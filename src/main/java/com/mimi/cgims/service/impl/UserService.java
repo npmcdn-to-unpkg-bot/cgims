@@ -164,9 +164,6 @@ public class UserService extends BaseService<UserModel,String> implements IUserS
                 }
             }
         }
-//        System.out.println(request.getSession().getAttribute(Constants.COOKIE_NAME_USER_ID));
-//        System.out.println(request.getSession().getAttribute(Constants.COOKIE_NAME_LOGIN_NAME));
-//        request.getSession().setAttribute(Constants.COOKIE_NAME_USER_ID,user.getId());
         request.getSession().setAttribute(Constants.COOKIE_NAME_USER_ID,user.getId());
         request.getSession().setAttribute(Constants.COOKIE_NAME_LOGIN_NAME,user.getLoginName());
         request.getSession().setAttribute(Constants.COOKIE_NAME_USER_NAME,user.getName());
