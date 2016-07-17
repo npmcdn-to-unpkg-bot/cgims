@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/aop 
+       http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+       http://www.springframework.org/schema/tx 
+       http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-3.1.xsd
+       ">
+
+	<context:component-scan base-package="com.mimi.cgims" />
+
+
+	<!-- <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> -->
+	<!-- <property name="locations"> -->
+	<!-- <list> -->
+	<!-- <value>classpath:resources.properties</value> -->
+	<!-- </list> -->
+	<!-- </property> -->
+	<!-- </bean> -->
+<!-- 	<context:property-placeholder location="classpath:resources.properties" /> -->
+	<context:property-placeholder location="classpath:*.properties" />
+
+
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<!-- <property name="alias" value="proxoolDataSource" /> -->
+		<!-- <property name="driver" value="${connection.driver_class}" /> -->
+		<!-- <property name="driverUrl" value="${connection.url}" /> -->
+		<!-- <property name="user" value="${connection.username}" /> -->
+		<!-- <property name="password" value="${connection.password}" /> -->
+		<!-- <property name="maximumConnectionCount" value="${proxool.maximum.connection.count}" 
+			/> -->
+		<!-- <property name="minimumConnectionCount" value="${proxool.minimum.connection.count}" 
+			/> -->
+		<!-- <property name="statistics" value="${proxool.statistics}" /> -->
+		<!-- <property name="simultaneousBuildThrottle" value="${proxool.simultaneous.build.throttle}" 
+			/> -->
+
+		<property name="driverClass" value="${connection.driver_class}" />
+		<property name="jdbcUrl" value="${connection.url}" />
+		<property name="user" value="${connection.username}" />
+		<property name="password" value="${connection.password}" />
+
+		<property name="minPoolSize" value="10" />
+		<property name="maxPoolSize" value="100" />
+		<property name="maxIdleTime" value="1800" />
+		<property name="acquireIncrement" value="3" />
+		<property name="maxStatements" value="1000" />
+		<property name="initialPoolSize" value="10" />
+		<property name="idleConnectionTestPeriod" value="60" />
+		<property name="acquireRetryAttempts" value="30" />
+		<property name="breakAfterAcquireFailure" value="true" />
+		<property name="testConnectionOnCheckout" value="false" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan">
+			<list>
+				<value>com.mimi.cgims.</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
+				<prop key="hibernate.default_batch_fetch_size">${hibernate.default_batch_fetch_size}</prop>
+				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
+				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
+				<prop key="hibernate.bytecode.use_reflection_optimizer">${hibernate.bytecode.use_reflection_optimizer}</prop>
+
+				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+				<prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop>
+				<prop key="net.sf.ehcache.configurationResourceName">${net.sf.ehcache.configurationResourceName}</prop>
+				<prop key="hibernate.cache.use_structured_entries">${hibernate.cache.use_structured_entries}</prop>
+				<prop key="hibernate.search.default.directory_provider">filesystem</prop>
+				<prop key="hibernate.search.default.indexBase">${hibernate.search.indexBase}</prop>
+<!-- 				<prop key="hibernate.search.analyzer"> org.apache.lucene.analysis.cjk.CJKAnalyzer</prop> -->
+			</props>
+		</property>
+		<!-- <property name="hibernate.search.default.directory_provider" -->
+		<!-- value="filesystem" /> -->
+		<!-- <property name="hibernate.search.default.indexBase" value="c:/lucene/indexes" 
+			/> -->
+		<!-- hibernate.search.default.directory_provider = filesystem -->
+		<!-- hibernate.search.default.indexBase = /usr/lucene/indexes -->
+		<!-- hibernate.search.Rules.directory_provider = ram -->
+		<!-- hibernate.search.Actions.directory_provider = com.acme.hibernate.CustomDirectoryProvider -->
+		<!-- <property name="hibernateProperties"> -->
+		<!-- <props> -->
+		<!-- <prop key="hibernate.connection.autocommit">true</prop> -->
+		<!-- <prop key="hibernate.show_sql">true</prop> -->
+		<!-- <prop key="hibernate.dialect">org.hibernate.dialect.OracleDialect -->
+		<!-- </prop> -->
+		<!-- <prop key="hibernate.query.factory_class"> org.hibernate.hql.ast.ASTQueryTranslatorFactory -->
+		<!-- </prop> -->
+		<!-- <prop key="hibernate.search.default.directory_provider"> org.hibernate.search.store.FSDirectoryProvider -->
+		<!-- </prop> -->
+		<!-- <prop key="hibernate.search.worker.batch_size"> 1000</prop> -->
+		<!-- <prop key="hibernate.search.default.indexBase"> d:/index</prop> -->
+		<!-- <prop key="hibernate.search.analyzer"> org.apache.lucene.analysis.cjk.CJKAnalyzer</prop> -->
+		<!-- </props> -->
+		<!-- </property> -->
+		<!-- <property name="eventListeners"> -->
+		<!-- <map> -->
+		<!-- <entry key="post-update"> -->
+		<!-- <bean class="org.hibernate.search.event.FullTextIndexEventListener" 
+			/> -->
+		<!-- </entry> -->
+		<!-- <entry key="post-insert"> -->
+		<!-- <bean class="org.hibernate.search.event.FullTextIndexEventListener" 
+			/> -->
+		<!-- </entry> -->
+		<!-- <entry key="post-delete"> -->
+		<!-- <bean class="org.hibernate.search.event.FullTextIndexEventListener" 
+			/> -->
+		<!-- </entry> -->
+		<!-- </map> -->
+		<!-- </property> -->
+
+	</bean>
+	
+	<!-- 配置Jdbc模板 -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+	<!-- 开启AOP监听 只对当前配置文件有效 -->
+	<aop:aspectj-autoproxy expose-proxy="true" />
+
+	<!-- 开启注解事务 只对当前配置文件有效 -->
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="create*" propagation="REQUIRED" />
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="merge*" propagation="REQUIRED" />
+			<tx:method name="del*" propagation="REQUIRED" />
+			<tx:method name="remove*" propagation="REQUIRED" />
+			<tx:method name="put*" propagation="REQUIRED" />
+			<tx:method name="use*" propagation="REQUIRED" />
+			<tx:method name="import*" propagation="REQUIRED" />
+			<tx:method name="init*" propagation="REQUIRED" />
+			<tx:method name="jdbc*" propagation="REQUIRED" />
+			<tx:method name="execute*" propagation="REQUIRED" />
+			<!--hibernate5必须配置为开启事务 否则 getCurrentSession()获取不到 -->
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="count*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="list*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config expose-proxy="true">
+		<!-- 只对业务逻辑层实施事务 -->
+		<aop:pointcut id="txPointcut"
+			expression="execution(* com.mimi.cgims.service..*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
+	</aop:config>
+
+</beans>

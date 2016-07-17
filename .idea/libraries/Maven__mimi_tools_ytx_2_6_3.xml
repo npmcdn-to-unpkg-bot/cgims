@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: mimi.tools:ytx:2.6.3">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/mimi/tools/ytx/2.6.3/ytx-2.6.3.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/mimi/tools/ytx/2.6.3/ytx-2.6.3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/mimi/tools/ytx/2.6.3/ytx-2.6.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
