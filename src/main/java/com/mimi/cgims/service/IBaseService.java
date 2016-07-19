@@ -6,6 +6,8 @@ import java.util.List;
 public interface IBaseService<M extends Serializable, PK extends Serializable> {
      void initData();
 
+    void initTestData();
+
     int count();
 
     List<M> list();

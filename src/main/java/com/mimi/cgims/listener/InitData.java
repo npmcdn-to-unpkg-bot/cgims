@@ -1,8 +1,8 @@
 package com.mimi.cgims.listener;
 
-import com.mimi.cgims.service.IPermissionService;
-import com.mimi.cgims.service.IRoleService;
-import com.mimi.cgims.service.IUserService;
+import com.mimi.cgims.service.*;
+import com.mimi.cgims.util.CityUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Repository;
@@ -17,6 +17,13 @@ public class InitData implements ApplicationListener<ContextRefreshedEvent> {
     IRoleService roleService;
     @Resource
     IUserService userService;
+    @Resource
+    IOrderService orderService;
+    @Resource
+    IWorkmanService workmanService;
+
+    @Value("${test.init_data:false}")
+    private boolean initTestData;
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         if (contextRefreshedEvent.getApplicationContext().getDisplayName()
@@ -26,8 +33,20 @@ public class InitData implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private void init(){
+        CityUtil.init();
         permissionService.initData();
         roleService.initData();
         userService.initData();
+
+        if(initTestData){
+            initTestData();
+        }
+    }
+
+    private void initTestData(){
+        roleService.initTestData();
+        userService.initTestData();
+        workmanService.initTestData();
+        orderService.initTestData();
     }
 }

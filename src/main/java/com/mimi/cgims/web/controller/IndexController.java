@@ -17,6 +17,16 @@ public class IndexController {
         return "index";
     }
 
+    @RequestMapping(value = "/html/login", method = {RequestMethod.GET})
+    public String login(HttpServletRequest request) {
+        return "login";
+    }
+
+    @RequestMapping(value = "/html/workman/login", method = {RequestMethod.GET})
+    public String workmanLogin(HttpServletRequest request) {
+        return "workmanLogin";
+    }
+
     @RequestMapping(value = "/html/index2", method = {RequestMethod.GET})
     public String index2(HttpServletRequest request) {
         TestUtil.makeError();

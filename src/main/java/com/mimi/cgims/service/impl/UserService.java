@@ -39,8 +39,8 @@ public class UserService extends BaseService<UserModel,String> implements IUserS
 
     @Override
     protected void initAction(){
-        int count = userDao.count();
-        if (count == 0) {
+//        int count = userDao.count();
+//        if (count == 0) {
             UserModel user = new UserModel();
             user.setLoginName(Constants.USER_LOGIN_NAME_ADMIN);
             user.setName(Constants.USER_NAME_ADMIN);
@@ -49,7 +49,7 @@ public class UserService extends BaseService<UserModel,String> implements IUserS
             user.setRoles(roles);
             user.setPassword(buildPassword(Constants.USER_PASSWORD));
             userDao.add(user);
-        }
+//        }
     }
 
     @Override
@@ -157,7 +157,7 @@ public class UserService extends BaseService<UserModel,String> implements IUserS
             for(PermissionModel tp:tps){
                 if(!permissions.contains(tp)){
                     if(StringUtils.isNotBlank(permissionCodes)){
-                        permissionCodes+=Constants.SPLIT_STRING_IDS;
+                        permissionCodes+=Constants.SPLIT_STRING_PARAMS;
                     }
                     permissionCodes+=tp.getCode();
                     permissions.add(tp);

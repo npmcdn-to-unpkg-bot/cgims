@@ -20,6 +20,9 @@ public abstract class BaseService<M extends Serializable, PK extends Serializabl
         }
     }
 
+    public void initTestData() {
+    }
+
     protected void initAction() {
     }
 

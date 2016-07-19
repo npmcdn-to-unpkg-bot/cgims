@@ -179,14 +179,14 @@
 <!-- 	    </property>   -->
 <!-- 	</bean>   -->
 	
-	<!--<mvc:interceptors>-->
-		<!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/**"/>-->
-            <!--<bean class="com.mimi.cgims.filter.LoginInterceptor">-->
+	<mvc:interceptors>
+		<mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.mimi.cgims.filter.LoginInterceptor">
              	<!--<property name="geetest" ref="geetestLibBean" /> -->
-            <!--</bean>-->
-		<!--</mvc:interceptor>-->
-	<!--</mvc:interceptors>-->
+            </bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 
     <!-- 极验证码  -->
     <bean id="geetestLibBean" class="com.mimi.cgims.web.captcha.GeetestLib">

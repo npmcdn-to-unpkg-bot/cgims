@@ -42,10 +42,47 @@ public class UserModel implements Serializable {
     @Size(max = 200)
     private String description;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "tr_user_role")
 //    @JsonIgnore
     private List<RoleModel> roles;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<OrderModel> orders;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "tr_user_user")
+    @JsonIgnore
+    private List<UserModel> masters;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "masters")
+//    @JsonIgnore
+    private List<UserModel> slaves;
+
+    public List<OrderModel> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderModel> orders) {
+        this.orders = orders;
+    }
+
+    public List<UserModel> getMasters() {
+        return masters;
+    }
+
+    public void setMasters(List<UserModel> masters) {
+        this.masters = masters;
+    }
+
+    public List<UserModel> getSlaves() {
+        return slaves;
+    }
+
+    public void setSlaves(List<UserModel> slaves) {
+        this.slaves = slaves;
+    }
 
     public String getId() {
         return id;

@@ -27,8 +27,8 @@ public class PermissionService extends BaseService<PermissionModel,String> imple
 
     @Override
     protected void initAction() {
-        int count = permissionDao.count();
-        if(count == 0){
+//        int count = permissionDao.count();
+//        if(count == 0){
             Map<String,String> map = Constants.getPermissionMap();
             Map<String,String> desc = Constants.getPermissionDescMap();
             for(String key:map.keySet()){
@@ -38,7 +38,7 @@ public class PermissionService extends BaseService<PermissionModel,String> imple
                 pm.setDescription(desc.get(key));
                 permissionDao.add(pm);
             }
-        }
+//        }
     }
 
 

@@ -34,8 +34,8 @@ public class RoleService extends BaseService<RoleModel, String> implements IRole
 
     @Override
     protected void initAction() {
-        int count = roleDao.count();
-        if (count == 0) {
+//        int count = roleDao.count();
+//        if (count == 0) {
             String[] roleNames = Constants.ROLE_NAMES;
             String[] roleDescs = Constants.ROLE_DESCRIPTIONS;
             String[][] rolePermissions = Constants.ROLE_PERMISSIONS;
@@ -56,7 +56,7 @@ public class RoleService extends BaseService<RoleModel, String> implements IRole
                 role.setPermissions(tempList);
                 roleDao.add(role);
             }
-        }
+//        }
     }
 
     @Override

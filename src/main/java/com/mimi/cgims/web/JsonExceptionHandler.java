@@ -34,6 +34,7 @@ public class JsonExceptionHandler extends SimpleMappingExceptionResolver {
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Cache-Control", "no-cache, must-revalidate");
         try {
+            ex.printStackTrace();
 //            response.getWriter().write(JSONObject.fromObject(ResultUtil.getFailResultMap(ex.getMessage())).toString());
             response.getWriter().write(JSONObject.fromObject(ResultUtil.getFailResultMap("操作失败，请稍后重试")).toString());
         } catch (IOException e) {
