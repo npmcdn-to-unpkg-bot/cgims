@@ -179,4 +179,10 @@
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
 	</aop:config>
 
+	<!-- 云通讯 -->
+	<bean class="com.cloopen.rest.sdk.CCPRestSmsSDK"/>
+
+	<!-- 极验证码  -->
+	<!--<bean id="geetestLibBean" class="com.mimi.cgims.web.captcha.GeetestLib">-->
+	<!--</bean>-->
 </beans>

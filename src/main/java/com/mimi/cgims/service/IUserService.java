@@ -10,13 +10,10 @@ public interface IUserService extends IBaseService<UserModel, String> {
 
     Map<String,Object> list4Page(String searchKeyword, int targetPage, int pageSize);
 
-    String computePwd(String password);
-
     String checkAdd(UserModel user);
 
     String checkUpdate(UserModel user);
 
-    String login(HttpServletRequest request, String loginName, String password);
+    String login(UserModel user);
 
-    void logout(HttpServletRequest request);
 }

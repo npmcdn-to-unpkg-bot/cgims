@@ -1,5 +1,6 @@
 package com.mimi.cgims.web.controller;
 
+import com.mimi.cgims.Config;
 import com.mimi.cgims.util.ResultUtil;
 import com.mimi.cgims.util.TestUtil;
 import org.springframework.stereotype.Controller;
@@ -7,10 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class IndexController {
+    @Resource
+    private Config config;
 
     @RequestMapping(value = "/html/index", method = {RequestMethod.GET})
     public String index(HttpServletRequest request) {
@@ -24,6 +28,7 @@ public class IndexController {
 
     @RequestMapping(value = "/html/workman/login", method = {RequestMethod.GET})
     public String workmanLogin(HttpServletRequest request) {
+        request.setAttribute("geetestId",config.getGeetestId());
         return "workmanLogin";
     }
 

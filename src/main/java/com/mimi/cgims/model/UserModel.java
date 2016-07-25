@@ -48,7 +48,7 @@ public class UserModel implements Serializable {
     private List<RoleModel> roles;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<OrderModel> orders;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

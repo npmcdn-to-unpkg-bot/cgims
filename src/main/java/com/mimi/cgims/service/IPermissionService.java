@@ -12,4 +12,6 @@ public interface IPermissionService extends IBaseService<PermissionModel, String
     int count(String searchKeyword);
 
     Map<String,Object> list4Page(String searchKeyword, int targetPage, int pageSize);
+
+    List<PermissionModel> listByUserId(String id);
 }

@@ -1,9 +1,12 @@
 package com.mimi.cgims.web.controller;
 
 import com.mimi.cgims.Constants;
+import com.mimi.cgims.model.PermissionModel;
 import com.mimi.cgims.model.RoleModel;
 import com.mimi.cgims.model.UserModel;
+import com.mimi.cgims.service.IPermissionService;
 import com.mimi.cgims.service.IUserService;
+import com.mimi.cgims.util.LoginUtil;
 import com.mimi.cgims.util.ResultUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -24,6 +27,9 @@ public class UserController {
     @Resource
     private IUserService userService;
 
+    @Resource
+    private IPermissionService permissionService;
+
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     @ResponseBody
     public Object search(String searchKeyword, int targetPage, int pageSize) {
@@ -33,7 +39,7 @@ public class UserController {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Object get(@PathVariable String id) {
-        return ResultUtil.getResultMap(true, null, userService.getWithRoles(id));
+        return ResultUtil.getSuccessResultMap(userService.getWithRoles(id));
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
@@ -43,7 +49,7 @@ public class UserController {
         if (StringUtils.isNotBlank(error)) {
             return ResultUtil.getFailResultMap(error);
         }
-        user.setPassword(userService.computePwd(user.getPassword()));
+        user.setPassword(LoginUtil.buildPassword(user.getPassword()));
         user.setRoles(buildRoles(roleIds));
         userService.add(user);
         return ResultUtil.getSuccessResultMap();
@@ -62,7 +68,7 @@ public class UserController {
             BeanUtils.copyProperties(user, newModel, "id", "roles");
         } else {
             BeanUtils.copyProperties(user, newModel, "id", "roles", "password");
-            newModel.setPassword(userService.computePwd(newModel.getPassword()));
+            newModel.setPassword(LoginUtil.buildPassword(newModel.getPassword()));
         }
         newModel.setRoles(buildRoles(roleIds));
         userService.update(newModel);
@@ -87,17 +93,34 @@ public class UserController {
     @ResponseBody
     public Object delete(@PathVariable String id) {
         userService.delete(id);
-        return ResultUtil.getResultMap(true, null, id);
+        return ResultUtil.getResultMap(ResultUtil.RESULT_SUCCESS, null, id);
     }
+
+    @RequestMapping(value = "/user/batch", method = RequestMethod.POST)
+    @ResponseBody
+    public Object batch(String ids) {
+
+        return ResultUtil.getResultMap(ResultUtil.RESULT_SUCCESS, null, ids);
+    }
+
 
 
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
     @ResponseBody
-    public Object login(HttpServletRequest request,String loginName, String password) {
-        String error = userService.login(request,loginName,password);
+    public Object login(HttpServletRequest request,UserModel user) {
+        String error = userService.login(user);
         if(StringUtils.isNotBlank(error)){
             return ResultUtil.getFailResultMap(error);
         }
+        List<PermissionModel> permissionModels = permissionService.listByUserId(user.getId());
+        String permissionCodes = "";
+        for(PermissionModel permission:permissionModels){
+            if(StringUtils.isNotBlank(permissionCodes)){
+                permissionCodes+=Constants.SPLIT_STRING_PARAMS;
+            }
+            permissionCodes+=permission.getCode();
+        }
+        LoginUtil.userLogin(request,user,permissionCodes);
         return ResultUtil.getSuccessResultMap();
     }
 
@@ -105,7 +128,7 @@ public class UserController {
     @RequestMapping(value = "/user/logout", method = RequestMethod.POST)
     @ResponseBody
     public Object logout(HttpServletRequest request) {
-        userService.logout(request);
+        LoginUtil.userLogout(request);
         return ResultUtil.getSuccessResultMap();
     }
 

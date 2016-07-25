@@ -32,7 +32,7 @@ public class RoleController {
     @RequestMapping(value = "/role/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Object get(@PathVariable String id) {
-        return ResultUtil.getResultMap(true, null, roleService.getWithPermissions(id));
+        return ResultUtil.getSuccessResultMap(roleService.getWithPermissions(id));
     }
 
     @RequestMapping(value = "/role", method = RequestMethod.POST)
@@ -43,7 +43,7 @@ public class RoleController {
             return ResultUtil.getFailResultMap(error);
         }
         role.setPermissions(buildPermissions(permissionIds));
-        return ResultUtil.getResultMap(true, null, roleService.add(role));
+        return ResultUtil.getSuccessResultMap(roleService.add(role));
     }
 
     @RequestMapping(value = "/role/{id}", method = RequestMethod.PATCH)
@@ -78,6 +78,6 @@ public class RoleController {
     @ResponseBody
     public Object delete(@PathVariable String id) {
         roleService.delete(id);
-        return ResultUtil.getResultMap(true, null, id);
+        return ResultUtil.getSuccessResultMap(id);
     }
 }

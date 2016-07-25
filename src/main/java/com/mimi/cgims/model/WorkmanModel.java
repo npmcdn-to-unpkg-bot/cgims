@@ -97,7 +97,6 @@ public class WorkmanModel implements Serializable {
     @Size(max = 1000)
     private String description;//	varchar	1000	备注
 
-
     private Integer cooperateTimes;//	int	8	合作次数
 
     private Float score;//float	6,4	综合评分

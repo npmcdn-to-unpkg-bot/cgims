@@ -24,9 +24,11 @@ public class OrderModel implements Serializable {
     @Column(unique = true)
     private String orderNumber;
 
-    private Integer orderStatus;
+    @Size(max = 50)
+    private String orderStatus;
 
-    private Integer serviceType;
+    @Size(max = 50)
+    private String serviceType;
 
     @Size(max = 50)
     private String customerName;
@@ -43,19 +45,19 @@ public class OrderModel implements Serializable {
     @Size(max = 500)
     private String productInfo;
 
-    @Size(max = 500)
+    @Size(max = 6000)
     private String productImgs;
 
     @Size(max = 500)
     private String logisticsInfo;
 
-    @Size(max = 500)
+    @Size(max = 6000)
     private String logisticsImgs;
 
     @Size(max = 1000)
     private String repairInfo;
 
-    @Size(max = 500)
+    @Size(max = 6000)
     private String repairImgs;
 
     private Boolean isChecked;
@@ -68,10 +70,8 @@ public class OrderModel implements Serializable {
 
     private Integer orderPrice;
 
-    
     private Integer servicePrice;
 
-    
     private Integer profit;
 
     @Size(max = 200)
@@ -80,14 +80,14 @@ public class OrderModel implements Serializable {
     private Integer judgment;
 
     @Size(max = 200)
-    private String judegReason;
+    private String judgeReason;
 
     @Size(max = 1000)
     private String description;
 
     private Date createDate;
 
-    private Date compleDate;
+    private Date completeDate;
 
     private Boolean orderPriceChanged;
 
@@ -117,19 +117,19 @@ public class OrderModel implements Serializable {
         this.orderNumber = orderNumber;
     }
 
-    public Integer getOrderStatus() {
+    public String getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(Integer orderStatus) {
+    public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
     }
 
-    public Integer getServiceType() {
+    public String getServiceType() {
         return serviceType;
     }
 
-    public void setServiceType(Integer serviceType) {
+    public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
 
@@ -277,12 +277,12 @@ public class OrderModel implements Serializable {
         this.judgment = judgment;
     }
 
-    public String getJudegReason() {
-        return judegReason;
+    public String getJudgeReason() {
+        return judgeReason;
     }
 
-    public void setJudegReason(String judegReason) {
-        this.judegReason = judegReason;
+    public void setJudgeReason(String judgeReason) {
+        this.judgeReason = judgeReason;
     }
 
     public String getDescription() {
@@ -301,12 +301,12 @@ public class OrderModel implements Serializable {
         this.createDate = createDate;
     }
 
-    public Date getCompleDate() {
-        return compleDate;
+    public Date getCompleteDate() {
+        return completeDate;
     }
 
-    public void setCompleDate(Date compleDate) {
-        this.compleDate = compleDate;
+    public void setCompleteDate(Date completeDate) {
+        this.completeDate = completeDate;
     }
 
     public Boolean getOrderPriceChanged() {

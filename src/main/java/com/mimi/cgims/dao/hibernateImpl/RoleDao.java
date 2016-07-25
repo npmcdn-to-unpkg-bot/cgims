@@ -3,6 +3,7 @@ package com.mimi.cgims.dao.hibernateImpl;
 import com.mimi.cgims.Constants;
 import com.mimi.cgims.dao.IRoleDao;
 import com.mimi.cgims.model.RoleModel;
+import com.mimi.cgims.util.DaoUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -20,14 +21,8 @@ public class RoleDao extends BaseDao<RoleModel, String>
         Criteria criteria = getCriteria();
         setParams(criteria, userId, searchKeyword);
         List<RoleModel> roles = list(criteria, targetPage, pageSize);
-        cleanLazyData(roles);
+        DaoUtil.cleanLazyDataRoles(roles);
         return roles;
-    }
-
-    private void cleanLazyData(List<RoleModel> roles) {
-        for (RoleModel role : roles) {
-            role.setPermissions(null);
-        }
     }
 
     @Override

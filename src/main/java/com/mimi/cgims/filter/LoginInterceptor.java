@@ -3,6 +3,7 @@ package com.mimi.cgims.filter;
 import com.mimi.cgims.Constants;
 import com.mimi.cgims.service.IPermissionService;
 import com.mimi.cgims.service.IUserService;
+import com.mimi.cgims.util.LoginUtil;
 import com.mimi.cgims.util.ResultUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -18,14 +19,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter {
-    private static final Logger LOG = LoggerFactory
-            .getLogger(LoginInterceptor.class);
-
-    @Resource
-    private IUserService userService;
-
-    @Resource
-    private IPermissionService permissionService;
 
     String DEFAULT_ACCESS_CHAR = "0-9a-zA-Z\u4E00-\u9FA5:/_-";
 
@@ -39,84 +32,43 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         }
 //        request.setAttribute("uri", request.getRequestURI());
         if (StringUtils.isBlank(sp) || "/".equals(sp.trim())) {
-            if (isAuthenticated(request)) {
-                return responseOut(request, response, "/html/index", true, "已登录", true);
+            if (LoginUtil.isUserLogined(request)) {
+                return responseOut(request, response, "/html/index", true, "已登录", ResultUtil.RESULT_SUCCESS);
             } else {
-                return responseOut(request, response, "/html/login", true, "请登录", false);
+                return responseOut(request, response, "/html/login", true, "请登录", ResultUtil.RESULT_FAIL);
             }
         } else if (isLoginPage(sp)) {
-            if (isAuthenticated(request)) {
-                return responseOut(request, response, "/html/index", true, "已登录", true);
+            if (LoginUtil.isUserLogined(request)) {
+                return responseOut(request, response, "/html/index", true, "已登录", ResultUtil.RESULT_SUCCESS);
             } else {
                 return true;
             }
         } else if (isIndexPage(sp) || sp.startsWith("/user/self")) {
-            if (isAuthenticated(request)) {
+            if (LoginUtil.isUserLogined(request)) {
                 return true;
             } else {
-                return responseOut(request, response, "/html/login", true, "请登录", false);
+                return responseOut(request, response, "/html/login", true, "请登录", ResultUtil.RESULT_FAIL);
             }
         } else if (isWorkmanLoginPage(sp)) {
-            if (isWorkmanLogined(request)) {
-                return responseOut(request, response, "/html/workman/self/" + request.getSession().getAttribute("workmanId"), true, "已登录", true);
+            if (LoginUtil.isWorkmanLogined(request)) {
+                return responseOut(request, response, "/html/workman/self/" + request.getSession().getAttribute("workmanId"), true, "已登录", ResultUtil.RESULT_SUCCESS);
             } else {
                 return true;
             }
         } else if (isWorkmanSelfPage(sp) || sp.startsWith("/workman/self/")) {
-            if (isWorkmanLogined(request)) {
+            if (LoginUtil.isWorkmanLogined(request)) {
                 return true;
             } else {
-                return responseOut(request, response, "/html/workman/login", true, "请登录登录", false);
+                return responseOut(request, response, "/html/workman/login", true, "请登录登录", ResultUtil.RESULT_FAIL);
             }
         } else if (sp.startsWith("/user/login") || sp.startsWith("/workman/phoneCaptcha") || sp.startsWith("/workman/login") || sp.startsWith("/error") || sp.startsWith("/user/logout")) {
             return true;
         }
-        if (checkPermission(sp, request.getMethod(), (String) request.getSession().getAttribute(Constants.COOKIE_NAME_PERMISSION_CODES))) {
+        if (checkPermission(sp, request.getMethod(), LoginUtil.getUserPermissionCodes(request))) {
             return true;
         } else {
-            return responseOut(request, response, "/html/index", true, "没有足够权限", false);
+            return responseOut(request, response, "/html/index", true, "没有足够权限", ResultUtil.RESULT_FAIL);
         }
-//        if (isHtmlPage(sp)) {
-//            if (isLoginPage(sp)) {
-//                if (isAuthenticated(request)) {
-//                    return responseOut(request, response, "/html/index", true, "已登录", true);
-//                } else {
-//                    return true;
-//                }
-//            } else if (isIndexPage(sp)) {
-//                if (isAuthenticated(request)) {
-//                    return true;
-//                } else {
-//                    return responseOut(request, response, "/html/login", false, "请登录", false);
-//                }
-//            } else if (isWorkmanLoginPage(sp)) {
-//                if (isWorkmanLogined(request)) {
-//                    return responseOut(request, response, "/html/workman/self/" + request.getSession().getAttribute("workmanId"), true, "已登录", true);
-//                } else {
-//                    return true;
-//                }
-//            } else if (isWorkmanSelfPage(sp)) {
-//                if (isWorkmanLogined(request)) {
-//                    return true;
-//                } else {
-//                    return responseOut(request, response, "/html/workman/login", true, "请登录登录", false);
-//                }
-//            }
-//        } else {
-//            if (sp.startsWith("/user/login") || sp.startsWith("/workman/phoneCaptcha") || sp.startsWith("/workman/login")) {
-//                return true;
-//            } else if (sp.startsWith("/user/self")) {
-//                return isAuthenticated(request);
-//            } else if (sp.startsWith("/workman/self/")) {
-//                return isWorkmanLogined(request);
-//            }
-//            if(checkPermission(sp, request.getMethod(), (String) request.getSession().getAttribute(Constants.COOKIE_NAME_PERMISSION_CODES))){
-//                return true;
-//            }else{
-//                return responseOut(request, response, "/html/index", true, "没有足够权限", false);
-//            }
-//        }
-//        return true;
     }
 
     private boolean checkPermission(String sp, String method, String permissionCodesStr) {
@@ -156,10 +108,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         return StringUtils.isNotBlank(sp) && sp.startsWith("/html/workman/self");
     }
 
-    private boolean isWorkmanLogined(HttpServletRequest request) {
-        return StringUtils.isNotBlank((String) request.getSession().getAttribute(Constants.COOKIE_NAME_WORKMAN_LOGIN_ID));
-    }
-
     private boolean isWorkmanLoginPage(String sp) {
         return StringUtils.isNotBlank(sp) && sp.startsWith("/html/workman/login");
     }
@@ -172,16 +120,10 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         return StringUtils.isNotBlank(sp) && sp.startsWith("/html/login");
     }
 
-    private boolean isHtmlPage(String sp) {
-        return StringUtils.isBlank(sp) || sp.startsWith("/html");
-    }
 
     private boolean responseOut(HttpServletRequest request,
-                                HttpServletResponse response, String responseUrl, boolean redirect, String responseMsg, boolean success) throws ServletException, IOException {
+                                HttpServletResponse response, String responseUrl, boolean redirect, String responseMsg, int success) throws ServletException, IOException {
         if (isAjaxRequest(request)) {
-//			Map<String,Object> resultMap = new HashMap<String,Object>();
-//			resultMap.put("success", success);
-//			resultMap.put("msg", responseMsg);
             responseOutWithJson(response, ResultUtil.getResultMap(success, responseMsg));
         } else {
             if (redirect) {
@@ -235,10 +177,5 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         return StringUtils.isBlank(str)
                 || (StringUtils.isNotBlank(path) && path.matches("^/?" + str
                 + "(/[" + DEFAULT_ACCESS_CHAR + "]*|)$"));
-    }
-
-    private boolean isAuthenticated(HttpServletRequest request) {
-        return StringUtils.isNotBlank((String) request.getSession()
-                .getAttribute(Constants.COOKIE_NAME_USER_ID));
     }
 }

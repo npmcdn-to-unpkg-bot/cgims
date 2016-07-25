@@ -3,6 +3,7 @@ package com.mimi.cgims.dao.hibernateImpl;
 import com.mimi.cgims.Constants;
 import com.mimi.cgims.dao.IUserDao;
 import com.mimi.cgims.model.UserModel;
+import com.mimi.cgims.util.DaoUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -19,14 +20,8 @@ public class UserDao extends BaseDao<UserModel, String>
         Criteria criteria = getCriteria();
         setParams(criteria, searchKeyword);
         List<UserModel> users = list(criteria, targetPage, pageSize);
-        cleanLazyData(users);
+        DaoUtil.cleanLazyDataUsers(users);
         return users;
-    }
-
-    private void cleanLazyData(List<UserModel> users) {
-        for (UserModel user : users) {
-            user.setRoles(null);
-        }
     }
 
     @Override

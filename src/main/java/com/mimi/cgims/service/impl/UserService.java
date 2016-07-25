@@ -2,25 +2,23 @@ package com.mimi.cgims.service.impl;
 
 import com.mimi.cgims.Constants;
 import com.mimi.cgims.dao.IBaseDao;
-import com.mimi.cgims.dao.IPermissionDao;
 import com.mimi.cgims.dao.IRoleDao;
 import com.mimi.cgims.dao.IUserDao;
-import com.mimi.cgims.model.PermissionModel;
 import com.mimi.cgims.model.RoleModel;
 import com.mimi.cgims.model.UserModel;
 import com.mimi.cgims.service.IUserService;
 import com.mimi.cgims.util.FormatUtil;
-import com.mimi.cgims.util.MD5Util;
+import com.mimi.cgims.util.LoginUtil;
 import com.mimi.cgims.util.ResultUtil;
 import com.mimi.cgims.util.page.PageUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @Service
 public class UserService extends BaseService<UserModel,String> implements IUserService{
@@ -28,8 +26,7 @@ public class UserService extends BaseService<UserModel,String> implements IUserS
 
     @Resource
     private IRoleDao roleDao;
-    @Resource
-    private IPermissionDao permissionDao;
+
     @Resource
     @Override
     public void setBaseDao(IBaseDao<UserModel, String> baseDao) {
@@ -39,17 +36,55 @@ public class UserService extends BaseService<UserModel,String> implements IUserS
 
     @Override
     protected void initAction(){
-//        int count = userDao.count();
-//        if (count == 0) {
-            UserModel user = new UserModel();
-            user.setLoginName(Constants.USER_LOGIN_NAME_ADMIN);
-            user.setName(Constants.USER_NAME_ADMIN);
-            user.setDescription(Constants.USER_DESCRIPTION_ADMIN);
-            List<RoleModel> roles = roleDao.list(null,Constants.ROLE_NAME_ADMIN,1,1);
-            user.setRoles(roles);
-            user.setPassword(buildPassword(Constants.USER_PASSWORD));
-            userDao.add(user);
-//        }
+        UserModel user = new UserModel();
+        user.setLoginName(Constants.USER_LOGIN_NAME_ADMIN);
+        user.setName(Constants.USER_NAME_ADMIN);
+        user.setDescription(Constants.USER_DESCRIPTION_ADMIN);
+        List<RoleModel> roles = roleDao.list();
+        List<RoleModel> tr = new ArrayList<>();
+        for(RoleModel role:roles){
+            if(Constants.ROLE_NAME_ADMIN.equals(role.getName())){
+                tr.add(role);
+            }
+        }
+        user.setRoles(tr);
+        user.setPassword(LoginUtil.buildPassword(Constants.USER_PASSWORD));
+        userDao.add(user);
+    }
+
+    @Override
+    public void initTestData(){
+        int count = userDao.count();
+        if (count == 1) {
+            List<RoleModel> roles = roleDao.list();
+            for(int i=0;i<30;i++){
+                List<RoleModel> tr = new ArrayList<>();
+                for(RoleModel role:roles){
+                    if(Math.random()>0.5){
+                        tr.add(role);
+                    }
+                }
+                UserModel user = new UserModel();
+                user.setLoginName("loginName"+i);
+                user.setName("名称"+i);
+                user.setDescription("描述"+i);
+                user.setRoles(tr);
+                user.setPassword(LoginUtil.buildPassword("123123"));
+                userDao.add(user);
+            }
+            List<UserModel> users = userDao.list();
+            Random random = new Random();
+            for(UserModel user:users){
+                List<UserModel> slaves = new ArrayList<>();
+                for(UserModel slave:users){
+                    if(random.nextBoolean()){
+                        slaves.add(slave);
+                    }
+                }
+                user.setSlaves(slaves);
+                userDao.add(user);
+            }
+        }
     }
 
     @Override
@@ -67,11 +102,6 @@ public class UserService extends BaseService<UserModel,String> implements IUserS
         List<UserModel> list = userDao.list(searchKeyword, targetPage, pageSize);
         int totalPage = PageUtil.getTotalPage(total, pageSize);
         return ResultUtil.getResultMap(total, totalPage, targetPage, pageSize, list);
-    }
-
-    @Override
-    public String computePwd(String password) {
-        return buildPassword(password);
     }
 
     @Override
@@ -115,7 +145,7 @@ public class UserService extends BaseService<UserModel,String> implements IUserS
         }
         if(errors.isEmpty()){
             UserModel tu = userDao.getByLoginName(user.getLoginName());
-            if(tu!=null && !tu.getId().equals(user.getId())){
+            if(tu!=null && !user.getId().equals(tu.getId())){
                 errors.add("登录名已存在");
             }
         }
@@ -132,7 +162,9 @@ public class UserService extends BaseService<UserModel,String> implements IUserS
     }
 
     @Override
-    public String login(HttpServletRequest request, String loginName, String password) {
+    public String login(UserModel user) {
+        String loginName = user.getLoginName();
+        String password = user.getPassword();
         String error;
         error = FormatUtil.checkFormat(loginName,FormatUtil.REGEX_COMMON_NAME,true,0,FormatUtil.MAX_LENGTH_COMMON_SHORT_L3,"登录名");
         if(StringUtils.isNotBlank(error)){
@@ -142,44 +174,15 @@ public class UserService extends BaseService<UserModel,String> implements IUserS
         if(StringUtils.isNotBlank(error)){
             return error;
         }
-        UserModel user = userDao.getByLoginName(loginName);
-        if(user==null){
+        UserModel tu = userDao.getByLoginName(loginName);
+        if(tu==null){
             return "找不到该用户";
         }
-        if(!user.getPassword().equals(buildPassword(password))){
+        if(!tu.getPassword().equals(LoginUtil.buildPassword(password))){
             return "密码错误";
         }
-        List<RoleModel> roles = roleDao.list(user.getId(),null,PageUtil.BEGIN_PAGE,PageUtil.MAX_PAGE_SIZE);
-        List<PermissionModel> permissions = new ArrayList<>();
-        String permissionCodes = "";
-        for(RoleModel role:roles){
-            List<PermissionModel> tps = permissionDao.list(role.getId(),null,PageUtil.BEGIN_PAGE,PageUtil.MAX_PAGE_SIZE);
-            for(PermissionModel tp:tps){
-                if(!permissions.contains(tp)){
-                    if(StringUtils.isNotBlank(permissionCodes)){
-                        permissionCodes+=Constants.SPLIT_STRING_PARAMS;
-                    }
-                    permissionCodes+=tp.getCode();
-                    permissions.add(tp);
-                }
-            }
-        }
-        request.getSession().setAttribute(Constants.COOKIE_NAME_USER_ID,user.getId());
-        request.getSession().setAttribute(Constants.COOKIE_NAME_LOGIN_NAME,user.getLoginName());
-        request.getSession().setAttribute(Constants.COOKIE_NAME_USER_NAME,user.getName());
-        request.getSession().setAttribute(Constants.COOKIE_NAME_PERMISSION_CODES,permissionCodes);
+        user.setId(tu.getId());
+        user.setName(tu.getName());
         return null;
-    }
-
-    @Override
-    public void logout(HttpServletRequest request) {
-        request.getSession().removeAttribute(Constants.COOKIE_NAME_USER_ID);
-        request.getSession().removeAttribute(Constants.COOKIE_NAME_LOGIN_NAME);
-        request.getSession().removeAttribute(Constants.COOKIE_NAME_USER_NAME);
-        request.getSession().removeAttribute(Constants.COOKIE_NAME_PERMISSION_CODES);
-    }
-
-    private String buildPassword(String password){
-        return MD5Util.MD5(MD5Util.MD5(password+Constants.PROJECT_NAME));
     }
 }

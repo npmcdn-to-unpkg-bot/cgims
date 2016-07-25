@@ -20,9 +20,13 @@
 <body>
 ${userName}
 <br/>
-<input type="text" id="keyword1" class="text"/>
-<input type="text" id="keyword2" class="text"/>
-<input type="text" id="keyword3" class="text"/>
+<form method="POST" action="${ctx}/order/upload/logistics" ENCTYPE="multipart/form-data">
+    <input type="file" name="theFile" />
+    <input type="submit" value="uploadLogisticsImg" />
+</form>
+id:<input type="text" id="keyword1" class="text"/><br/>
+v1:<input type="text" id="keyword2" class="text"/><br/>
+v2:<input type="text" id="keyword3" class="text"/><br/>
 <input type="button" value="testGET" onclick="test('GET')"/>
 <input type="button" value="testPOST" onclick="test('POST')"/>
 <input type="button" value="testPUT" onclick="test('PUT')"/>
@@ -43,20 +47,92 @@ ${userName}
 <input type="button" value="addUser" onclick="addUser()"/>
 <input type="button" value="updateUser" onclick="updateUser()"/>
 <input type="button" value="deleteUser" onclick="deleteUser()"/>
+<input type="button" value="batchUser" onclick="batch('user')"/>
 <input type="button" value="login" onclick="login()"/>
 <input type="button" value="logout" onclick="logout()"/>
+<br/>
+<input type="button" value="queryWorkman" onclick="query('workman')"/>
+<input type="button" value="getWorkman" onclick="get('workman')"/>
+<input type="button" value="addWorkman" onclick="add('workman')"/>
+<input type="button" value="updateWorkman" onclick="update('workman')"/>
+<input type="button" value="deleteWorkman" onclick="del('workman')"/>
+<input type="button" value="batchWorkman" onclick="batch('workman')"/>
+<br/>
+<input type="button" value="queryOrder" onclick="query('order')"/>
+<input type="button" value="getOrder" onclick="get('order')"/>
+<input type="button" value="addOrder" onclick="add('order')"/>
+<input type="button" value="updateOrder" onclick="update('order')"/>
+<input type="button" value="deleteOrder" onclick="del('order')"/>
+<input type="button" value="batchOrder" onclick="batch('order')"/>
 
 <br/>
 <span id="content">Hello World!wawa</span>
 </body>
 </html>
 <script>
+    function query(obj){
+        var url = "${ctx}/"+obj;
+        var data = {"searchKeyword": getKeyword(), targetPage: 1, pageSize: 10};
+        var type = "GET";
+        normalAjax(url, type, data);
+    }
+    function get(obj){
+        var url = "${ctx}/"+obj+"/"+getKeyword();
+        var type = "GET";
+        normalAjax(url, type, null);
+    }
+    function add(obj){
+        var url = "${ctx}/"+obj;
+        var data = {};
+        switch (obj){
+            case "user":
+                data.loginName = getKeyword();
+                data.password = getKeyword2();
+                data.roleIds = getKeyword3();
+                data.description = "测试用户描述";
+                break;
+            case "order":
+                data.orderNumber = getKeyword2();
+                data.workmanId = getKeyword3();
+        }
+        var type = "POST";
+        normalAjax(url, type, data);
+    }
+    function update(obj){
+        var url = "${ctx}/"+obj+"/"+getKeyword2();
+        var data = {};
+        data.id = getKeyword2();
+        data.name = getKeyword();
+        data.description = "测试角色描述3";
+        data.permissionIds = getKeyword3();
+        var type = "PATCH";
+        normalAjax(url, type, data);
+    }
+    function del(obj){
+        var url = "${ctx}/"+obj+"/"+getKeyword();
+        var type = "DELETE";
+        normalAjax(url, type, null);
+    }
+    function batch(obj){
+        var url = "${ctx}/"+obj+"/batch";
+        var type = "POST";
+        var data = {};
+        data.ids = "aa,bb";
+        normalAjax(url, type, data);
+    }
     function login(){
         var url = "${ctx}/user/login";
         var data = {};
         data.loginName = getKeyword();
         data.password = getKeyword2();
-        commonAjax(url,"POST",data);
+        var success = function(json){
+            if(json.status){
+                self.location.href = "${ctx}/html/index";
+            }else{
+                showContent(json.msg);
+            }
+        }
+        commonAjax(url,"POST",data,success);
     }
     function logout(){
         var url = "${ctx}/user/logout";
@@ -171,7 +247,7 @@ ${userName}
 //            contentType:"application/json",
             data: data,
             success: function (json) {
-                if (json.success) {
+                if (json.status) {
                     showContent(json.result);
                 } else {
                     alert(json.msg);
@@ -188,16 +264,16 @@ ${userName}
 
     function test(type) {
         commonAjax("${ctx}/index/test", type, {"searchKeyword": $("#searchKeyword").val()}, function (json) {
-            $("#content").html(json.success + json.msg);
+            $("#content").html(json.status + json.msg);
         }, function (XMLHttpRequest, textStatus, errorThrown) {
             var result = JSON.parse(XMLHttpRequest.responseText);
-            $("#content").html(result.success + result.msg + XMLHttpRequest.status);
+            $("#content").html(result.status + result.msg + XMLHttpRequest.status);
         });
     }
 
     function normalAjax(url, type, data) {
         var success = function (json) {
-            if (json.success) {
+            if (json.status) {
                 showContent(json.result);
             } else {
                 alert(json.msg);
@@ -205,7 +281,7 @@ ${userName}
         }
         var error = function (XMLHttpRequest) {
             var result = JSON.parse(XMLHttpRequest.responseText);
-            $("#content").html(result.success + result.msg + XMLHttpRequest.status);
+            $("#content").html(result.status + result.msg + XMLHttpRequest.status);
         }
         commonAjax(url, type, data, success, error);
     }

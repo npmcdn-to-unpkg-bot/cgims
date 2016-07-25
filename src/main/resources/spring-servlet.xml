@@ -188,7 +188,4 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 
-    <!-- 极验证码  -->
-    <bean id="geetestLibBean" class="com.mimi.cgims.web.captcha.GeetestLib">
-    </bean>
 </beans>
