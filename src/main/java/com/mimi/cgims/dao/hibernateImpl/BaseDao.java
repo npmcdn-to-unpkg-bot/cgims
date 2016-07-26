@@ -180,4 +180,10 @@ public abstract class BaseDao<M extends Serializable, PK extends Serializable>
         Integer count = ((Long)criteria.uniqueResult()).intValue();
         return count;
     }
+
+    protected int sum(Criteria criteria,String name){
+        criteria.setProjection(Projections.sum(name));
+        Integer count = ((Long)criteria.uniqueResult()).intValue();
+        return count;
+    }
 }

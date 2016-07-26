@@ -14,6 +14,7 @@ import com.mimi.cgims.util.AutoNumUtil;
 import com.mimi.cgims.util.ResultUtil;
 import com.mimi.cgims.util.page.PageUtil;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -129,10 +130,10 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
     }
 
     @Override
-    public Object list4Page(String searchKeyword, String orderStatus, String serviceType, String userId, String beginTime, String endTime, String searchKeyword1, int targetPage, int pageSize) {
-        int total = orderDao.count(searchKeyword, orderStatus, serviceType, userId, beginTime,endTime);
+    public Object list4Page(String searchKeyword, String orderStatus, String serviceType, String userId,String workmanId,  String beginTime, String endTime, int targetPage, int pageSize) {
+        int total = orderDao.count(searchKeyword, orderStatus, serviceType, userId,workmanId, beginTime,endTime);
         targetPage = PageUtil.fitPage(total, targetPage, pageSize);
-        List<OrderModel> list = orderDao.list(searchKeyword, orderStatus, serviceType, userId, beginTime,endTime, targetPage, pageSize);
+        List<OrderModel> list = orderDao.list(searchKeyword, orderStatus, serviceType, userId,workmanId, beginTime,endTime, targetPage, pageSize);
         int totalPage = PageUtil.getTotalPage(total, pageSize);
         return ResultUtil.getResultMap(total, totalPage, targetPage, pageSize, list);
     }
@@ -150,21 +151,77 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
     }
 
     @Override
-    public Object addAndRefresh(OrderModel order) {
-        return null;
+    public String addAndRefresh(OrderModel order) {
+        String id = orderDao.add(order);
+        refreshWorkman(order.getWorkman());
+        return id;
     }
 
     @Override
     public void updateAndRefresh(OrderModel order) {
-
+        orderDao.update(order);
+        refreshWorkman(order.getWorkman());
     }
 
     @Override
     public void deleteAndRefresh(String id) {
+        OrderModel order = orderDao.get(id);
+        WorkmanModel workman = order.getWorkman();
+        orderDao.delete(id);
+        refreshWorkman(workman);
+    }
 
+    private void refreshWorkman(WorkmanModel workman){
+        if(workman!=null){
+            List<OrderModel> orders = orderDao.list(null, null, null, null,workman.getId(), null,null, PageUtil.BEGIN_PAGE, PageUtil.MAX_PAGE_SIZE);
+            int count = 0;
+            int sum = 0;
+            for(OrderModel tOrder:orders){
+                if(tOrder.getJudgment()!=null){
+                    count++;
+                    sum+=tOrder.getJudgment();
+                }
+            }
+            float judgment = 0;
+            if(count>0){
+                judgment = (float)sum/count;
+            }
+            workman.setCooperateTimes(count);
+            workman.setScore(judgment);
+            workmanDao.update(workman);
+        }
     }
 
     @Override
     public void batchAction(String ids, String action, String orderStatus) {
+        // TODO: 2016/7/26
+    }
+
+    @Override
+    public int analysisOrderCount(String creatorId, String serviceType, String beginTime, String endTime) {
+        return orderDao.analysisOrderCount(creatorId,serviceType,beginTime,endTime);
+    }
+
+    @Override
+    public int analysisIncome(String creatorId, String serviceType, String beginTime, String endTime) {
+        return orderDao.analysisIncome(creatorId,serviceType,beginTime,endTime);
+    }
+
+    @Override
+    public int analysisExpenditure(String creatorId, String serviceType, String beginTime, String endTime) {
+        return orderDao.analysisExpenditure(creatorId,serviceType,beginTime,endTime);
+    }
+
+    @Override
+    public int analysisProfit(String creatorId, String serviceType, String beginTime, String endTime) {
+        return orderDao.analysisIncome(creatorId,serviceType,beginTime,endTime) - orderDao.analysisExpenditure(creatorId,serviceType,beginTime,endTime);
+    }
+
+    @Override
+    public float analysisProfitMargin(String creatorId, String serviceType, String beginTime, String endTime) {
+        int income = orderDao.analysisIncome(creatorId,serviceType,beginTime,endTime);
+        int expenditure = orderDao.analysisExpenditure(creatorId,serviceType,beginTime,endTime);
+
+        return (float)(income-expenditure)/income;
     }
 }

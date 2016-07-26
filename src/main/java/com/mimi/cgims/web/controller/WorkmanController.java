@@ -10,10 +10,7 @@ import com.mimi.cgims.web.captcha.GeetestLib;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -30,8 +27,8 @@ public class WorkmanController {
 
     @RequestMapping(value = "/workman", method = RequestMethod.GET)
     @ResponseBody
-    public Object search(String searchKeyword, String province, String city, String area, String serviceType, int targetPage, int pageSize) {
-        return workmanService.list4Page(searchKeyword, province, city, area, serviceType, targetPage, pageSize);
+    public Object search(String searchKeyword, String province, String city, String area, String serviceType, @RequestParam(defaultValue = "1") Integer curPage, @RequestParam(defaultValue = "10") Integer pageSize) {
+        return workmanService.list4Page(searchKeyword, province, city, area, serviceType, curPage, pageSize);
     }
 
     @RequestMapping(value = {"/workman/self/{id}","/workman/{id}"}, method = RequestMethod.GET)

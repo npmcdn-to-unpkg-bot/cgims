@@ -61,6 +61,7 @@ public class InitData implements ApplicationListener<ContextRefreshedEvent> {
     private void initTestData() {
         roleService.initTestData();
         userService.initTestData();
+//        userService.initTestData2();
         workmanService.initTestData();
         orderService.initTestData();
     }

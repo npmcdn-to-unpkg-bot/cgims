@@ -51,12 +51,12 @@ public class UserModel implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<OrderModel> orders;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "tr_user_user")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "slaves")
     @JsonIgnore
     private List<UserModel> masters;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "masters")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "tr_user_user")
 //    @JsonIgnore
     private List<UserModel> slaves;
 

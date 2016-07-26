@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ResultUtil {
-    public static final String MAP_KEY_STATUS = "status";
+    public static final String MAP_KEY_STATUS = "success";
 
     public static final String MAP_KEY_MSG = "msg";
 

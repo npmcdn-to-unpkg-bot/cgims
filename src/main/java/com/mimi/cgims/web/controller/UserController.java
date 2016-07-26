@@ -8,13 +8,11 @@ import com.mimi.cgims.service.IPermissionService;
 import com.mimi.cgims.service.IUserService;
 import com.mimi.cgims.util.LoginUtil;
 import com.mimi.cgims.util.ResultUtil;
+import com.mimi.cgims.util.page.PageUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -32,14 +30,14 @@ public class UserController {
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     @ResponseBody
-    public Object search(String searchKeyword, int targetPage, int pageSize) {
-        return userService.list4Page(searchKeyword, targetPage, pageSize);
+    public Object search(String searchKeyword, @RequestParam(defaultValue = "1") Integer curPage,@RequestParam(defaultValue = "10") Integer pageSize) {
+        return userService.list4Page(searchKeyword, curPage, pageSize);
     }
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Object get(@PathVariable String id) {
-        return ResultUtil.getSuccessResultMap(userService.getWithRoles(id));
+        return ResultUtil.getSuccessResultMap(userService.getWithDatas(id));
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)

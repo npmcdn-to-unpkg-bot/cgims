@@ -37,6 +37,8 @@ public class DaoUtil {
         if(user!=null){
             user.setRoles(null);
             user.setSlaves(null);
+            user.setMasters(null);
+            user.setOrders(null);
         }
     }
 
@@ -55,6 +57,7 @@ public class DaoUtil {
     public static void cleanLazyData(RoleModel role){
         if(role!=null){
             role.setPermissions(null);
+            role.setUsers(null);
         }
     }
 }

@@ -9,11 +9,21 @@ public interface IOrderService extends IBaseService<OrderModel, String> {
 
     String checkUpdate(OrderModel order);
 
-    Object addAndRefresh(OrderModel order);
+    String addAndRefresh(OrderModel order);
 
     void updateAndRefresh(OrderModel order);
 
     void deleteAndRefresh(String id);
 
     void batchAction(String ids, String action, String orderStatus);
+
+    int analysisOrderCount(String creatorId, String serviceType, String beginTime, String endTime);
+
+    int analysisIncome(String creatorId, String serviceType, String beginTime, String endTime);
+
+    int analysisExpenditure(String creatorId, String serviceType, String beginTime, String endTime);
+
+    int analysisProfit(String creatorId, String serviceType, String beginTime, String endTime);
+
+    float analysisProfitMargin(String creatorId, String serviceType, String beginTime, String endTime);
 }

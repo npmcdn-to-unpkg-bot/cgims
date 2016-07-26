@@ -6,7 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 public interface IUserService extends IBaseService<UserModel, String> {
-    UserModel getWithRoles(String id);
+
+    UserModel getWithDatas(String id);
 
     Map<String,Object> list4Page(String searchKeyword, int targetPage, int pageSize);
 

@@ -51,16 +51,28 @@ public class OrderController {
         return ResultUtil.getSuccessResultMap();
     }
 
-    @RequestMapping(value = {"/user/{id}/order","/order"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/order", method = RequestMethod.GET)
     @ResponseBody
-    public Object search(String searchKeyword,String orderStatus,String serviceType,String userId,String beginTime,String endTime, int targetPage, int pageSize) {
-        return orderService.list4Page(searchKeyword,orderStatus,serviceType,userId,beginTime,endTime,searchKeyword, targetPage, pageSize);
+    public Object search(String searchKeyword,String orderStatus,String serviceType,String userId,String workmanId,String beginTime,String endTime,@RequestParam(defaultValue = "1") Integer curPage,@RequestParam(defaultValue = "10") Integer pageSize) {
+        return orderService.list4Page(searchKeyword,orderStatus,serviceType,userId,workmanId,beginTime,endTime,curPage, pageSize);
     }
 
-    @RequestMapping(value = {" /user/{id}/order/{orderId}","/order/{id}"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/user/{id}/order", method = RequestMethod.GET)
     @ResponseBody
-    public Object get(@PathVariable String id) {
-        return ResultUtil.getSuccessResultMap(orderService.get(id));
+    public Object userSearch(@PathVariable String id,String searchKeyword,String orderStatus,String serviceType,String userId,String beginTime,String endTime,@RequestParam(defaultValue = "1") Integer curPage,@RequestParam(defaultValue = "10") Integer pageSize) {
+        return orderService.list4Page(searchKeyword,orderStatus,serviceType,id,null,beginTime,endTime,curPage, pageSize);
+    }
+
+    @RequestMapping(value = "/workman/{id}/order", method = RequestMethod.GET)
+    @ResponseBody
+    public Object workmanSearch(@PathVariable String id, String searchKeyword,String orderStatus,String serviceType,String userId,String beginTime,String endTime,@RequestParam(defaultValue = "1") Integer curPage,@RequestParam(defaultValue = "10") Integer pageSize) {
+        return orderService.list4Page(searchKeyword,orderStatus,serviceType,userId,id,beginTime,endTime,curPage, pageSize);
+    }
+
+    @RequestMapping(value = {"/workman/{id}/order/{orderId}"," /user/{id}/order/{orderId}","/order/{orderId}"}, method = RequestMethod.GET)
+    @ResponseBody
+    public Object get(@PathVariable String orderId) {
+        return ResultUtil.getSuccessResultMap(orderService.get(orderId));
     }
 
     @RequestMapping(value = {"/user/{id}/order","/order"}, method = RequestMethod.POST)
@@ -129,4 +141,31 @@ public class OrderController {
         }
     }
 
+
+
+    @RequestMapping(value = "/analysis/{type}", method = { RequestMethod.GET })
+    public @ResponseBody
+    Object analysis(@PathVariable String type,String creatorId,String serviceType,String beginTime,String endTime) {
+        Object result;
+        switch (type){
+            case "orderCount":
+                result = orderService.analysisOrderCount(creatorId,serviceType,beginTime,endTime);
+                break;
+            case "income":
+                result = orderService.analysisIncome(creatorId,serviceType,beginTime,endTime);
+                break;
+            case "expenditure":
+                result = orderService.analysisExpenditure(creatorId,serviceType,beginTime,endTime);
+                break;
+            case "profit":
+                result = orderService.analysisProfit(creatorId,serviceType,beginTime,endTime);
+                break;
+            case "profitMargin":
+                result = orderService.analysisProfitMargin(creatorId,serviceType,beginTime,endTime);
+                break;
+            default:
+                return ResultUtil.getFailResultMap("未知分析类型");
+        }
+        return ResultUtil.getSuccessResultMap(result);
+    }
 }

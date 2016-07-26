@@ -8,10 +8,7 @@ import com.mimi.cgims.util.ResultUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -25,8 +22,8 @@ public class RoleController {
 
     @RequestMapping(value = "/role", method = RequestMethod.GET)
     @ResponseBody
-    public Object search(String searchKeyword, int targetPage, int pageSize) {
-        return roleService.list4Page(searchKeyword, targetPage, pageSize);
+    public Object search(String searchKeyword, @RequestParam(defaultValue = "1") Integer curPage, @RequestParam(defaultValue = "10") Integer pageSize) {
+        return roleService.list4Page(searchKeyword, curPage, pageSize);
     }
 
     @RequestMapping(value = "/role/{id}", method = RequestMethod.GET)
