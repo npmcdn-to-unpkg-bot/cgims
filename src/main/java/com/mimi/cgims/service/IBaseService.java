@@ -19,4 +19,6 @@ public interface IBaseService<M extends Serializable, PK extends Serializable> {
     void update(M model);
 
     void delete(PK id);
+
+    void batchDelete(PK ... ids);
 }

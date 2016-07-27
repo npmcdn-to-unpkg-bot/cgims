@@ -21,6 +21,11 @@ public class IndexController {
         return "index";
     }
 
+    @RequestMapping(value = "/html/indexOld", method = {RequestMethod.GET})
+    public String indexOld(HttpServletRequest request) {
+        return "indexOld";
+    }
+
     @RequestMapping(value = "/html/login", method = {RequestMethod.GET})
     public String login(HttpServletRequest request) {
         return "login";

@@ -92,12 +92,25 @@ public abstract class BaseDao<M extends Serializable, PK extends Serializable>
         return executeUpdate(deleteHql,ids);
     }
 
-    public int executeUpdate(String hql,Object ... params){
-        Query deleteQuery = getSession().createQuery(hql);
-        for(int i=0;i<params.length;i++){
-            deleteQuery.setParameter(i,params[i]);
+    public int batchUpdate(String name,Object value,PK ... ids){
+        String updateHql = "update "+this.entityClass.getSimpleName()+" set model."+name+" = ? where model.id in ({ids})";
+        String idsStr = "";
+        for(int i=0;i<ids.length;i++){
+            if(i!=0){
+                idsStr+=",";
+            }
+            idsStr+="?";
         }
-        return deleteQuery.executeUpdate();
+        updateHql = updateHql.replace("{ids}",idsStr);
+        return executeUpdate(updateHql,value,ids);
+    }
+
+    public int executeUpdate(String hql,Object ... params){
+        Query updateQuery = getSession().createQuery(hql);
+        for(int i=0;i<params.length;i++){
+            updateQuery.setParameter(i,params[i]);
+        }
+        return updateQuery.executeUpdate();
     }
 
 
@@ -144,7 +157,15 @@ public abstract class BaseDao<M extends Serializable, PK extends Serializable>
 //        }
 //    }
 
-    protected List querySql(String sql, Object... args) {
+    public int updateSql(String sql,Object ... args){
+        Query query = getSession().createSQLQuery(sql);
+        for (int i = 0; i < args.length; i++) {
+            query.setParameter(i, args[i]);
+        }
+        return query.executeUpdate();
+    }
+
+    public List querySql(String sql, Object... args) {
         Query query = getSession().createSQLQuery(sql);
         for (int i = 0; i < args.length; i++) {
             query.setParameter(i, args[i]);

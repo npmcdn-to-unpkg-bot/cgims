@@ -56,6 +56,13 @@ public class OrderDao extends BaseDao<OrderModel, String>
         setAnalysisParams(criteria,creatorId,serviceType,beginTime,endTime);
         return sum(criteria,"servicePrice");
     }
+
+    @Override
+    public void cleanUserId(String userId) {
+        String sql = "update tbl_order set user_id = ? where user_id = ?";
+        updateSql(sql,null,userId);
+    }
+
     private void setAnalysisParams(Criteria criteria, String creatorId, String serviceType, String beginTime, String endTime) {
         if (StringUtils.isNotBlank(serviceType)) {
             criteria.add(Restrictions.like("serviceType", "%" + serviceType + "%"));

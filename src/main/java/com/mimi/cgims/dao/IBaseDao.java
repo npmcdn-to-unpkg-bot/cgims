@@ -15,4 +15,8 @@ public interface IBaseDao<M extends Serializable, PK extends Serializable> {
     void update(M model);
 
     void delete(PK id);
+
+    int batchDelete(PK ... ids);
+
+    int batchUpdate(String name,Object value,PK ... ids);
 }

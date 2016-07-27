@@ -2,11 +2,6 @@ package com.mimi.cgims.service.impl;
 
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.*;
-import com.baidu.ueditor.PathFormat;
-import com.baidu.ueditor.define.AppInfo;
-import com.baidu.ueditor.define.BaseState;
-import com.baidu.ueditor.define.MIMEType;
-import com.baidu.ueditor.define.State;
 import com.cedarsoft.zip.ZipExtractor;
 import com.mimi.cgims.Config;
 import com.mimi.cgims.service.IAliyunOSSService;
@@ -17,8 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -311,78 +304,6 @@ public class AliyunOSSService implements IAliyunOSSService {
 		return midPath;
 	}
 
-	@Override
-	public State saveImageToServer(String urlStr) throws IOException {
-
-		HttpURLConnection connection = null;
-		URL url = null;
-		String suffix = null;
-		
-		try {
-			url = new URL( urlStr );
-
-			
-			connection = (HttpURLConnection) url.openConnection();
-		
-			connection.setInstanceFollowRedirects( true );
-			connection.setUseCaches( true );
-		
-			
-			suffix = MIMEType.getSuffix( connection.getContentType() );
-
-			List<String> allowSuffix = new ArrayList<String>();
-			allowSuffix.add(".jpg");
-			allowSuffix.add(".jpeg");
-			allowSuffix.add(".png");
-			allowSuffix.add(".gif");
-			if ( !allowSuffix.contains( suffix ) ) {
-				return new BaseState( false, AppInfo.NOT_ALLOW_FILE_TYPE );
-			}
-			
-			if ( connection.getContentLength()>25 * 1024 * 1024 ) {
-				return new BaseState( false, AppInfo.MAX_SIZE );
-			}
-			
-			
-//			String savePath = this.getPath( this.savePath, this.filename, suffix );
-//			String physicalPath = this.rootPath + savePath;
-//			State state = StorageManager.saveFileByInputStream( connection.getInputStream(), physicalPath );
-
-			// 初始化OSSClient
-		    OSSClient client = getOSSClient();
-
-		    // 获取指定文件的输入流
-		    InputStream content = connection.getInputStream();
-
-		    // 创建上传Object的Metadata
-		    ObjectMetadata meta = new ObjectMetadata();
-
-		    // 必须设置ContentLength
-		    meta.setContentLength(connection.getContentLength());
-		    meta.setContentType(connection.getContentType());
-
-			String path = config.getAliyunOssUploadUrlBase()+config.getAliyunOssUploadUrlImage()+getAutoBuildDirectory()+suffix;
-			
-			client.putObject(config.getAliyunOssImageBucket(), path, content, meta);
-		    path = config.getAliyunOssCdnUrl()+path;
-
-
-			String fileName = path.substring(path.lastIndexOf("/")+1);
-			path = addImgParams(path,
-					AliyunOSSService.ALIYUN_OSS_IMAGE_PARAMS_TYPE_INFO_IMG);
-		    State state = new BaseState(true);
-			state.putInfo( "size", connection.getContentLength() );
-			state.putInfo( "title", fileName );
-			state.putInfo( "url", PathFormat.format( path ) );
-			state.putInfo( "source", urlStr );
-			
-			return state;
-			
-		} catch ( Exception e ) {
-			return new BaseState( false, AppInfo.REMOTE_FAIL );
-		}
-	}
-	
 	public List<String> getChildPathList(String basePath){
 		if(StringUtils.isBlank(basePath)){
 			return null;

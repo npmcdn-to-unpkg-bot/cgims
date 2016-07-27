@@ -15,4 +15,6 @@ public interface IOrderDao extends
     int analysisIncome(String creatorId, String serviceType, String beginTime, String endTime);
 
     int analysisExpenditure(String creatorId, String serviceType, String beginTime, String endTime);
+
+    void cleanUserId(String userId);
 }

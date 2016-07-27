@@ -1,7 +1,6 @@
 package com.mimi.cgims.service;
 
 import com.aliyun.oss.OSSClient;
-import com.baidu.ueditor.define.State;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -12,8 +11,6 @@ public interface IAliyunOSSService {
 	public OSSClient getOSSClient();
 
 	public String saveFileToServer(MultipartFile theFile) throws IOException;
-
-	public State saveImageToServer(String url) throws IOException;
 
 	public String upzipAndSaveFileToServer(MultipartFile theFile, String type) throws IOException;
 	

@@ -2,8 +2,10 @@ package com.mimi.cgims.service.impl;
 
 import com.mimi.cgims.Constants;
 import com.mimi.cgims.dao.IBaseDao;
+import com.mimi.cgims.dao.IOrderDao;
 import com.mimi.cgims.dao.IRoleDao;
 import com.mimi.cgims.dao.IUserDao;
+import com.mimi.cgims.model.OrderModel;
 import com.mimi.cgims.model.RoleModel;
 import com.mimi.cgims.model.UserModel;
 import com.mimi.cgims.service.IUserService;
@@ -27,6 +29,9 @@ public class UserService extends BaseService<UserModel, String> implements IUser
 
     @Resource
     private IRoleDao roleDao;
+
+    @Resource
+    private IOrderDao orderDao;
 
     @Resource
     @Override
@@ -212,5 +217,11 @@ public class UserService extends BaseService<UserModel, String> implements IUser
         user.setId(tu.getId());
         user.setName(tu.getName());
         return null;
+    }
+
+    @Override
+    public void delete(String id){
+        orderDao.cleanUserId(id);
+        super.delete(id);
     }
 }

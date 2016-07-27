@@ -50,4 +50,8 @@ public abstract class BaseService<M extends Serializable, PK extends Serializabl
         baseDao.delete(id);
     }
 
+    public void batchDelete(PK ... ids){
+        baseDao.batchDelete(ids);
+    }
+
 }
