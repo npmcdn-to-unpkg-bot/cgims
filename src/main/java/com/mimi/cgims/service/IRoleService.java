@@ -12,4 +12,6 @@ public interface IRoleService extends IBaseService<RoleModel,String> {
     String checkAdd(RoleModel role);
 
     String checkUpdate(RoleModel role);
+
+    RoleModel getByName(String name);
 }

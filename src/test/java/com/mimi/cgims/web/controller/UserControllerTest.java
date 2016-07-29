@@ -215,8 +215,6 @@ public class UserControllerTest extends BaseJunit4Test {
 
     @Test
     public void delete() throws Exception {
-
-        Random random = new Random();
         List<RoleModel> roles = roleDao.list();
         List<UserModel> slaves = userDao.list();
         List<UserModel> nSlaves = randomList(slaves);

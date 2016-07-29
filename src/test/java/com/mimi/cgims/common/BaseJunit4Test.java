@@ -5,6 +5,7 @@ import com.mimi.cgims.listener.InitData;
 import com.mimi.cgims.service.*;
 import com.mimi.cgims.util.ListUtil;
 import com.mimi.cgims.util.ResultUtil;
+import com.mimi.cgims.web.controller.RoleController;
 import com.mimi.cgims.web.controller.UserController;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -28,6 +29,9 @@ public class BaseJunit4Test extends AbstractTransactionalJUnit4SpringContextTest
 
     @Resource
     protected UserController userController;
+
+    @Resource
+    protected RoleController roleController;
 
     @Resource
     protected IPermissionService permissionService;

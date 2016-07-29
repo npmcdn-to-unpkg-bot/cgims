@@ -85,11 +85,17 @@ public class RoleService extends BaseService<RoleModel, String> implements IRole
         return errors.get(0);
     }
 
+    @Override
+    public RoleModel getByName(String name) {
+        return roleDao.getByName(name);
+    }
+
     private List<String> commonCheck(RoleModel role){
         List<String> errors = new ArrayList<>();
         String error;
         if(role == null){
             errors.add("内容为空");
+            return errors;
         }
          error = FormatUtil.checkFormat(role.getName(),FormatUtil.REGEX_COMMON_NAME,true,0,FormatUtil.MAX_LENGTH_COMMON_SHORT_L3,"角色名称");
         if(StringUtils.isNotBlank(error)){
