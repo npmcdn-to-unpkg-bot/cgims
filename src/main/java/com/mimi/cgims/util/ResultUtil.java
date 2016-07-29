@@ -22,9 +22,9 @@ public class ResultUtil {
     public static final String MAP_KEY_PAGE_SIZE = "pageSize";
 
     public static final String MAP_KEY_DATA = "data";
-    
+
     public static final int RESULT_SUCCESS = 1;
-    
+
     public static final int RESULT_FAIL = 0;
 
     public static Map<String, Object> getResultMap(int success, String msg, Object result) {
@@ -41,7 +41,7 @@ public class ResultUtil {
 
 
     public static Map<String, Object> getSuccessResultMap(Object result) {
-        return getResultMap(RESULT_SUCCESS, null,result);
+        return getResultMap(RESULT_SUCCESS, null, result);
     }
 
 
@@ -75,6 +75,22 @@ public class ResultUtil {
 
     public static Map<String, Object> getResultMap(int success, String msg) {
         return getResultMap(success, msg, null);
+    }
+
+    public static int getStatus(Map<String, Object> map) {
+        return (int) map.get(MAP_KEY_STATUS);
+    }
+
+    public static String getMsg(Map<String, Object> map) {
+        return (String) map.get(MAP_KEY_MSG);
+    }
+
+    public static Object getDatas(Map<String, Object> map) {
+        return ((Map<String, Object>) getResult(map)).get(MAP_KEY_DATAS);
+    }
+
+    public static Object getResult(Map<String, Object> map) {
+        return map.get(MAP_KEY_RESULT);
     }
 
 }

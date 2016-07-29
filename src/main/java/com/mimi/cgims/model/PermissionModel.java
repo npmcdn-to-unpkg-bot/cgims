@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "tbl_permission")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class PermissionModel implements Serializable {
+public class PermissionModel extends BaseModel{
 
     @Id
     @GeneratedValue(generator = "uuid")

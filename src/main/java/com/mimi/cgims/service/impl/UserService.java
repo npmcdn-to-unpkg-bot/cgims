@@ -151,6 +151,7 @@ public class UserService extends BaseService<UserModel, String> implements IUser
         String error;
         if (user == null) {
             errors.add("内容为空");
+            return errors;
         }
         error = FormatUtil.checkFormat(user.getLoginName(), FormatUtil.REGEX_COMMON_NAME, true, 0, FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "登录名");
         if (StringUtils.isNotBlank(error)) {
@@ -178,7 +179,7 @@ public class UserService extends BaseService<UserModel, String> implements IUser
         }
         if (errors.isEmpty()) {
             UserModel tu = userDao.getByLoginName(user.getLoginName());
-            if (tu != null && !user.getId().equals(tu.getId())) {
+            if (tu != null && !tu.getId().equals(user.getId())) {
                 errors.add("登录名已存在");
             }
         }

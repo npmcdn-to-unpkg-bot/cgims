@@ -1,6 +1,7 @@
 package com.mimi.cgims.util;
 
 import com.mimi.cgims.Constants;
+import com.mimi.cgims.model.BaseModel;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -23,6 +24,10 @@ public class ListUtil {
         return list == null || list.isEmpty();
     }
 
+    public static boolean isNotEmpty(List list) {
+        return !isEmpty(list);
+    }
+
     public static String buildStr(List<String> list) {
         if (isEmpty(list)) {
             return "";
@@ -35,6 +40,20 @@ public class ListUtil {
                 }
                 str += s.trim();
             }
+        }
+        return str;
+    }
+
+    public static <M extends BaseModel> String buildIds(List<M> list) {
+        if (isEmpty(list)) {
+            return "";
+        }
+        String str = "";
+        for (M model : list) {
+            if (StringUtils.isNotBlank(str)) {
+                str += Constants.SPLIT_STRING_PARAMS;
+            }
+            str += model.getId();
         }
         return str;
     }

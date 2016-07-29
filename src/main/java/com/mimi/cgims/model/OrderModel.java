@@ -13,7 +13,7 @@ import java.util.Date;
 @Entity
 @Table(name = "tbl_order")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class OrderModel implements Serializable {
+public class OrderModel extends BaseModel {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid")

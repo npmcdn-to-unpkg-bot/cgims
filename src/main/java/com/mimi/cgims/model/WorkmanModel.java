@@ -17,7 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "tbl_workman")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class WorkmanModel implements Serializable {
+public class WorkmanModel extends BaseModel {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid")

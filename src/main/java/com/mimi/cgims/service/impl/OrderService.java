@@ -52,7 +52,7 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
             List<UserModel> users = userDao.list();
             List<WorkmanModel> workmanModels = workmanDao.list();
             for (UserModel user : users) {
-                for (int i = 0; i < 30; i++) {
+                for (int i = 0; i < 100; i++) {
                     if (Math.random() > 0.9) {
                         break;
                     }

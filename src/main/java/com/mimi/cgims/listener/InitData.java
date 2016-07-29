@@ -45,7 +45,7 @@ public class InitData implements ApplicationListener<ContextRefreshedEvent> {
         }
     }
 
-    private void init() {
+    public void init() {
         CityUtil.init();
         initGeetest();
         initYTX();
@@ -58,7 +58,7 @@ public class InitData implements ApplicationListener<ContextRefreshedEvent> {
         }
     }
 
-    private void initTestData() {
+    public void initTestData() {
         roleService.initTestData();
         userService.initTestData();
 //        userService.initTestData2();

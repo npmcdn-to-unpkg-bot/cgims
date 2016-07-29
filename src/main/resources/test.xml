@@ -24,8 +24,8 @@
 	<!-- </property> -->
 	<!-- </bean> -->
 <!-- 	<context:property-placeholder location="classpath:resources.properties" /> -->
-	<context:property-placeholder location="classpath:*.properties" />
-	<!--<context:property-placeholder location="classpath:*.properties" ignore-unresolvable="true" />-->
+	<!--<context:property-placeholder location="classpath:*.properties" />-->
+	<context:property-placeholder location="classpath:*.properties" ignore-unresolvable="true" />
 
 
 
@@ -36,18 +36,21 @@
 		<!-- <property name="driverUrl" value="${connection.url}" /> -->
 		<!-- <property name="user" value="${connection.username}" /> -->
 		<!-- <property name="password" value="${connection.password}" /> -->
-		<!-- <property name="maximumConnectionCount" value="${proxool.maximum.connection.count}" 
+		<!-- <property name="maximumConnectionCount" value="${proxool.maximum.connection.count}"
 			/> -->
-		<!-- <property name="minimumConnectionCount" value="${proxool.minimum.connection.count}" 
+		<!-- <property name="minimumConnectionCount" value="${proxool.minimum.connection.count}"
 			/> -->
 		<!-- <property name="statistics" value="${proxool.statistics}" /> -->
-		<!-- <property name="simultaneousBuildThrottle" value="${proxool.simultaneous.build.throttle}" 
+		<!-- <property name="simultaneousBuildThrottle" value="${proxool.simultaneous.build.throttle}"
 			/> -->
-
-		<property name="driverClass" value="${connection.driver_class}" />
-		<property name="jdbcUrl" value="${connection.url}" />
-		<property name="user" value="${connection.username}" />
-		<property name="password" value="${connection.password}" />
+		<!--connection.driver_class=com.mysql.jdbc.Driver-->
+		<!--connection.url=jdbc:mysql://localhost:3306/cgims?useUnicode=true&amp;characterEncoding=UTF-8-->
+		<!--connection.username=root-->
+		<!--connection.password=123456-->
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/cgims?useUnicode=true&amp;characterEncoding=UTF-8" />
+		<property name="user" value="root" />
+		<property name="password" value="123456" />
 
 		<property name="minPoolSize" value="10" />
 		<property name="maxPoolSize" value="100" />
@@ -66,34 +69,34 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="packagesToScan">
 			<list>
-				<value>com.mimi.cgims.</value>
+				<value>com.mimi.cgims</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
-				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
-				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.hbm2ddl.auto">create</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>
 				<prop key="hibernate.format_sql">true</prop>
-				<prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
-				<prop key="hibernate.default_batch_fetch_size">${hibernate.default_batch_fetch_size}</prop>
-				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
-				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
-				<prop key="hibernate.bytecode.use_reflection_optimizer">${hibernate.bytecode.use_reflection_optimizer}</prop>
+				<prop key="hibernate.query.substitutions">true 1, false 0</prop>
+				<prop key="hibernate.default_batch_fetch_size">16</prop>
+				<prop key="hibernate.max_fetch_depth">2</prop>
+				<prop key="hibernate.generate_statistics">true</prop>
+				<prop key="hibernate.bytecode.use_reflection_optimizer">true</prop>
 
-				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
-				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
-				<prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop>
-				<prop key="net.sf.ehcache.configurationResourceName">${net.sf.ehcache.configurationResourceName}</prop>
-				<prop key="hibernate.cache.use_structured_entries">${hibernate.cache.use_structured_entries}</prop>
-				<prop key="hibernate.search.default.directory_provider">filesystem</prop>
-				<prop key="hibernate.search.default.indexBase">${hibernate.search.indexBase}</prop>
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.EhCacheRegionFactory</prop>
+				<prop key="net.sf.ehcache.configurationResourceName">/ehcache_hibernate.xml</prop>
+				<prop key="hibernate.cache.use_structured_entries">true</prop>
+				<!--<prop key="hibernate.search.default.directory_provider">filesystem</prop>-->
+				<!--<prop key="hibernate.search.default.indexBase">${hibernate.search.indexBase}</prop>-->
 <!-- 				<prop key="hibernate.search.analyzer"> org.apache.lucene.analysis.cjk.CJKAnalyzer</prop> -->
 			</props>
 		</property>
 		<!-- <property name="hibernate.search.default.directory_provider" -->
 		<!-- value="filesystem" /> -->
-		<!-- <property name="hibernate.search.default.indexBase" value="c:/lucene/indexes" 
+		<!-- <property name="hibernate.search.default.indexBase" value="c:/lucene/indexes"
 			/> -->
 		<!-- hibernate.search.default.directory_provider = filesystem -->
 		<!-- hibernate.search.default.indexBase = /usr/lucene/indexes -->
@@ -117,22 +120,22 @@
 		<!-- <property name="eventListeners"> -->
 		<!-- <map> -->
 		<!-- <entry key="post-update"> -->
-		<!-- <bean class="org.hibernate.search.event.FullTextIndexEventListener" 
+		<!-- <bean class="org.hibernate.search.event.FullTextIndexEventListener"
 			/> -->
 		<!-- </entry> -->
 		<!-- <entry key="post-insert"> -->
-		<!-- <bean class="org.hibernate.search.event.FullTextIndexEventListener" 
+		<!-- <bean class="org.hibernate.search.event.FullTextIndexEventListener"
 			/> -->
 		<!-- </entry> -->
 		<!-- <entry key="post-delete"> -->
-		<!-- <bean class="org.hibernate.search.event.FullTextIndexEventListener" 
+		<!-- <bean class="org.hibernate.search.event.FullTextIndexEventListener"
 			/> -->
 		<!-- </entry> -->
 		<!-- </map> -->
 		<!-- </property> -->
 
 	</bean>
-	
+
 	<!-- 配置Jdbc模板 -->
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource"></property>
@@ -148,7 +151,6 @@
 		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-
 	<tx:advice id="txAdvice" transaction-manager="txManager">
 		<tx:attributes>
 			<tx:method name="save*" propagation="REQUIRED" />

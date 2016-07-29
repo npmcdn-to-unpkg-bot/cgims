@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "tbl_role")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class RoleModel implements Serializable {
+public class RoleModel extends BaseModel {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid")

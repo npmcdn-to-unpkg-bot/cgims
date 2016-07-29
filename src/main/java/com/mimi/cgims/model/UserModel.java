@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "tbl_user")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class UserModel implements Serializable {
+public class UserModel extends BaseModel{
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid")
@@ -27,7 +27,6 @@ public class UserModel implements Serializable {
     private String loginName;
 
     @Pattern(regexp = "[0-9a-zA-Z\u4E00-\u9FA5_-]{0,50}", message = "姓名格式有误")
-    @Column(unique = true)
     private String name;
 
     @Pattern(regexp = "^(1[0-9]{10})|$", message = "电话格式有误")

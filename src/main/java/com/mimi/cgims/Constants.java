@@ -7,13 +7,6 @@ import java.util.Map;
 public class Constants {
     public static final String PROJECT_NAME = "cgims";
 
-    public static final String ROLE_DEFAULT_ADMIN_NAME = "超级管理员";
-    public static final String USER_DEFAULT_ADMIN_NAME = "admin";
-    public static final String USER_DEFAULT_ADMIN_PASSWORD = "123456";
-    public static final String MI_HEAD_IMG_DEFAULT_URL = "/assets/img/ui/logo.jpg";
-
-    public static String COMMAND = "command";
-
     public static final String GEETEST_ID = "61658dd2f0dfc210aeb78192ea4fde05";
     public static final String GEETEST_KEY = "abceaa2fd512253fb743ba7e06780635";
 
