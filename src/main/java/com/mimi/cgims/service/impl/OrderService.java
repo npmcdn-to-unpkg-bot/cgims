@@ -9,8 +9,10 @@ import com.mimi.cgims.enums.OrderStatus;
 import com.mimi.cgims.model.OrderModel;
 import com.mimi.cgims.model.UserModel;
 import com.mimi.cgims.model.WorkmanModel;
+import com.mimi.cgims.service.IAutoNumService;
 import com.mimi.cgims.service.IOrderService;
 import com.mimi.cgims.util.AutoNumUtil;
+import com.mimi.cgims.util.DateUtil;
 import com.mimi.cgims.util.ResultUtil;
 import com.mimi.cgims.util.page.PageUtil;
 import org.apache.commons.lang.StringUtils;
@@ -18,10 +20,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class OrderService extends BaseService<OrderModel, String> implements IOrderService {
@@ -49,13 +48,17 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
     public void initTestData() {
         int count = orderDao.count();
         if (count == 0) {
+            Random random = new Random();
+
             List<UserModel> users = userDao.list();
             List<WorkmanModel> workmanModels = workmanDao.list();
             for (UserModel user : users) {
-                for (int i = 0; i < 100; i++) {
-                    if (Math.random() > 0.9) {
-                        break;
-                    }
+                int total = random.nextInt(50);
+                for (int i = 0; i < total; i++) {
+                    Date today = DateUtil.randomDate("2014-01-01 00:00:00","2015-01-01 00:00:00");
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(today);
+                    AutoNumUtil.setC(c);
                     OrderModel order = new OrderModel();
                     order.setOrderNumber(AutoNumUtil.getOrderNum());
                     order.setOrderStatus(OrderStatus.random().getName());
@@ -81,7 +84,6 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
                     order.setChecked(Math.random() > 0.5);
                     order.setCheckInfo("核销信息" + i);
                     order.setShopInfo("商家信息" + i);
-                    Random random = new Random();
                     order.setOrderPrice(random.nextInt(300) + 100);
                     order.setServicePrice(order.getOrderPrice() - random.nextInt(100));
                     order.setProfit(order.getOrderPrice() - order.getServicePrice());
@@ -89,12 +91,14 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
                     order.setJudgment(random.nextInt(5) + 1);
                     order.setJudgeReason("评价理由" + i);
                     order.setDescription("备注" + i);
-                    order.setUser(user);
-                    order.setCreateDate(new Date());
+                    if(random.nextBoolean()){
+                        order.setUser(user);
+                    }
+                    order.setCreateDate(today);
                     order.setOrderPriceChanged(random.nextBoolean());
                     order.setServicePriceChanged(random.nextBoolean());
                     if (OrderStatus.YSWC.getName().equals(order.getOrderStatus())) {
-                        order.setCompleteDate(new Date());
+                        order.setCompleteDate(DateUtil.randomDate("2015-01-01 00:00:00","2016-01-01 00:00:00"));
                     }
                     if(random.nextBoolean()){
                         order.setWorkman(workmanModels.get(random.nextInt(workmanModels.size())));
@@ -186,9 +190,10 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
             if(count>0){
                 judgment = (float)sum/count;
             }
-            workman.setCooperateTimes(count);
-            workman.setScore(judgment);
-            workmanDao.update(workman);
+            WorkmanModel nw = workmanDao.get(workman.getId());
+            nw.setCooperateTimes(count);
+            nw.setScore(judgment);
+            workmanDao.update(nw);
         }
     }
 
@@ -223,5 +228,14 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
         int expenditure = orderDao.analysisExpenditure(creatorId,serviceType,beginTime,endTime);
 
         return (float)(income-expenditure)/income;
+    }
+
+    @Override
+    public int getNewestCount(int year, int month, int day) {
+        OrderModel order = orderDao.getNewest(year,month,day);
+        if(order!=null){
+            return Integer.parseInt(order.getOrderNumber().substring(8));
+        }
+        return 0;
     }
 }

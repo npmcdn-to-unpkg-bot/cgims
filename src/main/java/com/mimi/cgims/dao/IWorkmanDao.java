@@ -9,4 +9,6 @@ public interface IWorkmanDao extends
     int count(String searchKeyword, String province, String city, String area, String serviceType);
 
     List<WorkmanModel> list(String searchKeyword, String province, String city, String area, String serviceType, int targetPage, int pageSize);
+
+    WorkmanModel getNewest(int year, int month, int day);
 }

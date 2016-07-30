@@ -1,14 +1,18 @@
 package com.mimi.cgims.common;
 
+import com.mimi.cgims.Config;
 import com.mimi.cgims.dao.*;
 import com.mimi.cgims.listener.InitData;
 import com.mimi.cgims.service.*;
 import com.mimi.cgims.util.ListUtil;
 import com.mimi.cgims.util.ResultUtil;
+import com.mimi.cgims.web.controller.OrderController;
 import com.mimi.cgims.web.controller.RoleController;
 import com.mimi.cgims.web.controller.UserController;
+import com.mimi.cgims.web.controller.WorkmanController;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -28,10 +32,19 @@ import static org.junit.Assert.assertEquals;
 public class BaseJunit4Test extends AbstractTransactionalJUnit4SpringContextTests {//AbstractJUnit4SpringContextTests {
 
     @Resource
+    protected Config config;
+
+    @Resource
     protected UserController userController;
 
     @Resource
     protected RoleController roleController;
+
+    @Resource
+    protected OrderController orderController;
+
+    @Resource
+    protected WorkmanController workmanController;
 
     @Resource
     protected IPermissionService permissionService;
@@ -60,7 +73,9 @@ public class BaseJunit4Test extends AbstractTransactionalJUnit4SpringContextTest
     @Before
     public void before() {
         initData.init();
-        initData.initTestData();
+        if(!config.isInitTestData()){
+            initData.initTestData();
+        }
     }
 
     public List randomList(List list){

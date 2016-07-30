@@ -213,31 +213,31 @@ public class UserControllerTest extends BaseJunit4Test {
         }
     }
 
-    @Test
-    public void delete() throws Exception {
-        List<RoleModel> roles = roleDao.list();
-        List<UserModel> slaves = userDao.list();
-        List<UserModel> nSlaves = randomList(slaves);
-        List<RoleModel> nRoles = randomList(roles);
-        String slaveIds = ListUtil.buildIds(nSlaves);
-        String roleIds = ListUtil.buildIds(nRoles);
-
-        List<UserModel> users = userDao.list();
-        for (UserModel tu : users) {
-            if (!LoginUtil.isAdmin(tu.getLoginName())) {
-                int oCount = orderDao.count();
-                int oRoles = roleDao.count();
-                int oUsers = userDao.count();
-                assertResultSuccess(userController.delete(tu.getId()));
-                oUsers--;
-                assertEquals(oCount, orderDao.count());
-                assertEquals(oRoles, roleDao.count());
-                assertEquals(oUsers, userDao.count());
-            } else {
-                assertResultFail(userController.update(tu.getId(), tu, roleIds, slaveIds));
-            }
-        }
-    }
+//    @Test
+//    public void delete() throws Exception {
+//        List<RoleModel> roles = roleDao.list();
+//        List<UserModel> slaves = userDao.list();
+//        List<UserModel> nSlaves = randomList(slaves);
+//        List<RoleModel> nRoles = randomList(roles);
+//        String slaveIds = ListUtil.buildIds(nSlaves);
+//        String roleIds = ListUtil.buildIds(nRoles);
+//
+//        List<UserModel> users = userDao.list();
+//        for (UserModel tu : users) {
+//            if (!LoginUtil.isAdmin(tu.getLoginName())) {
+//                int oCount = orderDao.count();
+//                int oRoles = roleDao.count();
+//                int oUsers = userDao.count();
+//                assertResultSuccess(userController.delete(tu.getId()));
+//                oUsers--;
+//                assertEquals(oCount, orderDao.count());
+//                assertEquals(oRoles, roleDao.count());
+//                assertEquals(oUsers, userDao.count());
+//            } else {
+//                assertResultFail(userController.update(tu.getId(), tu, roleIds, slaveIds));
+//            }
+//        }
+//    }
 
     @Test
     public void batch() throws Exception {
@@ -248,6 +248,7 @@ public class UserControllerTest extends BaseJunit4Test {
         List<UserModel> nSlaves = randomList(slaves);
         List<RoleModel> nRoles = randomList(roles);
         List<UserModel> nUsers = randomList(slaves);
+        int orderNum = orderDao.count();
         String slaveIds = ListUtil.buildIds(nSlaves);
         String roleIds = ListUtil.buildIds(nRoles);
         String userIds = ListUtil.buildIds(nUsers);
@@ -255,6 +256,7 @@ public class UserControllerTest extends BaseJunit4Test {
         count -= nUsers.size();
         assertResultSuccess(userController.batch(userIds));
         assertEquals(count, userDao.count());
+        assertEquals(orderNum,orderDao.count());
     }
 
 

@@ -69,7 +69,7 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.POST)
     @ResponseBody
     public Object update(@PathVariable String id, UserModel user, String roleIds, String slaveIds) {
         if (LoginUtil.isAdmin(user.getLoginName())) {
@@ -120,16 +120,16 @@ public class UserController {
         return roleModels;
     }
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
-    @ResponseBody
-    public Object delete(@PathVariable String id) {
-        UserModel user = userService.get(id);
-        if (LoginUtil.isAdmin(user.getLoginName())) {
-            return ResultUtil.getFailResultMap("不能删除超级管理员");
-        }
-        userService.delete(id);
-        return ResultUtil.getSuccessResultMap(id);
-    }
+//    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
+//    @ResponseBody
+//    public Object delete(@PathVariable String id) {
+//        UserModel user = userService.get(id);
+//        if (LoginUtil.isAdmin(user.getLoginName())) {
+//            return ResultUtil.getFailResultMap("不能删除超级管理员");
+//        }
+//        userService.delete(id);
+//        return ResultUtil.getSuccessResultMap(id);
+//    }
 
     @RequestMapping(value = "/user/batch", method = RequestMethod.POST)
     @ResponseBody
@@ -181,7 +181,7 @@ public class UserController {
         return ResultUtil.getSuccessResultMap(user);
     }
 
-    @RequestMapping(value = "/user/self", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/user/self", method = RequestMethod.POST)
     public Object userSelfUpdate(HttpServletRequest request, UserModel user) {
         String id = LoginUtil.getCurUserId(request);
         if(StringUtils.isBlank(id)){

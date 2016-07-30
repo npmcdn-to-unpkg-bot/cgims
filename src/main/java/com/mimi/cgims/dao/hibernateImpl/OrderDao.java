@@ -5,12 +5,10 @@ import com.mimi.cgims.dao.IOrderDao;
 import com.mimi.cgims.model.OrderModel;
 import com.mimi.cgims.util.DaoUtil;
 import com.mimi.cgims.util.DateUtil;
+import com.mimi.cgims.util.ListUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Projection;
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
@@ -39,28 +37,41 @@ public class OrderDao extends BaseDao<OrderModel, String>
     @Override
     public int analysisOrderCount(String creatorId, String serviceType, String beginTime, String endTime) {
         Criteria criteria = getCriteria();
-        setAnalysisParams(criteria,creatorId,serviceType,beginTime,endTime);
+        setAnalysisParams(criteria, creatorId, serviceType, beginTime, endTime);
         return count(criteria);
     }
 
     @Override
     public int analysisIncome(String creatorId, String serviceType, String beginTime, String endTime) {
         Criteria criteria = getCriteria();
-        setAnalysisParams(criteria,creatorId,serviceType,beginTime,endTime);
-        return sum(criteria,"orderPrice");
+        setAnalysisParams(criteria, creatorId, serviceType, beginTime, endTime);
+        return sum(criteria, "orderPrice");
     }
 
     @Override
     public int analysisExpenditure(String creatorId, String serviceType, String beginTime, String endTime) {
         Criteria criteria = getCriteria();
-        setAnalysisParams(criteria,creatorId,serviceType,beginTime,endTime);
-        return sum(criteria,"servicePrice");
+        setAnalysisParams(criteria, creatorId, serviceType, beginTime, endTime);
+        return sum(criteria, "servicePrice");
     }
 
     @Override
     public void cleanUserId(String userId) {
         String sql = "update tbl_order set user_id = ? where user_id = ?";
-        updateSql(sql,null,userId);
+        updateSql(sql, null, userId);
+    }
+
+    @Override
+    public OrderModel getNewest(int year, int month, int day) {
+        Criteria criteria = getCriteria();
+        criteria.add(Restrictions.like("orderNumber", DateUtil.convert2String(year, month, day) + "%"));
+        criteria.addOrder(Order.desc("orderNumber"));
+        criteria.setMaxResults(1);
+        List<OrderModel> list = criteria.list();
+        if (ListUtil.isNotEmpty(list)) {
+            return list.get(0);
+        }
+        return null;
     }
 
     private void setAnalysisParams(Criteria criteria, String creatorId, String serviceType, String beginTime, String endTime) {
@@ -85,8 +96,9 @@ public class OrderDao extends BaseDao<OrderModel, String>
     private void setParams(Criteria criteria, String searchKeyword, String orderStatus, String serviceType, String userId, String workmanId, String beginTime, String endTime) {
         if (StringUtils.isNotBlank(searchKeyword)) {
             String keyword = "%" + searchKeyword.trim() + "%";
-            criteria.add(Restrictions.or(Restrictions.like("name", keyword), Restrictions.like("phoneNum", keyword)));
+            criteria.add(Restrictions.or(Restrictions.like("orderNumber", keyword), Restrictions.like("customerName", keyword), Restrictions.like("customerPhoneNum", keyword), Restrictions.like("customerTel", keyword), Restrictions.like("customerAddress", keyword), Restrictions.like("shopInfo", keyword)));
         }
+
         if (StringUtils.isNotBlank(orderStatus)) {
             criteria.add(Restrictions.eq("orderStatus", orderStatus));
         }

@@ -7,6 +7,7 @@ import com.mimi.cgims.model.WorkmanModel;
 import com.mimi.cgims.service.IWorkmanService;
 import com.mimi.cgims.util.AutoNumUtil;
 import com.mimi.cgims.util.CityUtil;
+import com.mimi.cgims.util.DateUtil;
 import com.mimi.cgims.util.ResultUtil;
 import com.mimi.cgims.util.page.PageUtil;
 import net.sf.json.JSONObject;
@@ -33,6 +34,10 @@ public class WorkmanService extends BaseService<WorkmanModel, String> implements
         int count = workmanDao.count();
         if (count == 0) {
             for (int i = 0; i < 100; i++) {
+                Date today = DateUtil.randomDate("2014-01-01 00:00:00","2015-01-01 00:00:00");
+                Calendar c = Calendar.getInstance();
+                c.setTime(today);
+                AutoNumUtil.setC(c);
                 WorkmanModel workman = new WorkmanModel();
                 workman.setName("名称" + i);
                 workman.setWorkmanNumber(AutoNumUtil.getWorkmanNum());
@@ -126,5 +131,14 @@ public class WorkmanService extends BaseService<WorkmanModel, String> implements
     public String checkUpdate(WorkmanModel workman) {
         // TODO: 2016/7/23
         return null;
+    }
+
+    @Override
+    public int getNewestCount(int year, int month, int day) {
+        WorkmanModel workman = workmanDao.getNewest(year, month, day);
+        if (workman != null) {
+            return Integer.parseInt(workman.getWorkmanNumber().substring(8));
+        }
+        return 0;
     }
 }

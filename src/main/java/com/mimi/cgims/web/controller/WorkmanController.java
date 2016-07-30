@@ -49,7 +49,7 @@ public class WorkmanController {
     }
 
 
-    @RequestMapping(value = {"/workman/self/{id}","/workman/{id}"}, method = RequestMethod.PATCH)
+    @RequestMapping(value = {"/workman/self/{id}","/workman/{id}"}, method = RequestMethod.POST)
     @ResponseBody
     public Object get(@PathVariable String id, WorkmanModel workman) {
         String error = workmanService.checkUpdate(workman);
@@ -62,13 +62,13 @@ public class WorkmanController {
         return ResultUtil.getSuccessResultMap();
     }
 
-    @RequestMapping(value = "/workman/{id}", method = RequestMethod.DELETE)
-    @ResponseBody
-    public Object delete(@PathVariable String id) {
-        workmanService.delete(id);
-        return ResultUtil.getResultMap(ResultUtil.RESULT_SUCCESS
-                , null, id);
-    }
+//    @RequestMapping(value = "/workman/{id}", method = RequestMethod.DELETE)
+//    @ResponseBody
+//    public Object delete(@PathVariable String id) {
+//        workmanService.delete(id);
+//        return ResultUtil.getResultMap(ResultUtil.RESULT_SUCCESS
+//                , null, id);
+//    }
 
 
 //    @RequestMapping(value = "/workman/self/{id}", method = RequestMethod.GET)

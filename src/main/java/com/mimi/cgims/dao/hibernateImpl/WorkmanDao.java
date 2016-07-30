@@ -3,8 +3,11 @@ package com.mimi.cgims.dao.hibernateImpl;
 import com.mimi.cgims.Constants;
 import com.mimi.cgims.dao.IWorkmanDao;
 import com.mimi.cgims.model.WorkmanModel;
+import com.mimi.cgims.util.DateUtil;
+import com.mimi.cgims.util.ListUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -27,6 +30,19 @@ public class WorkmanDao extends BaseDao<WorkmanModel, String>
         setParams(criteria, searchKeyword, province, city, area, serviceType);
         List<WorkmanModel> workmans = list(criteria, targetPage, pageSize);
         return workmans;
+    }
+
+    @Override
+    public WorkmanModel getNewest(int year, int month, int day) {
+        Criteria criteria = getCriteria();
+        criteria.add(Restrictions.like("workmanNumber", DateUtil.convert2String(year,month,day)+"%"));
+        criteria.addOrder(Order.desc("workmanNumber"));
+        criteria.setMaxResults(1);
+        List<WorkmanModel> list = criteria.list();
+        if(ListUtil.isNotEmpty(list)){
+            return list.get(0);
+        }
+        return null;
     }
 
     private void setParams(Criteria criteria, String searchKeyword, String province, String city, String area, String serviceType) {

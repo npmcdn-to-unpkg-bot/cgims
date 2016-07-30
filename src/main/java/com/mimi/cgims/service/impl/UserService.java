@@ -225,4 +225,11 @@ public class UserService extends BaseService<UserModel, String> implements IUser
         orderDao.cleanUserId(id);
         super.delete(id);
     }
+
+    @Override
+    public void batchDelete(String ...ids){
+        for(String id:ids){
+            delete(id);
+        }
+    }
 }

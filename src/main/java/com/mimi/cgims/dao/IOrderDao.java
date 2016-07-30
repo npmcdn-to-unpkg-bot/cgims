@@ -17,4 +17,6 @@ public interface IOrderDao extends
     int analysisExpenditure(String creatorId, String serviceType, String beginTime, String endTime);
 
     void cleanUserId(String userId);
+
+    OrderModel getNewest(int year, int month, int day);
 }

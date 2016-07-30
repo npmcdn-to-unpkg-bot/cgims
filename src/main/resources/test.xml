@@ -25,7 +25,8 @@
 	<!-- </bean> -->
 <!-- 	<context:property-placeholder location="classpath:resources.properties" /> -->
 	<!--<context:property-placeholder location="classpath:*.properties" />-->
-	<context:property-placeholder location="classpath:*.properties" ignore-unresolvable="true" />
+	<context:property-placeholder location="classpath:resources.properties" ignore-unresolvable="true" />
+	<context:property-placeholder location="classpath:log4j.properties" ignore-unresolvable="true" />
 
 
 

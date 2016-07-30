@@ -3,6 +3,7 @@ package com.mimi.cgims.listener;
 import com.cloopen.rest.sdk.CCPRestSmsSDK;
 import com.mimi.cgims.Config;
 import com.mimi.cgims.service.*;
+import com.mimi.cgims.util.AutoNumUtil;
 import com.mimi.cgims.util.CityUtil;
 import com.mimi.cgims.web.captcha.GeetestLib;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,6 +48,7 @@ public class InitData implements ApplicationListener<ContextRefreshedEvent> {
 
     public void init() {
         CityUtil.init();
+        AutoNumUtil.init(orderService,workmanService);
         initGeetest();
         initYTX();
         permissionService.initData();
@@ -59,6 +61,7 @@ public class InitData implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     public void initTestData() {
+        AutoNumUtil.test = true;
         roleService.initTestData();
         userService.initTestData();
 //        userService.initTestData2();

@@ -43,7 +43,7 @@ public class RoleController {
         return ResultUtil.getSuccessResultMap(roleService.add(role));
     }
 
-    @RequestMapping(value = "/role/{id}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/role/{id}", method = RequestMethod.POST)
     @ResponseBody
     public Object update(@PathVariable String id, RoleModel role, String permissionIds) {
         String error = roleService.checkUpdate(role);
@@ -74,16 +74,16 @@ public class RoleController {
         return permissionModels;
     }
 
-    @RequestMapping(value = "/role/{id}", method = RequestMethod.DELETE)
-    @ResponseBody
-    public Object delete(@PathVariable String id) {
-        RoleModel role = roleService.getByName(Constants.ROLE_NAME_ADMIN);
-        if(id.contains(role.getId())){
-            return ResultUtil.getFailResultMap("不能删除超级管理员角色");
-        }
-        roleService.delete(id);
-        return ResultUtil.getSuccessResultMap(id);
-    }
+//    @RequestMapping(value = "/role/{id}", method = RequestMethod.DELETE)
+//    @ResponseBody
+//    public Object delete(@PathVariable String id) {
+//        RoleModel role = roleService.getByName(Constants.ROLE_NAME_ADMIN);
+//        if(id.contains(role.getId())){
+//            return ResultUtil.getFailResultMap("不能删除超级管理员角色");
+//        }
+//        roleService.delete(id);
+//        return ResultUtil.getSuccessResultMap(id);
+//    }
 
     @RequestMapping(value = "/role/batch", method = RequestMethod.POST)
     @ResponseBody

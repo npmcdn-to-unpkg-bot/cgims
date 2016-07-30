@@ -19,12 +19,12 @@ public class TestUtil {
         final ExecutorService executorService = Executors.newScheduledThreadPool(5);
         for (int i = 0; i < 200; i++) {
             final int k = i;
-            executorService.execute((new Runnable() {
+            new Runnable() {
                 public void run() {
                     if(k%20==0){
                         Calendar c = Calendar.getInstance();
                         c.set(Calendar.DAY_OF_MONTH,19);
-                        AutoNumUtil.setC(c);
+//                        AutoNumUtil.setC(c);
                     }
                     String num = AutoNumUtil.getOrderNum();
                     if(list.contains(num)){
@@ -37,10 +37,14 @@ public class TestUtil {
 //                    System.out.println(getNext());
 //                    executorService.shutdownNow()
 //                    if(executorService.isTerminated()){
-                        executorService.shutdown();
+                    executorService.shutdown();
 //                    }
                 }
-            }));
+            };
+
+            executorService.execute(()->{
+                System.out.println("hello,lambda");
+            });
         }
     }
 //

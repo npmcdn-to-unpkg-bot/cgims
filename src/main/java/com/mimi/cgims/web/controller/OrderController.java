@@ -6,8 +6,10 @@ import com.mimi.cgims.model.UserModel;
 import com.mimi.cgims.model.WorkmanModel;
 import com.mimi.cgims.service.IAliyunOSSService;
 import com.mimi.cgims.service.IOrderService;
+import com.mimi.cgims.service.IUserService;
 import com.mimi.cgims.service.IWorkmanService;
 import com.mimi.cgims.service.impl.AliyunOSSService;
+import com.mimi.cgims.util.AutoNumUtil;
 import com.mimi.cgims.util.ListUtil;
 import com.mimi.cgims.util.LoginUtil;
 import com.mimi.cgims.util.ResultUtil;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +33,10 @@ public class OrderController {
     private IOrderService orderService;
     @Resource
     private IAliyunOSSService aliyunOSSService;
-//    @Resource
-//    private IWorkmanService workmanService;
+    @Resource
+    private IWorkmanService workmanService;
+    @Resource
+    private IUserService userService;
 
     @RequestMapping(value = {"/user/{id}/order/batch","/order/batch"}, method = RequestMethod.POST)
     @ResponseBody
@@ -82,10 +87,14 @@ public class OrderController {
             WorkmanModel workman = new WorkmanModel();
             workman.setId(workmanId);
             order.setWorkman(workman);
+//            order.setWorkman(workmanService.get(workmanId));
         }
         UserModel user = new UserModel();
         user.setId(LoginUtil.getCurUserId(request));
         order.setUser(user);
+//        order.setUser(userService.get(LoginUtil.getCurUserId(request)));
+        order.setOrderNumber(AutoNumUtil.getOrderNum());
+        order.setCreateDate(new Date());
         String error = orderService.checkAdd(order);
         if (StringUtils.isNotBlank(error)) {
             return ResultUtil.getFailResultMap(error);
@@ -93,7 +102,7 @@ public class OrderController {
         return ResultUtil.getSuccessResultMap(orderService.addAndRefresh(order));
     }
 
-    @RequestMapping(value = {" /user/{id}/order/{orderId}","/order/{id}"}, method = RequestMethod.PATCH)
+    @RequestMapping(value = {" /user/{id}/order/{orderId}","/order/{id}"}, method = RequestMethod.POST)
     @ResponseBody
     public Object update(@PathVariable String id, OrderModel order,String workmanId) {
         if(StringUtils.isNotBlank(workmanId)){
@@ -110,12 +119,12 @@ public class OrderController {
         return ResultUtil.getSuccessResultMap();
     }
 
-    @RequestMapping(value = {" /user/{id}/order/{orderId}","/order/{id}"}, method = RequestMethod.DELETE)
-    @ResponseBody
-    public Object delete(@PathVariable String id) {
-        orderService.deleteAndRefresh(id);
-        return ResultUtil.getSuccessResultMap(id);
-    }
+//    @RequestMapping(value = {" /user/{id}/order/{orderId}","/order/{id}"}, method = RequestMethod.DELETE)
+//    @ResponseBody
+//    public Object delete(@PathVariable String id) {
+//        orderService.deleteAndRefresh(id);
+//        return ResultUtil.getSuccessResultMap(id);
+//    }
 
 
     @RequestMapping(value = {

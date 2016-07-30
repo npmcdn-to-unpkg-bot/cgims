@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ResultUtil {
-    public static final String MAP_KEY_STATUS = "success";
+    public static final String MAP_KEY_STATUS = "status";
 
     public static final String MAP_KEY_MSG = "msg";
 
@@ -91,6 +91,11 @@ public class ResultUtil {
 
     public static Object getResult(Map<String, Object> map) {
         return map.get(MAP_KEY_RESULT);
+    }
+
+    public static int getPageTotal(Map<String,Object> map){
+        Map<String, Object> map2 = (Map<String, Object>) getResult(map);
+        return (int) map2.get(MAP_KEY_TOTAL);
     }
 
 }

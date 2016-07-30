@@ -1,12 +1,18 @@
 package com.mimi.cgims.util;
 
+import com.mimi.cgims.service.IAutoNumService;
+import com.mimi.cgims.service.IOrderService;
+import com.mimi.cgims.service.IWorkmanService;
+
 import java.util.Calendar;
 
 public class AutoNumUtil {
 
-    private static AutoNumber workmanAutoNumber = new AutoNumber();
+    public static boolean test = false;
 
-    private static AutoNumber orderAutoNumber = new AutoNumber();
+    private static AutoNumber workmanAutoNumber;
+
+    private static AutoNumber orderAutoNumber;
 
     public static String getWorkmanNum() {
         return workmanAutoNumber.getNext();
@@ -17,13 +23,21 @@ public class AutoNumUtil {
     }
 
     private static Calendar c = Calendar.getInstance();
-    public static void setC(Calendar c){
+
+    public static void setC(Calendar c) {
         AutoNumUtil.c = c;
     }
 
-    public static Calendar getC(){
-//        return Calendar.getInstance();
+    public static Calendar getC() {
+        if(!test){
+            c = Calendar.getInstance();
+        }
         return c;
+    }
+
+    public static void init(IOrderService orderService, IWorkmanService workmanService) {
+        orderAutoNumber = new AutoNumber(orderService);
+        workmanAutoNumber = new AutoNumber(workmanService);
     }
 
 }
@@ -33,45 +47,50 @@ class AutoNumber {
     private int curMonth = 0;
     private int curDay = 0;
     private int count = 0;
+    private final int size = 4;
+    private IAutoNumService autoNumService;
 
-    public AutoNumber() {
-        Calendar c = Calendar.getInstance();
-        int nowYear = c.get(Calendar.YEAR);
-        int nowMonth = c.get(Calendar.MONTH) + 1;
-        int nowDay = c.get(Calendar.DAY_OF_MONTH);
-        curYear = nowYear;
-        curMonth = nowMonth;
-        curDay = nowDay;
+
+    public AutoNumber(IAutoNumService autoNumService) {
+        this.autoNumService = autoNumService;
+    }
+
+    public void initData(int year, int month, int day) {
         count = 0;
+        curYear = year;
+        curMonth = month;
+        curDay = day;
+        if (autoNumService != null) {
+            count = autoNumService.getNewestCount(year, month, day);
+        }
+    }
+
+    private boolean needInit(int year, int month, int day) {
+        return curDay != day || curMonth != month || curYear == year;
+    }
+
+    private void refreshCount(int year, int month, int day) {
+        if (needInit(year, month, day)) {
+            initData(year, month, day);
+        }
+        count++;
+    }
+
+    private String buildNum(int year, int month, int day) {
+        String dateStr  = DateUtil.convert2String(year,month,day);
+        String countStr = "" + count;
+        while (countStr.length() < size) {
+            countStr = "0" + countStr;
+        }
+        return dateStr + countStr;
     }
 
     synchronized public String getNext() {
         Calendar c = AutoNumUtil.getC();
-        int nowYear = c.get(Calendar.YEAR);
-        int nowMonth = c.get(Calendar.MONTH) + 1;
-        int nowDay = c.get(Calendar.DAY_OF_MONTH);
-        String year = "" + nowYear;
-        String month = "" + nowMonth;
-        if (month.length() == 1) {
-            month = "0" + month;
-        }
-        String day = "" + c.get(Calendar.DAY_OF_MONTH);
-
-        String dateStr = year + month + day;
-        if (curDay == nowDay && curMonth == nowMonth && curYear == nowYear) {
-            count++;
-        } else {
-            count = 0;
-            curYear = nowYear;
-            curMonth = nowMonth;
-            curDay = nowDay;
-        }
-        for (int i = 1000; i > 1; i = i / 10) {
-            if (count / i > 0) {
-                break;
-            }
-            dateStr += "0";
-        }
-        return dateStr + count;
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        refreshCount(year, month, day);
+        return buildNum(year, month, day);
     }
 }

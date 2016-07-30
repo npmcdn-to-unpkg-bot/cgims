@@ -159,25 +159,25 @@ public class RoleControllerTest extends BaseJunit4Test {
         }
     }
 
-    @Test
-    public void delete() throws Exception {
-        List<RoleModel> roles = roleDao.list();
-        int uCount = userDao.count();
-        int pCount = permissionDao.count();
-        int rCount  = roles.size();
-        for(RoleModel role:roles){
-            if(Constants.ROLE_NAME_ADMIN.equals(role.getName())){
-                assertResultFail(roleController.delete(role.getId()));
-            }else{
-                assertResultSuccess(roleController.delete(role.getId()));
-                rCount--;
-            }
-        }
-        assertEquals(uCount,userDao.count());
-        assertEquals(pCount, permissionDao.count());
-        assertEquals(1, roleDao.count());
-        assertEquals(1,rCount);
-    }
+//    @Test
+//    public void delete() throws Exception {
+//        List<RoleModel> roles = roleDao.list();
+//        int uCount = userDao.count();
+//        int pCount = permissionDao.count();
+//        int rCount  = roles.size();
+//        for(RoleModel role:roles){
+//            if(Constants.ROLE_NAME_ADMIN.equals(role.getName())){
+//                assertResultFail(roleController.delete(role.getId()));
+//            }else{
+//                assertResultSuccess(roleController.delete(role.getId()));
+//                rCount--;
+//            }
+//        }
+//        assertEquals(uCount,userDao.count());
+//        assertEquals(pCount, permissionDao.count());
+//        assertEquals(1, roleDao.count());
+//        assertEquals(1,rCount);
+//    }
 
     @Test
     public void batch() throws Exception {
