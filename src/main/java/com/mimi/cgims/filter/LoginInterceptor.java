@@ -31,47 +31,68 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
 //        request.setAttribute("uri", request.getRequestURI());
+        String loginUrl = "/html/index";
+        String indexUrl = "/html/index";
         if (StringUtils.isBlank(sp) || "/".equals(sp.trim())) {
+            return responseOut(request, response, indexUrl, true, "", ResultUtil.RESULT_SUCCESS);
+        }
+        if(sp.startsWith(indexUrl)){
+            return true;
+        }
+        if (sp.startsWith("/user/login") || sp.startsWith("/workman/phoneCaptcha") || sp.startsWith("/workman/login") || sp.startsWith("/error") || sp.startsWith("/user/logout")) {
+            return true;
+        }
+
+//        if (StringUtils.isBlank(sp) || "/".equals(sp.trim())) {
+//            if (LoginUtil.isUserLogined(request)) {
+//                return responseOut(request, response, "/html/index", true, "已登录", ResultUtil.RESULT_SUCCESS);
+//            } else {
+//                return responseOut(request, response, loginUrl, true, "请登录", ResultUtil.RESULT_FAIL);
+//            }
+//        }
+//        if (isLoginPage(sp)) {
+//            if (LoginUtil.isUserLogined(request)) {
+//                return responseOut(request, response, "/html/index", true, "已登录", ResultUtil.RESULT_SUCCESS);
+//            } else {
+//                return true;
+//            }
+//        }
+        if(sp.startsWith("/user/self")){
             if (LoginUtil.isUserLogined(request)) {
-                return responseOut(request, response, "/html/index", true, "已登录", ResultUtil.RESULT_SUCCESS);
-            } else {
-                return responseOut(request, response, "/html/login", true, "请登录", ResultUtil.RESULT_FAIL);
-            }
-        } else if (isLoginPage(sp)) {
-            if (LoginUtil.isUserLogined(request)) {
-                return responseOut(request, response, "/html/index", true, "已登录", ResultUtil.RESULT_SUCCESS);
-            } else {
                 return true;
-            }
-        } else if (isIndexPage(sp) || sp.startsWith("/user/self")) {
-            if (LoginUtil.isUserLogined(request)) {
-                return true;
             } else {
-                return responseOut(request, response, "/html/login", true, "请登录", ResultUtil.RESULT_FAIL);
+                return responseOut(request, response, loginUrl, true, "请登录", ResultUtil.RESULT_FAIL);
             }
-        } else if (isWorkmanLoginPage(sp)) {
+        }
+//        if (isIndexPage(sp) || sp.startsWith("/user/self")) {
+//            if (LoginUtil.isUserLogined(request)) {
+//                return true;
+//            } else {
+//                return responseOut(request, response, loginUrl, true, "请登录", ResultUtil.RESULT_FAIL);
+//            }
+//        }
+        if (isWorkmanLoginPage(sp)) {
             if (LoginUtil.isWorkmanLogined(request)) {
                 return responseOut(request, response, "/html/workman/self/" + request.getSession().getAttribute("workmanId"), true, "已登录", ResultUtil.RESULT_SUCCESS);
             } else {
                 return true;
             }
-        } else if (isWorkmanSelfPage(sp) || sp.startsWith("/workman/self/")) {
+        }
+        if (isWorkmanSelfPage(sp) || sp.startsWith("/workman/self/")) {
             if (LoginUtil.isWorkmanLogined(request)) {
                 return true;
             } else {
                 return responseOut(request, response, "/html/workman/login", true, "请登录登录", ResultUtil.RESULT_FAIL);
             }
-        } else if (sp.startsWith("/user/login") || sp.startsWith("/workman/phoneCaptcha") || sp.startsWith("/workman/login") || sp.startsWith("/error") || sp.startsWith("/user/logout")) {
-            return true;
         }
-        if (checkPermission(sp, request.getMethod(), LoginUtil.getUserPermissionCodes(request))) {
+        if (checkPermission(sp, request.getMethod(), LoginUtil.getUserPermissionCodes(request),LoginUtil.getUserSlaveIds(request))) {
             return true;
         } else {
-            return responseOut(request, response, "/html/index", true, "没有足够权限", ResultUtil.RESULT_FAIL);
+            return responseOut(request, response, indexUrl, true, "没有足够权限", ResultUtil.RESULT_FAIL);
         }
     }
 
-    private boolean checkPermission(String sp, String method, String permissionCodesStr) {
+    private boolean checkPermission(String sp, String method, String permissionCodesStr,String slaveIdsStr) {
         if(StringUtils.isBlank(sp) || StringUtils.isBlank(method) || StringUtils.isBlank(permissionCodesStr)){
             return false;
         }
@@ -84,7 +105,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return permissionCodesStr.contains(Constants.PERMISSION_CODE_ROLE_MANAGER);
         } else if (sp.startsWith("/user")) {
             if (sp.contains("/order")) {
-                return permissionCodesStr.contains(Constants.PERMISSION_CODE_USER_ORDER_MANAGER);
+                String slaveId = sp.substring(sp.indexOf("/user/")+6,sp.indexOf("/order"));
+                return permissionCodesStr.contains(Constants.PERMISSION_CODE_USER_ORDER_MANAGER) && slaveIdsStr.contains(slaveId);
             }
             return permissionCodesStr.contains(Constants.PERMISSION_CODE_USER_MANAGER);
         } else if (sp.startsWith("/order")) {

@@ -61,48 +61,48 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
                     AutoNumUtil.setC(c);
                     OrderModel order = new OrderModel();
                     order.setOrderNumber(AutoNumUtil.getOrderNum());
-                    order.setOrderStatus(OrderStatus.random().getName());
-                    if (Math.random() > 0.5) {
-                        order.setServiceType(Constants.SERVICE_TYPE_PSAZ);
-                    } else {
-                        if (Math.random() > 0.5) {
-                            order.setServiceType(Constants.SERVICE_TYPE_WX);
-                        } else {
-                            order.setServiceType(Constants.SERVICE_TYPE_WX + "," + Constants.SERVICE_TYPE_PSAZ);
-                        }
-                    }
-                    order.setCustomerName("客户名称" + i);
-                    order.setCustomerPhoneNum("客户电话" + i);
-                    order.setCustomerTel("备用电话" + i);
-                    order.setCustomerAddress("客户地址" + i);
-                    order.setProductInfo("产品信息" + i);
-                    order.setProductImgs(randomTestImgs());
-                    order.setLogisticsInfo("物流信息" + i);
-                    order.setLogisticsImgs(randomTestImgs());
-                    order.setRepairInfo("维修信息" + i);
-                    order.setRepairImgs(randomTestImgs());
-                    order.setChecked(Math.random() > 0.5);
-                    order.setCheckInfo("核销信息" + i);
-                    order.setShopInfo("商家信息" + i);
-                    order.setOrderPrice(random.nextInt(300) + 100);
-                    order.setServicePrice(order.getOrderPrice() - random.nextInt(100));
-                    order.setProfit(order.getOrderPrice() - order.getServicePrice());
-                    order.setPriceChangeReason("价格变动原因" + i);
-                    order.setJudgment(random.nextInt(5) + 1);
-                    order.setJudgeReason("评价理由" + i);
-                    order.setDescription("备注" + i);
-                    if(random.nextBoolean()){
-                        order.setUser(user);
-                    }
-                    order.setCreateDate(today);
-                    order.setOrderPriceChanged(random.nextBoolean());
-                    order.setServicePriceChanged(random.nextBoolean());
-                    if (OrderStatus.YSWC.getName().equals(order.getOrderStatus())) {
-                        order.setCompleteDate(DateUtil.randomDate("2015-01-01 00:00:00","2016-01-01 00:00:00"));
-                    }
-                    if(random.nextBoolean()){
-                        order.setWorkman(workmanModels.get(random.nextInt(workmanModels.size())));
-                    }
+//                    order.setOrderStatus(OrderStatus.random().getName());
+//                    if (Math.random() > 0.5) {
+//                        order.setServiceType(Constants.SERVICE_TYPE_PSAZ);
+//                    } else {
+//                        if (Math.random() > 0.5) {
+//                            order.setServiceType(Constants.SERVICE_TYPE_WX);
+//                        } else {
+//                            order.setServiceType(Constants.SERVICE_TYPE_WX + "," + Constants.SERVICE_TYPE_PSAZ);
+//                        }
+//                    }
+//                    order.setCustomerName("客户名称" + i);
+//                    order.setCustomerPhoneNum("客户电话" + i);
+//                    order.setCustomerTel("备用电话" + i);
+//                    order.setCustomerAddress("客户地址" + i);
+//                    order.setProductInfo("产品信息" + i);
+//                    order.setProductImgs(randomTestImgs());
+//                    order.setLogisticsInfo("物流信息" + i);
+//                    order.setLogisticsImgs(randomTestImgs());
+//                    order.setRepairInfo("维修信息" + i);
+//                    order.setRepairImgs(randomTestImgs());
+//                    order.setChecked(Math.random() > 0.5);
+//                    order.setCheckInfo("核销信息" + i);
+//                    order.setShopInfo("商家信息" + i);
+//                    order.setOrderPrice(random.nextInt(300) + 100);
+//                    order.setServicePrice(order.getOrderPrice() - random.nextInt(100));
+//                    order.setProfit(order.getOrderPrice() - order.getServicePrice());
+//                    order.setPriceChangeReason("价格变动原因" + i);
+//                    order.setJudgment(random.nextInt(5) + 1);
+//                    order.setJudgeReason("评价理由" + i);
+//                    order.setDescription("备注" + i);
+//                    if(random.nextBoolean()){
+//                        order.setUser(user);
+//                    }
+//                    order.setCreateDate(today);
+//                    order.setOrderPriceChanged(random.nextBoolean());
+//                    order.setServicePriceChanged(random.nextBoolean());
+//                    if (OrderStatus.YSWC.getName().equals(order.getOrderStatus())) {
+//                        order.setCompleteDate(DateUtil.randomDate("2015-01-01 00:00:00","2016-01-01 00:00:00"));
+//                    }
+//                    if(random.nextBoolean()){
+//                        order.setWorkman(workmanModels.get(random.nextInt(workmanModels.size())));
+//                    }
                     orderDao.add(order);
                 }
             }

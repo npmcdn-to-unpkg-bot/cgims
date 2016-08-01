@@ -15,6 +15,7 @@ import com.mimi.cgims.util.LoginUtil;
 import com.mimi.cgims.util.ResultUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -80,9 +81,20 @@ public class OrderController {
         return ResultUtil.getSuccessResultMap(orderService.get(orderId));
     }
 
-    @RequestMapping(value = {"/user/{id}/order","/order"}, method = RequestMethod.POST)
+    @RequestMapping(value = "/order", method = RequestMethod.POST)
     @ResponseBody
     public Object add(HttpServletRequest request,OrderModel order,String workmanId) {
+        return addAction(request,order,workmanId,null);
+    }
+
+
+    @RequestMapping(value = "/user/{id}/order", method = RequestMethod.POST)
+    @ResponseBody
+    public Object personAdd(@PathVariable String id, HttpServletRequest request,OrderModel order,String workmanId) {
+        return addAction(request,order,workmanId,id);
+    }
+
+    private Object addAction(HttpServletRequest request,OrderModel order,String workmanId,String userId){
         if(StringUtils.isNotBlank(workmanId)){
             WorkmanModel workman = new WorkmanModel();
             workman.setId(workmanId);
@@ -95,6 +107,8 @@ public class OrderController {
 //        order.setUser(userService.get(LoginUtil.getCurUserId(request)));
         order.setOrderNumber(AutoNumUtil.getOrderNum());
         order.setCreateDate(new Date());
+        order.setOrderPriceChanged(false);
+        order.setServicePriceChanged(false);
         String error = orderService.checkAdd(order);
         if (StringUtils.isNotBlank(error)) {
             return ResultUtil.getFailResultMap(error);
@@ -110,6 +124,7 @@ public class OrderController {
             workman.setId(workmanId);
             order.setWorkman(workman);
         }
+        OrderModel newOrder = orderService.get(id);
         order.setId(id);
         String error = orderService.checkUpdate(order);
         if (StringUtils.isNotBlank(error)) {

@@ -156,7 +156,19 @@ public class UserController {
             }
             permissionCodes += permission.getCode();
         }
-        LoginUtil.userLogin(request, user, permissionCodes);
+        UserModel nowUser = userService.getWithDatas(user.getId());
+        List<UserModel> slaves = nowUser.getSlaves();
+        String slaveNames = "";
+        String slaveIds = "";
+        for(UserModel slave:slaves){
+            if(StringUtils.isNotBlank(slaveIds)){
+                slaveNames+=Constants.SPLIT_STRING_PARAMS;
+                slaveIds+=Constants.SPLIT_STRING_PARAMS;
+            }
+            slaveNames+=slave.getName();
+            slaveIds+=slave.getId();
+        }
+        LoginUtil.userLogin(request, user, permissionCodes,slaveIds,slaveNames);
         return ResultUtil.getSuccessResultMap();
     }
 
