@@ -20,7 +20,7 @@ public class FormatUtil {
     public static final String REGEX_COMMON_TEL = "^((0\\d{2,3}-\\d{7,8})|(1\\d{10}))$";
     //手机号码
     public static final String REGEX_COMMON_PHONENUM = "^1[0-9]{10}$";
-    //手机号码
+    //身份证号码
     public static final String REGEX_COMMON_IDENTITY = "^4[0-9]{14,17}$";
     //住户数
     public static final String REGEX_COMMON_HOUSEHOLD_NUM = "^\\d{1,6}$";
