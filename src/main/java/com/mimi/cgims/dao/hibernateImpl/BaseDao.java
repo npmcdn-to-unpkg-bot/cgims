@@ -1,6 +1,7 @@
 package com.mimi.cgims.dao.hibernateImpl;
 
 import com.mimi.cgims.dao.IBaseDao;
+import com.mimi.cgims.util.ListUtil;
 import com.mimi.cgims.util.page.PageUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
@@ -93,7 +94,7 @@ public abstract class BaseDao<M extends Serializable, PK extends Serializable>
     }
 
     public int batchUpdate(String name,Object value,PK ... ids){
-        String updateHql = "update "+this.entityClass.getSimpleName()+" set model."+name+" = ? where model.id in ({ids})";
+        String updateHql = "update "+this.entityClass.getSimpleName()+" set "+name+" = ? where id in ({ids})";
         String idsStr = "";
         for(int i=0;i<ids.length;i++){
             if(i!=0){
@@ -102,7 +103,7 @@ public abstract class BaseDao<M extends Serializable, PK extends Serializable>
             idsStr+="?";
         }
         updateHql = updateHql.replace("{ids}",idsStr);
-        return executeUpdate(updateHql,value,ids);
+        return executeUpdate(updateHql,ListUtil.concat(value,ids));
     }
 
     public int executeUpdate(String hql,Object ... params){
