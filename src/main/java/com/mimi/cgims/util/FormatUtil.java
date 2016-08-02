@@ -14,6 +14,8 @@ public class FormatUtil {
     public static final String REGEX_NO_NEED = "";
     public static final String REGEX_COMMON_NAME = "^[0-9a-zA-Z_\u4E00-\u9FA5]+$";
 
+    public static final String REGEX_ORDER_NUMBER = "^[0-9]{12}$";
+
     //热线
     public static final String REGEX_COMMON_TEL = "^((0\\d{2,3}-\\d{7,8})|(1\\d{10}))$";
     //手机号码
@@ -67,8 +69,15 @@ public class FormatUtil {
     public static final int MAX_LENGTH_COMMON_SHORT_L3 = 50;
     public static final int MAX_LENGTH_COMMON_NORMAL_L1 = 100;
     public static final int MAX_LENGTH_COMMON_NORMAL_L2 = 200;
-    public static final int MAX_LENGTH_COMMON_LONG_L1 = 2000;
-    public static final int MAX_LENGTH_COMMON_LONG_L2 = 60000;
+    public static final int MAX_LENGTH_COMMON_NORMAL_L3 = 500;
+    public static final int MAX_LENGTH_COMMON_LONG_L1 = 1000;
+    public static final int MAX_LENGTH_COMMON_LONG_L2 = 2000;
+    public static final int MAX_LENGTH_COMMON_LONG_L6 = 6000;
+
+    public static String checkLengthOnly(String value, int maxLen,
+                                         String errPrefix) {
+        return checkLengthOnly(value,0,maxLen,errPrefix);
+    }
 
     public static String checkLengthOnly(String value, int minLen, int maxLen,
                                          String errPrefix) {

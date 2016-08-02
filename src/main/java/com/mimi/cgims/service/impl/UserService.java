@@ -9,10 +9,7 @@ import com.mimi.cgims.model.OrderModel;
 import com.mimi.cgims.model.RoleModel;
 import com.mimi.cgims.model.UserModel;
 import com.mimi.cgims.service.IUserService;
-import com.mimi.cgims.util.DaoUtil;
-import com.mimi.cgims.util.FormatUtil;
-import com.mimi.cgims.util.LoginUtil;
-import com.mimi.cgims.util.ResultUtil;
+import com.mimi.cgims.util.*;
 import com.mimi.cgims.util.page.PageUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -110,17 +107,21 @@ public class UserService extends BaseService<UserModel, String> implements IUser
 
         List<RoleModel> roles = new ArrayList<>();
         List<UserModel> slaves = new ArrayList<>();
-        for(RoleModel role:user.getRoles()){
-            RoleModel nr = new RoleModel();
-            nr.setId(role.getId());
-            nr.setName(role.getName());
-            roles.add(nr);
+        if(ListUtil.isNotEmpty(user.getRoles())){
+            for(RoleModel role:user.getRoles()){
+                RoleModel nr = new RoleModel();
+                nr.setId(role.getId());
+                nr.setName(role.getName());
+                roles.add(nr);
+            }
         }
-        for(UserModel slave:user.getSlaves()){
-            UserModel ns = new UserModel();
-            ns.setId(slave.getId());
-            ns.setName(slave.getName());
-            slaves.add(ns);
+        if(ListUtil.isNotEmpty(user.getSlaves())){
+            for(UserModel slave:user.getSlaves()){
+                UserModel ns = new UserModel();
+                ns.setId(slave.getId());
+                ns.setName(slave.getName());
+                slaves.add(ns);
+            }
         }
         DaoUtil.cleanLazyData(user);
         user.setRoles(roles);

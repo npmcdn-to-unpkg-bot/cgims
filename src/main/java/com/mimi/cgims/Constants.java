@@ -118,6 +118,7 @@ public class Constants {
 
     public static final String SERVICE_TYPE_WX = "维修";
     public static final String SERVICE_TYPE_PSAZ = "配送安装";
+    public static final String[] SERVICE_TYPE_LIST = {SERVICE_TYPE_PSAZ,SERVICE_TYPE_WX};
 
     public static final String SERVICE_CATALOG_JJ = "家具类";
     public static final String SERVICE_CATALOG_DJ = "灯具类";

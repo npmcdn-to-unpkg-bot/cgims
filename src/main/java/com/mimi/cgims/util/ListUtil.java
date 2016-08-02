@@ -68,4 +68,13 @@ public class ListUtil {
         }
         return false;
     }
+
+    public static Object[] concat(Object value, Object[] values) {
+        Object[] arr = new Object[values.length+1];
+        arr[0] = value;
+        for(int i=0;i<values.length;i++){
+            arr[i+1] = values[i];
+        }
+        return arr;
+    }
 }

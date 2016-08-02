@@ -168,6 +168,7 @@ public class UserController {
             slaveNames+=slave.getName();
             slaveIds+=slave.getId();
         }
+        System.out.println(user.getId()+":"+permissionCodes);
         LoginUtil.userLogin(request, user, permissionCodes,slaveIds,slaveNames);
         return ResultUtil.getSuccessResultMap();
     }

@@ -69,16 +69,18 @@ public class PermissionService extends BaseService<PermissionModel, String> impl
 
     @Override
     public List<PermissionModel> listByUserId(String id) {
-        List<RoleModel> roles = roleDao.list(id, null, PageUtil.BEGIN_PAGE, PageUtil.MAX_PAGE_SIZE);
-        List<PermissionModel> permissions = new ArrayList<>();
-        for (RoleModel role : roles) {
-            List<PermissionModel> tps = permissionDao.list(role.getId(), null, PageUtil.BEGIN_PAGE, PageUtil.MAX_PAGE_SIZE);
-            for (PermissionModel tp : tps) {
-                if (!permissions.contains(tp)) {
-                    permissions.add(tp);
-                }
-            }
-        }
-        return permissions;
+        return permissionDao.list(id);
+//        List<RoleModel> roles = roleDao.list(id, null, PageUtil.BEGIN_PAGE, PageUtil.MAX_PAGE_SIZE);
+//        List<PermissionModel> permissions = new ArrayList<>();
+//        for (RoleModel role : roles) {
+//            List<PermissionModel> tps = permissionDao.list(role.getId(), null, PageUtil.BEGIN_PAGE, PageUtil.MAX_PAGE_SIZE);
+////            List<PermissionModel> tps = permissionDao.list(null, null, PageUtil.BEGIN_PAGE, PageUtil.MAX_PAGE_SIZE);
+//            for (PermissionModel tp : tps) {
+//                if (!permissions.contains(tp)) {
+//                    permissions.add(tp);
+//                }
+//            }
+//        }
+//        return permissions;
     }
 }

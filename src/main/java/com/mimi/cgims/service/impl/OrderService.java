@@ -11,9 +11,7 @@ import com.mimi.cgims.model.UserModel;
 import com.mimi.cgims.model.WorkmanModel;
 import com.mimi.cgims.service.IAutoNumService;
 import com.mimi.cgims.service.IOrderService;
-import com.mimi.cgims.util.AutoNumUtil;
-import com.mimi.cgims.util.DateUtil;
-import com.mimi.cgims.util.ResultUtil;
+import com.mimi.cgims.util.*;
 import com.mimi.cgims.util.page.PageUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.core.annotation.Order;
@@ -61,48 +59,48 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
                     AutoNumUtil.setC(c);
                     OrderModel order = new OrderModel();
                     order.setOrderNumber(AutoNumUtil.getOrderNum());
-//                    order.setOrderStatus(OrderStatus.random().getName());
-//                    if (Math.random() > 0.5) {
-//                        order.setServiceType(Constants.SERVICE_TYPE_PSAZ);
-//                    } else {
-//                        if (Math.random() > 0.5) {
-//                            order.setServiceType(Constants.SERVICE_TYPE_WX);
-//                        } else {
-//                            order.setServiceType(Constants.SERVICE_TYPE_WX + "," + Constants.SERVICE_TYPE_PSAZ);
-//                        }
-//                    }
-//                    order.setCustomerName("客户名称" + i);
-//                    order.setCustomerPhoneNum("客户电话" + i);
-//                    order.setCustomerTel("备用电话" + i);
-//                    order.setCustomerAddress("客户地址" + i);
-//                    order.setProductInfo("产品信息" + i);
-//                    order.setProductImgs(randomTestImgs());
-//                    order.setLogisticsInfo("物流信息" + i);
-//                    order.setLogisticsImgs(randomTestImgs());
-//                    order.setRepairInfo("维修信息" + i);
-//                    order.setRepairImgs(randomTestImgs());
-//                    order.setChecked(Math.random() > 0.5);
-//                    order.setCheckInfo("核销信息" + i);
-//                    order.setShopInfo("商家信息" + i);
-//                    order.setOrderPrice(random.nextInt(300) + 100);
-//                    order.setServicePrice(order.getOrderPrice() - random.nextInt(100));
-//                    order.setProfit(order.getOrderPrice() - order.getServicePrice());
-//                    order.setPriceChangeReason("价格变动原因" + i);
-//                    order.setJudgment(random.nextInt(5) + 1);
-//                    order.setJudgeReason("评价理由" + i);
-//                    order.setDescription("备注" + i);
-//                    if(random.nextBoolean()){
-//                        order.setUser(user);
-//                    }
-//                    order.setCreateDate(today);
-//                    order.setOrderPriceChanged(random.nextBoolean());
-//                    order.setServicePriceChanged(random.nextBoolean());
-//                    if (OrderStatus.YSWC.getName().equals(order.getOrderStatus())) {
-//                        order.setCompleteDate(DateUtil.randomDate("2015-01-01 00:00:00","2016-01-01 00:00:00"));
-//                    }
-//                    if(random.nextBoolean()){
-//                        order.setWorkman(workmanModels.get(random.nextInt(workmanModels.size())));
-//                    }
+                    order.setOrderStatus(OrderStatus.random().getName());
+                    if (Math.random() > 0.5) {
+                        order.setServiceType(Constants.SERVICE_TYPE_PSAZ);
+                    } else {
+                        if (Math.random() > 0.5) {
+                            order.setServiceType(Constants.SERVICE_TYPE_WX);
+                        } else {
+                            order.setServiceType(Constants.SERVICE_TYPE_WX + "," + Constants.SERVICE_TYPE_PSAZ);
+                        }
+                    }
+                    order.setCustomerName("客户名称" + i);
+                    order.setCustomerPhoneNum("客户电话" + i);
+                    order.setCustomerTel("备用电话" + i);
+                    order.setCustomerAddress("客户地址" + i);
+                    order.setProductInfo("产品信息" + i);
+                    order.setProductImgs(randomTestImgs());
+                    order.setLogisticsInfo("物流信息" + i);
+                    order.setLogisticsImgs(randomTestImgs());
+                    order.setRepairInfo("维修信息" + i);
+                    order.setRepairImgs(randomTestImgs());
+                    order.setChecked(Math.random() > 0.5);
+                    order.setCheckInfo("核销信息" + i);
+                    order.setShopInfo("商家信息" + i);
+                    order.setOrderPrice(random.nextInt(300) + 100);
+                    order.setServicePrice(order.getOrderPrice() - random.nextInt(100));
+                    order.setProfit(order.getOrderPrice() - order.getServicePrice());
+                    order.setPriceChangeReason("价格变动原因" + i);
+                    order.setJudgment(random.nextInt(5) + 1);
+                    order.setJudgeReason("评价理由" + i);
+                    order.setDescription("备注" + i);
+                    if(random.nextBoolean()){
+                        order.setUser(user);
+                    }
+                    order.setCreateDate(today);
+                    order.setOrderPriceChanged(random.nextBoolean());
+                    order.setServicePriceChanged(random.nextBoolean());
+                    if (OrderStatus.YSWC.getName().equals(order.getOrderStatus())) {
+                        order.setCompleteDate(DateUtil.randomDate("2015-01-01 00:00:00","2016-01-01 00:00:00"));
+                    }
+                    if(random.nextBoolean()){
+                        order.setWorkman(workmanModels.get(random.nextInt(workmanModels.size())));
+                    }
                     orderDao.add(order);
                 }
             }
@@ -144,14 +142,106 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
 
     @Override
     public String checkAdd(OrderModel order) {
-        // TODO: 2016/7/23  
-        return null;
+        List<String> errors = commonCheck(order, true);
+        if (errors.isEmpty()) {
+            return null;
+        }
+        return errors.get(0);
     }
 
     @Override
     public String checkUpdate(OrderModel order) {
-        // TODO: 2016/7/23  
-        return null;
+        List<String> errors = commonCheck(order, false);
+        if (errors.isEmpty()) {
+            return null;
+        }
+        return errors.get(0);
+    }
+    private List<String> commonCheck(OrderModel order, boolean isAdd) {
+        List<String> errors = new ArrayList<>();
+        String error;
+        if(order == null){
+            errors.add("内容为空");
+            return errors;
+        }
+        error = FormatUtil.checkFormat(order.getOrderNumber(), FormatUtil.REGEX_ORDER_NUMBER, true, 0, FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "订单号");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        if(!ListUtil.contains(Constants.ORDER_STATUS_LIST,order.getOrderStatus())){
+            errors.add("未知订单状态");
+        }
+        if(!ListUtil.contains(Constants.SERVICE_TYPE_LIST,order.getServiceType())){
+            errors.add("未知订单类型");
+        }
+        error = FormatUtil.checkLengthOnly(order.getCustomerName(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "客户名称");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(order.getCustomerPhoneNum(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "客户电话");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(order.getCustomerTel(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "备用电话");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(order.getCustomerAddress(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "客户地址");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(order.getProductInfo(), FormatUtil.MAX_LENGTH_COMMON_NORMAL_L3, "产品信息");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(order.getProductImgs(), FormatUtil.MAX_LENGTH_COMMON_LONG_L6, "产品图片");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(order.getLogisticsInfo(), FormatUtil.MAX_LENGTH_COMMON_NORMAL_L3, "物流信息");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(order.getLogisticsImgs(), FormatUtil.MAX_LENGTH_COMMON_LONG_L6, "物流图片");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(order.getRepairInfo(), FormatUtil.MAX_LENGTH_COMMON_LONG_L1, "维修信息");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(order.getRepairImgs(), FormatUtil.MAX_LENGTH_COMMON_LONG_L6, "维修图片");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        if(order.getChecked()==null){
+            errors.add("核销选项缺失");
+        }
+        error = FormatUtil.checkLengthOnly(order.getCheckInfo(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "核销信息");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(order.getShopInfo(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "商家信息");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(order.getPriceChangeReason(), FormatUtil.MAX_LENGTH_COMMON_NORMAL_L2, "价格变动原因");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(order.getJudgeReason(), FormatUtil.MAX_LENGTH_COMMON_NORMAL_L2, "评价备注");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(order.getDescription(), FormatUtil.MAX_LENGTH_COMMON_LONG_L1, "备注");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        if(order.getCreateDate()==null){
+            errors.add("创建日期缺失");
+        }
+
+        return errors;
     }
 
     @Override
@@ -177,7 +267,12 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
 
     private void refreshWorkman(WorkmanModel workman){
         if(workman!=null){
-            List<OrderModel> orders = orderDao.list(null, null, null, null,workman.getId(), null,null, PageUtil.BEGIN_PAGE, PageUtil.MAX_PAGE_SIZE);
+            refreshWorkman(workman.getId());
+        }
+    }
+    private void refreshWorkman(String workmanId){
+        if(StringUtils.isNotBlank(workmanId)){
+            List<OrderModel> orders = orderDao.list(null, null, null, null,workmanId, null,null, PageUtil.BEGIN_PAGE, PageUtil.MAX_PAGE_SIZE);
             int count = 0;
             int sum = 0;
             for(OrderModel tOrder:orders){
@@ -190,7 +285,7 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
             if(count>0){
                 judgment = (float)sum/count;
             }
-            WorkmanModel nw = workmanDao.get(workman.getId());
+            WorkmanModel nw = workmanDao.get(workmanId);
             nw.setCooperateTimes(count);
             nw.setScore(judgment);
             workmanDao.update(nw);
@@ -199,7 +294,23 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
 
     @Override
     public void batchAction(String ids, String action, String orderStatus) {
-        // TODO: 2016/7/26
+        if(StringUtils.isBlank(ids)){
+            return;
+        }
+        if(Constants.BATCH_ACTION_UPDATE.equals(action) || ListUtil.contains(Constants.ORDER_STATUS_LIST,orderStatus)){
+            orderDao.batchUpdate("orderStatus",orderStatus,ids.split(Constants.SPLIT_STRING_IDS));
+        }
+        if(Constants.BATCH_ACTION_DELETE.equals(action)){
+            orderDao.batchDelete(ids.split(Constants.SPLIT_STRING_IDS));
+            List<String> workmanIds = new ArrayList<>();
+            for(String id:ids.split(Constants.SPLIT_STRING_IDS)){
+                OrderModel order = orderDao.get(id);
+                if(order.getWorkman()!=null && StringUtils.isNotBlank(order.getWorkman().getId()) && !workmanIds.contains(order.getWorkman().getId())){
+                    workmanIds.add(order.getWorkman().getId());
+                }
+            }
+            workmanIds.forEach(this::refreshWorkman);
+        }
     }
 
     @Override
@@ -228,6 +339,21 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
         int expenditure = orderDao.analysisExpenditure(creatorId,serviceType,beginTime,endTime);
 
         return (float)(income-expenditure)/income;
+    }
+
+    @Override
+    public int analysisIncomeP(String creatorId, String serviceType, String beginTime, String endTime) {
+        int income = orderDao.analysisIncome(creatorId,serviceType,beginTime,endTime);
+        int count = orderDao.analysisOrderCount(creatorId,serviceType,beginTime,endTime);
+        return income/count;
+    }
+
+    @Override
+    public int analysisProfitP(String creatorId, String serviceType, String beginTime, String endTime) {
+        int income = orderDao.analysisIncome(creatorId,serviceType,beginTime,endTime);
+        int expenditure = orderDao.analysisExpenditure(creatorId,serviceType,beginTime,endTime);
+        int count = orderDao.analysisOrderCount(creatorId,serviceType,beginTime,endTime);
+        return (income-expenditure)/count;
     }
 
     @Override

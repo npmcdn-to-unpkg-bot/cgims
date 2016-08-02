@@ -37,6 +37,22 @@ public class PermissionDao extends BaseDao<PermissionModel, String>
         return criteria.list();
     }
 
+    @Override
+    public List<PermissionModel> list(String userId){
+        Criteria criteria = getSession().createCriteria(PermissionModel.class);
+        if(StringUtils.isNotBlank(userId)){
+            criteria.createAlias("roles", "r").createAlias("r.users","u")
+                    .add(Restrictions.eq("u.id", userId));
+        }
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        List<PermissionModel> list = criteria.list();
+        return list;
+//        return criteria.list();
+    }
+
+
+
+
     private void setParams(Criteria criteria,String roleId,String searchKeyword){
         if(StringUtils.isNotBlank(roleId)){
             criteria.createAlias("roles", "r")

@@ -30,6 +30,7 @@ import static org.junit.Assert.assertEquals;
         ({"classpath:test.xml", "classpath:spring-servlet.xml"}) //加载配置文件
 //({"classpath:test.xml","classpath:ehcache_hibernate.xml"}) //加载配置文件
 public class BaseJunit4Test extends AbstractTransactionalJUnit4SpringContextTests {//AbstractJUnit4SpringContextTests {
+//    public class BaseJunit4Test extends AbstractJUnit4SpringContextTests {
 
     @Resource
     protected Config config;
@@ -79,16 +80,38 @@ public class BaseJunit4Test extends AbstractTransactionalJUnit4SpringContextTest
     }
 
     public List randomList(List list){
+        return randomList(list,1,50);
+//        Random random = new Random();
+//        List nList = new ArrayList<>();
+//        if(ListUtil.isNotEmpty(list)){
+//            for(Object obj:list){
+//                if(random.nextBoolean()){
+//                    nList.add(obj);
+//                }
+//            }
+//            if(nList.isEmpty()){
+//                nList.add(list.get(0));
+//            }
+//        }
+//        return nList;
+    }
+
+    public List randomList(List list,int min,int max){
         Random random = new Random();
         List nList = new ArrayList<>();
         if(ListUtil.isNotEmpty(list)){
-            for(Object obj:list){
-                if(random.nextBoolean()){
-                    nList.add(obj);
-                }
+            if(list.size()<min){
+                return list;
             }
-            if(nList.isEmpty()){
-                nList.add(list.get(0));
+            while(nList.size()<min){
+                for(Object obj:list){
+                    if(random.nextBoolean()){
+                        nList.add(obj);
+                    }
+                    if(nList.size()==max){
+                        return nList;
+                    }
+                }
             }
         }
         return nList;
