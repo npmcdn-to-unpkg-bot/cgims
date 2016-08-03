@@ -36,12 +36,15 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         if (StringUtils.isBlank(sp) || "/".equals(sp.trim())) {
             return responseOut(request, response, indexUrl, true, "", ResultUtil.RESULT_SUCCESS);
         }
-        if(sp.startsWith(indexUrl)){
-            return true;
+        String[] freeUrl={indexUrl,"/user/login","/user/logout","/workman/phoneCaptcha","/workman/login","/workman/logout","/error","/workman/initCaptcha"};
+        for(String url:freeUrl){
+            if(sp.startsWith(url)){
+                return true;
+            }
         }
-        if (sp.startsWith("/user/login") || sp.startsWith("/workman/phoneCaptcha") || sp.startsWith("/workman/login") || sp.startsWith("/error") || sp.startsWith("/user/logout")) {
-            return true;
-        }
+//        if (sp.startsWith("/user/login") || sp.startsWith("/workman/phoneCaptcha") || sp.startsWith("/workman/login") || sp.startsWith("/error") || sp.startsWith("/user/logout")) {
+//            return true;
+//        }
 
 //        if (StringUtils.isBlank(sp) || "/".equals(sp.trim())) {
 //            if (LoginUtil.isUserLogined(request)) {

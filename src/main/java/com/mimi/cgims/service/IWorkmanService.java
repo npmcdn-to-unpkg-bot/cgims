@@ -10,4 +10,6 @@ public interface IWorkmanService extends IAutoNumService<WorkmanModel, String> {
     String checkAdd(WorkmanModel workman);
 
     String checkUpdate(WorkmanModel workman);
+
+    WorkmanModel getByPhoneNum(String phoneNum);
 }

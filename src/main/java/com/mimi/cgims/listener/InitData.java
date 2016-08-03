@@ -2,9 +2,11 @@ package com.mimi.cgims.listener;
 
 import com.cloopen.rest.sdk.CCPRestSmsSDK;
 import com.mimi.cgims.Config;
+import com.mimi.cgims.Constants;
 import com.mimi.cgims.service.*;
 import com.mimi.cgims.util.AutoNumUtil;
 import com.mimi.cgims.util.CityUtil;
+import com.mimi.cgims.util.GeetestUtil;
 import com.mimi.cgims.web.captcha.GeetestLib;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
@@ -48,13 +50,13 @@ public class InitData implements ApplicationListener<ContextRefreshedEvent> {
 
     public void init() {
         CityUtil.init();
+        GeetestUtil.init(config);
         AutoNumUtil.init(orderService,workmanService);
         initGeetest();
         initYTX();
         permissionService.initData();
         roleService.initData();
         userService.initData();
-
         if (config.isInitTestData()) {
             initTestData();
         }

@@ -26,4 +26,8 @@ public interface IOrderService extends IAutoNumService<OrderModel, String> {
     int analysisProfit(String creatorId, String serviceType, String beginTime, String endTime);
 
     float analysisProfitMargin(String creatorId, String serviceType, String beginTime, String endTime);
+
+    int analysisIncomeP(String creatorId, String serviceType, String beginTime, String endTime);
+
+    int analysisProfitP(String creatorId, String serviceType, String beginTime, String endTime);
 }

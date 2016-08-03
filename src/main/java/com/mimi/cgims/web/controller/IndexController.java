@@ -1,8 +1,11 @@
 package com.mimi.cgims.web.controller;
 
 import com.mimi.cgims.Config;
+import com.mimi.cgims.util.LoginUtil;
 import com.mimi.cgims.util.ResultUtil;
 import com.mimi.cgims.util.TestUtil;
+import net.sf.json.JSON;
+import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,14 +13,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Controller
 public class IndexController {
     @Resource
     private Config config;
 
+    @RequestMapping(value = "/error", method = {RequestMethod.GET})
+    public String error(HttpServletRequest request) {
+        return "error_all";
+    }
+
+
     @RequestMapping(value = "/html/index", method = {RequestMethod.GET})
     public String index(HttpServletRequest request) {
+        Map<String,String> map = LoginUtil.getUserLoginMsg(request);
+        request.setAttribute("loginUserMap", JSONObject.fromObject(map));
         return "index";
     }
 
@@ -31,11 +43,6 @@ public class IndexController {
         return "login";
     }
 
-    @RequestMapping(value = "/html/workman/login", method = {RequestMethod.GET})
-    public String workmanLogin(HttpServletRequest request) {
-        request.setAttribute("geetestId",config.getGeetestId());
-        return "workmanLogin";
-    }
 
     @RequestMapping(value = "/html/index2", method = {RequestMethod.GET})
     public String index2(HttpServletRequest request) {

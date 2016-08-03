@@ -5,10 +5,7 @@ import com.mimi.cgims.dao.IBaseDao;
 import com.mimi.cgims.dao.IWorkmanDao;
 import com.mimi.cgims.model.WorkmanModel;
 import com.mimi.cgims.service.IWorkmanService;
-import com.mimi.cgims.util.AutoNumUtil;
-import com.mimi.cgims.util.CityUtil;
-import com.mimi.cgims.util.DateUtil;
-import com.mimi.cgims.util.ResultUtil;
+import com.mimi.cgims.util.*;
 import com.mimi.cgims.util.page.PageUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -123,14 +120,123 @@ public class WorkmanService extends BaseService<WorkmanModel, String> implements
 
     @Override
     public String checkAdd(WorkmanModel workman) {
-        // TODO: 2016/7/23
-        return null;
+        List<String> errors = commonCheck(workman, true);
+        if (errors.isEmpty()) {
+            return null;
+        }
+        return errors.get(0);
     }
 
     @Override
     public String checkUpdate(WorkmanModel workman) {
-        // TODO: 2016/7/23
-        return null;
+        List<String> errors = commonCheck(workman, false);
+        if (errors.isEmpty()) {
+            return null;
+        }
+        return errors.get(0);
+    }
+
+    private List<String> commonCheck(WorkmanModel workman, boolean isAdd) {
+        List<String> errors = new ArrayList<>();
+        String error;
+        if(workman == null){
+            errors.add("内容为空");
+            return errors;
+        }
+        error = FormatUtil.checkFormat(workman.getWorkmanNumber(), FormatUtil.REGEX_ORDER_NUMBER, true, 0, FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "工号号");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getHeadImg(), FormatUtil.MAX_LENGTH_COMMON_NORMAL_L2, "头像");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getName(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "姓名");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getPhoneNum(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "手机");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getQq(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "QQ");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+
+        if(workman.getReceiveType()!=null && !ListUtil.contains(Constants.RECEIVE_TYPE_LIST,workman.getReceiveType())){
+            errors.add("未知收款类型");
+        }
+        error = FormatUtil.checkLengthOnly(workman.getAlipayAccount(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "阿里账号");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getBank(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "银行");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getCardNum(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "银行卡号");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getProvince(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "所在省");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getCity(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "所在市");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getArea(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "所在区");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getAddress(), FormatUtil.MAX_LENGTH_COMMON_NORMAL_L3, "详细地址");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getIdCardFace(), FormatUtil.MAX_LENGTH_COMMON_NORMAL_L2, "身份证正面");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getIdCardBack(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "身份证背面");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getServiceType(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "服务类型");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getServiceItems(), FormatUtil.MAX_LENGTH_COMMON_NORMAL_L3, "服务类目");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getServiceArea(), FormatUtil.MAX_LENGTH_COMMON_NORMAL_L3, "服务区域");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getWillingPickAddress(), FormatUtil.MAX_LENGTH_COMMON_NORMAL_L2, "推荐提货点");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getLogistics(), FormatUtil.MAX_LENGTH_COMMON_NORMAL_L2, "提存物流");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getStrength(), FormatUtil.MAX_LENGTH_COMMON_NORMAL_L3, "优势");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getDescription(), FormatUtil.MAX_LENGTH_COMMON_LONG_L1, "备注");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        return errors;
+    }
+
+    @Override
+    public WorkmanModel getByPhoneNum(String phoneNum) {
+        return workmanDao.getByPhoneNum(phoneNum);
     }
 
     @Override

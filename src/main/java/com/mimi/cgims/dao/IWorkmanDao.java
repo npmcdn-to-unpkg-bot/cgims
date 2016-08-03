@@ -11,4 +11,6 @@ public interface IWorkmanDao extends
     List<WorkmanModel> list(String searchKeyword, String province, String city, String area, String serviceType, int targetPage, int pageSize);
 
     WorkmanModel getNewest(int year, int month, int day);
+
+    WorkmanModel getByPhoneNum(String phoneNum);
 }

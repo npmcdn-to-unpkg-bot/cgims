@@ -1,29 +1,72 @@
 package com.mimi.cgims.web.controller;
 
 import com.cloopen.rest.sdk.CCPRestSmsSDK;
+import com.geetest.sdk.java.GeetestLib;
+import com.mimi.cgims.Config;
 import com.mimi.cgims.Constants;
 import com.mimi.cgims.model.WorkmanModel;
 import com.mimi.cgims.service.IWorkmanService;
-import com.mimi.cgims.util.LoginUtil;
-import com.mimi.cgims.util.ResultUtil;
-import com.mimi.cgims.web.captcha.GeetestLib;
+import com.mimi.cgims.util.*;
+import net.sf.json.JSONException;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class WorkmanController {
     @Resource
     private CCPRestSmsSDK ytxAPI;
     @Resource
-    private GeetestLib geetest;
-    @Resource
     private IWorkmanService workmanService;
+    @Resource
+    private Config config;
+
+    private String[] ignores = {"id", "workmanNumber", "cooperateTimes", "score"};
+
+    @RequestMapping(value = "/html/workman/login", method = {RequestMethod.GET})
+    public String workmanLogin(HttpServletRequest request) {
+        return "workmanLogin";
+    }
+
+    @RequestMapping(value = "/html/workman/self/{id}", method = {RequestMethod.GET})
+    public String workmanSelf(HttpServletRequest request) {
+        return "workmanSelf";
+    }
+
+
+    @RequestMapping(value = "/workman/login", method = RequestMethod.POST)
+    @ResponseBody
+    public Object login(HttpServletRequest request,String phoneNum,String captchaText) {
+        if(LoginUtil.checkPhoneCaptcha(request,phoneNum,captchaText)){
+            WorkmanModel workman = workmanService.getByPhoneNum(phoneNum);
+            if(workman==null){
+                workman = new WorkmanModel();
+                workman.setWorkmanNumber(AutoNumUtil.getWorkmanNum());
+                workman.setPhoneNum(phoneNum);
+                workmanService.add(workman);
+            }
+            LoginUtil.workmanLogin(request,workman);
+            return ResultUtil.getSuccessResultMap(workman.getId());
+        }else{
+            return ResultUtil.getFailResultMap("验证码错误");
+        }
+    }
+
+    @RequestMapping(value = "/workman/logout", method = RequestMethod.POST)
+    @ResponseBody
+    public Object logout(HttpServletRequest request) {
+        LoginUtil.workmanLogout(request);
+        return ResultUtil.getSuccessResultMap();
+    }
+
 
     @RequestMapping(value = "/workman", method = RequestMethod.GET)
     @ResponseBody
@@ -31,15 +74,16 @@ public class WorkmanController {
         return workmanService.list4Page(searchKeyword, province, city, area, serviceType, curPage, pageSize);
     }
 
-    @RequestMapping(value = {"/workman/self/{id}","/workman/{id}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/workman/self/{id}", "/workman/{id}"}, method = RequestMethod.GET)
     @ResponseBody
     public Object get(@PathVariable String id) {
-        return ResultUtil.getResultMap(ResultUtil.RESULT_SUCCESS, null, workmanService.get(id));
+        return ResultUtil.getSuccessResultMap(workmanService.get(id));
     }
 
     @RequestMapping(value = "/workman", method = RequestMethod.POST)
     @ResponseBody
     public Object add(WorkmanModel workman) {
+        workman.setWorkmanNumber(AutoNumUtil.getWorkmanNum());
         String error = workmanService.checkAdd(workman);
         if (StringUtils.isNotBlank(error)) {
             return ResultUtil.getFailResultMap(error);
@@ -49,15 +93,15 @@ public class WorkmanController {
     }
 
 
-    @RequestMapping(value = {"/workman/self/{id}","/workman/{id}"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/workman/self/{id}", "/workman/{id}"}, method = RequestMethod.POST)
     @ResponseBody
-    public Object get(@PathVariable String id, WorkmanModel workman) {
-        String error = workmanService.checkUpdate(workman);
+    public Object update(@PathVariable String id, WorkmanModel workman) {
+        WorkmanModel newModel = workmanService.get(id);
+        BeanUtils.copyProperties(workman, newModel, ignores);
+        String error = workmanService.checkUpdate(newModel);
         if (StringUtils.isNotBlank(error)) {
             return ResultUtil.getFailResultMap(error);
         }
-        WorkmanModel newModel = workmanService.get(id);
-        BeanUtils.copyProperties(workman, newModel, "id", "workmanNumber");
         workmanService.update(newModel);
         return ResultUtil.getSuccessResultMap();
     }
@@ -78,37 +122,44 @@ public class WorkmanController {
 //    }
 
 
-    @RequestMapping(value = "/workman/phoneCaptcha", method = RequestMethod.GET)
-    public @ResponseBody Object getPhoneCaptcha(HttpServletRequest request,
-                                                String phoneNum) {
-        boolean result = geetest.validateRequest(request);
-        String err = "";
-        if (result) {
-            int rNum = (int) (Math.random() * 999999);
-            String rNumStr = String.valueOf(rNum);
-            while (rNumStr.length() < 6) {
-                rNumStr = "0" + rNumStr;
+    @RequestMapping(value = "/workman/phoneCaptcha", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    Object getPhoneCaptcha(HttpServletRequest request,
+                           String phoneNum) {
+            if(!GeetestUtil.valid(request)){
+                return ResultUtil.getFailResultMap(Constants.SMOOTH_CAPTCHA_ERROR);
             }
-            HashMap<String, Object> receiveMap = ytxAPI.sendTemplateSMS(
-                    phoneNum, "27380", new String[] { rNumStr, "15" });
-            if ("000000".equals(receiveMap.get("statusCode"))) {
-                request.getSession().setAttribute(Constants.ACCESS_PHONE_NUM,
-                        phoneNum);
-                request.getSession().setAttribute(
-                        Constants.ACCESS_PHONE_CAPTCHA, rNumStr);
-            } else {
-                result = false;
-                err ="发送验证码出错，请稍后重试";
-            }
-
-            // request.getSession().setAttribute(Constants.ACCESS_PHONE_NUM,
-            // phoneNum);
-            // request.getSession().setAttribute(Constants.ACCESS_PHONE_CAPTCHA,
-            // "414141");
-        } else {
-            err = Constants.SMOOTH_CAPTCHA_ERROR;
+        if (!FormatUtil.checkValueFormat(phoneNum, FormatUtil.REGEX_COMMON_PHONENUM, true)) {
+            return ResultUtil.getFailResultMap("手机号码格式有误");
         }
-        int status = result?ResultUtil.RESULT_SUCCESS:ResultUtil.RESULT_FAIL;
-        return ResultUtil.getResultMap(status,err);
+        int rNum = (int) (Math.random() * 999999);
+        String rNumStr = String.valueOf(rNum);
+        while (rNumStr.length() < 6) {
+            rNumStr = "0" + rNumStr;
+        }
+        HashMap<String, Object> receiveMap = ytxAPI.sendTemplateSMS(
+                phoneNum, config.getYtxTemplateId(), new String[]{rNumStr, "15"});
+        if ("000000".equals(receiveMap.get("statusCode"))) {
+            request.getSession().setAttribute(Constants.ACCESS_PHONE_NUM,
+                    phoneNum);
+            request.getSession().setAttribute(
+                    Constants.ACCESS_PHONE_CAPTCHA, rNumStr);
+        } else {
+            return ResultUtil.getFailResultMap("发送验证码出错，请稍后重试");
+        }
+//        String captcha = "414141";
+//        LoginUtil.initPhoneCaptcha(request,phoneNum,captcha);
+        return ResultUtil.getSuccessResultMap();
     }
+
+
+    @RequestMapping(value = "/workman/initCaptcha", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Object initCaptcha(HttpServletRequest request) {
+        return GeetestUtil.getInitData(request);
+    }
+
+
 }

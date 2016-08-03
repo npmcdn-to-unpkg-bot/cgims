@@ -115,6 +115,7 @@ public class Constants {
 
     public static final int RECEIVE_TYPE_ALIPAY = 0;
     public static final int RECEIVE_TYPE_BANK = 1;
+    public static final int[] RECEIVE_TYPE_LIST = {RECEIVE_TYPE_ALIPAY,RECEIVE_TYPE_BANK};
 
     public static final String SERVICE_TYPE_WX = "维修";
     public static final String SERVICE_TYPE_PSAZ = "配送安装";

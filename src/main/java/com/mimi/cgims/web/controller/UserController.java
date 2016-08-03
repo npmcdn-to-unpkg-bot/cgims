@@ -170,7 +170,7 @@ public class UserController {
         }
         System.out.println(user.getId()+":"+permissionCodes);
         LoginUtil.userLogin(request, user, permissionCodes,slaveIds,slaveNames);
-        return ResultUtil.getSuccessResultMap();
+        return ResultUtil.getSuccessResultMap(LoginUtil.getUserLoginMsg(request));
     }
 
 

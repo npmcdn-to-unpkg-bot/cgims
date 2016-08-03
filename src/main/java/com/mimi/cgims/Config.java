@@ -50,11 +50,18 @@ public class Config {
     @Value("${ytx.appId}")
     private String ytxAppId;
 
+    @Value("${ytx.templateId:1}")
+    private String ytxTemplateId;
+
     @Value("${geetest.key}")
     private String geetestKey;
 
     @Value("${geetest.id}")
     private String geetestId;
+
+    public String getYtxTemplateId() {
+        return ytxTemplateId;
+    }
 
     public String getGeetestId() {
         return geetestId;

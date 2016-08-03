@@ -11,6 +11,9 @@
     <meta charset=utf-8>
     <title>vue-cgims</title>
     <script>window.__BASE_PATH__ = 'http://localhost:8080'</script>
+    <script>
+        window._LOGIN_USER__ = ${loginUserMap};
+    </script>
     <%--<script>window.__BASE_PATH__ = 'http://www.chengongjiaju.cn'</script>--%>
 
     <link rel=stylesheet href=${ctx}/assets/css/admin.css>

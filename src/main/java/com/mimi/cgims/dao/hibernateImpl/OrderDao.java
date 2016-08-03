@@ -87,7 +87,7 @@ public class OrderDao extends BaseDao<OrderModel, String>
 //            criteria.add(Restrictions.ge("completeDate", new java.util.Date()));
         }
         if (StringUtils.isNotBlank(endTime)) {
-            criteria.add(Restrictions.lt("completeDate", DateUtil.toDate(endTime)));
+            criteria.add(Restrictions.le("completeDate", DateUtil.toDate(endTime)));
 //            criteria.add(Restrictions.lt("completeDate", endTime));
         }
         criteria.add(Restrictions.eq("orderStatus", Constants.ORDER_STATUS_YSWC));
@@ -117,7 +117,7 @@ public class OrderDao extends BaseDao<OrderModel, String>
             criteria.add(Restrictions.ge("createDate", DateUtil.toDate(beginTime)));
         }
         if (StringUtils.isNotBlank(endTime)) {
-            criteria.add(Restrictions.lt("createDate", DateUtil.toDate(endTime)));
+            criteria.add(Restrictions.le("createDate", DateUtil.toDate(endTime)));
         }
     }
 }

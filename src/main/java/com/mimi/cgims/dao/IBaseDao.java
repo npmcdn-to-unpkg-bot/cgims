@@ -1,5 +1,7 @@
 package com.mimi.cgims.dao;
 
+import org.hibernate.Session;
+
 import java.io.Serializable;
 import java.util.List;
 

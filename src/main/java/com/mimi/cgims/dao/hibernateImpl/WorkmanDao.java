@@ -45,6 +45,18 @@ public class WorkmanDao extends BaseDao<WorkmanModel, String>
         return null;
     }
 
+    @Override
+    public WorkmanModel getByPhoneNum(String phoneNum) {
+        Criteria criteria = getCriteria();
+        criteria.add(Restrictions.eq("phoneNum",phoneNum));
+        criteria.setMaxResults(1);
+        List<WorkmanModel> list = criteria.list();
+        if(list==null || list.isEmpty()){
+            return null;
+        }
+        return list.get(0);
+    }
+
     private void setParams(Criteria criteria, String searchKeyword, String province, String city, String area, String serviceType) {
         if (StringUtils.isNotBlank(searchKeyword)) {
             String keyword = "%" + searchKeyword.trim() + "%";
