@@ -5,7 +5,9 @@ import com.geetest.sdk.java.GeetestLib;
 import com.mimi.cgims.Config;
 import com.mimi.cgims.Constants;
 import com.mimi.cgims.model.WorkmanModel;
+import com.mimi.cgims.service.IAliyunOSSService;
 import com.mimi.cgims.service.IWorkmanService;
+import com.mimi.cgims.service.impl.AliyunOSSService;
 import com.mimi.cgims.util.*;
 import net.sf.json.JSONException;
 import org.apache.commons.lang.StringUtils;
@@ -13,6 +15,7 @@ import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +29,8 @@ public class WorkmanController {
     private CCPRestSmsSDK ytxAPI;
     @Resource
     private IWorkmanService workmanService;
+    @Resource
+    private IAliyunOSSService aliyunOSSService;
     @Resource
     private Config config;
 
@@ -161,5 +166,32 @@ public class WorkmanController {
         return GeetestUtil.getInitData(request);
     }
 
+    @RequestMapping(value = {
+            "/workman/update/headImg"}, method = { RequestMethod.POST })
+    public @ResponseBody
+    Object uploadHeadImg(HttpServletRequest request,
+                  @RequestParam("theFile") MultipartFile theFile) {
+        return uploadAction(theFile,AliyunOSSService.ALIYUN_OSS_IMAGE_PARAMS_TYPE_HEAD_IMG);
+    }
+
+    @RequestMapping(value = {
+            "/workman/update/idCardBack",
+            "/workman/update/idCardFace"}, method = { RequestMethod.POST })
+    public @ResponseBody
+    Object upload(HttpServletRequest request,
+                  @RequestParam("theFile") MultipartFile theFile) {
+        return uploadAction(theFile,AliyunOSSService.ALIYUN_OSS_IMAGE_PARAMS_TYPE_IDENTITY);
+    }
+    private Map<String,Object> uploadAction(MultipartFile theFile,String returnSize){
+        try {
+            String path = aliyunOSSService.saveFileToServer(theFile);
+            path = aliyunOSSService.addImgParams(path,
+                    returnSize);
+            return ResultUtil.getSuccessResultMap(path);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtil.getFailResultMap("保存图片失败");
+        }
+    }
 
 }

@@ -1,0 +1,101 @@
+body {
+  font-size: 16px;
+  background: cadetblue;
+}
+body,
+html {
+  height: 100%;
+}
+body,
+img,
+input,
+textarea {
+  font-family: Arial, "Microsoft Yahei";
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+.workmanLoginMain {
+  margin: 0 auto;
+  max-width: 640px;
+  min-height: 100%;
+}
+.workmanLoginMain header {
+  height: 44px;
+  text-align: center;
+  line-height: 44px;
+  background-color: #ffa500;
+}
+.workmanLoginMain .line {
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+  float: left;
+}
+.workmanLoginMain .form {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+.workmanLoginMain .ipt-text {
+  padding: 0 5px;
+  border: 1px solid #e4e4e4;
+  background-color: #ffffff;
+  border-radius: 3px;
+  height: 32px;
+  line-height: normal;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.workmanLoginMain .shortText {
+  width: 68%;
+  float: left;
+}
+.workmanLoginMain .formbtn01 {
+  margin: 2px 0 0 5px;
+  float: right;
+  width: 30%;
+  height: 28px;
+  line-height: 28px;
+  font-size: 14px;
+  cursor: pointer;
+  box-sizing: border-box;
+  border: 1px solid #ffa500;
+  border-radius: 2px;
+  background-color: #fff;
+  color: #ffa500;
+}
+.workmanLoginMain .btn {
+  margin: 0 auto;
+  display: block;
+  width: 200px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 14px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #ffa500;
+  color: #fff !important;
+}
+.workmanLoginMain .btn.disabled {
+  background-color: #e4e4e4;
+  color: #999;
+  cursor: default;
+  outline: 0;
+}
+.workmanLoginMain .captcha {
+  margin: 0 auto;
+  width: 300px;
+  height: 188px;
+}
+.workmanLoginMain .logo {
+  width: 100px;
+  border-radius: 10px;
+}
+.workmanLoginMain .title {
+  color: #ffffff;
+  font-size: 32px;
+}

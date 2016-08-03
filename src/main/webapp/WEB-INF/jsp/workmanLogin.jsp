@@ -8,6 +8,8 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link href="${ctx }/assets/css/ui.css" rel="stylesheet" type="text/css"/>
     <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
     <link href="${ctx }/assets/img/ui/favicon.ico" rel="icon" type="image/x-icon"/>
     <link href="${ctx }/assets/img/ui/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
@@ -15,18 +17,44 @@
     <!-- 引入封装了failback的接口--initGeetest -->
     <script src="http://static.geetest.com/static/tools/gt.js"></script>
     <style>
-        .text{
-            width:300px;
+        .text {
+            width: 300px;
         }
     </style>
 </head>
-<body>
-电话:<input type="text" id="phoneNum" class="text"/><br/>
-<div class="captcha">
-    <div id="embed-captcha"></div>
-    <input type="text" id="captchaText"/>
-    <input type="button" id="jsGetPhoneCaptchaBtn" class="formbtn01" value="获取验证码"/>
-    <input type="button" id="submitBtn" value="登录"/>
+<body style="zoom: 1;">
+<div class="workmanLoginMain">
+    <header>
+        <span class="title">
+            师傅登录
+        </span>
+    </header>
+    <div class="line">
+        <div class="captcha" id="embed-captcha"></div>
+    </div>
+    <div class="line">
+        <div class="form">
+
+            <input type="text" id="phoneNum" name="phoneNum" value="请填写您希望收到验证码的手机号" class="ipt-text mt10"
+                   maxlength="11" onkeyup="return inputOnKeyup(event,this)" onfocus="return inputOnFocus(event,this)"
+                   onblur="return inputOnBlus(event,this)" style="color: #999999;">
+        </div>
+    </div>
+    <div class="line">
+        <div class="form">
+            <input type="text" id="captchaText" name="captcha" value="请输入手机验证码" class="ipt-text shortText" maxlength="6"
+                   onkeyup="return inputOnKeyup(event,this)" onfocus="return inputOnFocus(event,this)"
+                   onblur="return inputOnBlus(event,this)" style="color: #999999;">
+            <input type="button" id="jsGetPhoneCaptchaBtn" class="formbtn01" onclick="getPhoneCaptcha(this);"
+                   value="获取验证码">
+        </div>
+    </div>
+    <div class="line">
+        <input type="button" class="btn" id="submitBtn" value="登录"/>
+    </div>
+    <div class="line">
+        <img class="logo" src="${ctx}/assets/img/logo.png"/>
+    </div>
 </div>
 <br/>
 <span id="content">Hello World!wawa</span>
@@ -106,75 +134,75 @@
     <%--var smoothCaptchObject = new Object();--%>
     <%--smoothCaptchObject.captchaReady = false;--%>
     <%--function gt_custom_ajax(result, selector) {--%>
-        <%--if (result) {--%>
-            <%--smoothCaptchObject.captchaReady = true;--%>
-            <%--$("#captchaerror").css("display","none");--%>
-            <%--smoothCaptchObject.challenge = selector(".geetest_challenge").value;--%>
-            <%--smoothCaptchObject.validate = selector(".geetest_validate").value;--%>
-            <%--smoothCaptchObject.seccode = selector(".geetest_seccode").value;--%>
-            <%--$("[name='geetest_challenge']").val(smoothCaptchObject.challenge);--%>
-            <%--$("[name='geetest_validate']").val(smoothCaptchObject.validate);--%>
-            <%--$("[name='geetest_seccode']").val(smoothCaptchObject.seccode);--%>
-        <%--}else{--%>
-            <%--smoothCaptchObject.captchaReady = false;--%>
-        <%--}--%>
+    <%--if (result) {--%>
+    <%--smoothCaptchObject.captchaReady = true;--%>
+    <%--$("#captchaerror").css("display","none");--%>
+    <%--smoothCaptchObject.challenge = selector(".geetest_challenge").value;--%>
+    <%--smoothCaptchObject.validate = selector(".geetest_validate").value;--%>
+    <%--smoothCaptchObject.seccode = selector(".geetest_seccode").value;--%>
+    <%--$("[name='geetest_challenge']").val(smoothCaptchObject.challenge);--%>
+    <%--$("[name='geetest_validate']").val(smoothCaptchObject.validate);--%>
+    <%--$("[name='geetest_seccode']").val(smoothCaptchObject.seccode);--%>
+    <%--}else{--%>
+    <%--smoothCaptchObject.captchaReady = false;--%>
+    <%--}--%>
     <%--}--%>
     <%--function getPhoneCaptcha(element) {--%>
-        <%--if(smoothCaptchObject.captchaReady){--%>
-            <%--var url = "${ctx}/workman/phoneCaptcha";--%>
-            <%--var data = {phoneNum:getKeyword(),geetest_challenge:smoothCaptchObject.challenge,geetest_validate:smoothCaptchObject.validate,geetest_seccode:smoothCaptchObject.seccode};--%>
-            <%--var method = "GET";--%>
-            <%--normalAjax(url,method,data)--%>
-        <%--}else{--%>
-            <%--alert(smoothCaptchObject.captchaReady);--%>
-        <%--}--%>
+    <%--if(smoothCaptchObject.captchaReady){--%>
+    <%--var url = "${ctx}/workman/phoneCaptcha";--%>
+    <%--var data = {phoneNum:getKeyword(),geetest_challenge:smoothCaptchObject.challenge,geetest_validate:smoothCaptchObject.validate,geetest_seccode:smoothCaptchObject.seccode};--%>
+    <%--var method = "GET";--%>
+    <%--normalAjax(url,method,data)--%>
+    <%--}else{--%>
+    <%--alert(smoothCaptchObject.captchaReady);--%>
+    <%--}--%>
 
-        <%--return;--%>
-        <%--if($(element).hasClass("disabled")){--%>
-            <%--return false;--%>
-        <%--}--%>
-        <%--var phoneNumReady = checkElement(document.getElementById(PHONE_ID));--%>
-        <%--if(phoneNumReady && smoothCaptchObject.captchaReady){--%>
-            <%--document.getElementById(errorMap[CAPTCHA_ID]).innerHTML = "";--%>
-            <%--if(phoneNumCheckObject.accessValue != document.getElementById(PHONE_ID).value){--%>
-                <%--phoneNumCheckObject.toCaptcha = true;--%>
-                <%--phoneNumValid();--%>
-                <%--return false;--%>
-            <%--}--%>
-            <%--var errorElement = document.getElementById(errorMap[CAPTCHA_ID]);--%>
-            <%--$.ajax({--%>
-                <%--type: "GET",--%>
-                <%--async: true,--%>
-                <%--url: GET_PHONE_CAPTCHA_URL,--%>
-                <%--data: {phoneNum:phoneNumCheckObject.accessValue,geetest_challenge:smoothCaptchObject.challenge,geetest_validate:smoothCaptchObject.validate,geetest_seccode:smoothCaptchObject.seccode},--%>
-                <%--dataType: "json",--%>
-                <%--success: function (data) {--%>
-                    <%--if(!data.success){--%>
-                        <%--errorElement.innerHTML = data.msg;--%>
-                    <%--}--%>
-                <%--},--%>
-                <%--error: function (data) {--%>
-                    <%--errorElement.innerHTML = "验证码发送失败，请稍后尝试！";--%>
-                <%--}--%>
-            <%--});--%>
-            <%--captchaTimeSpan(element);--%>
-            <%--return true;--%>
-        <%--}else{--%>
-            <%--var errStr = "";--%>
-            <%--if(!phoneNumReady && !smoothCaptchObject.captchaReady){--%>
-                <%--errStr = "请输入正确的电话号码和滑动验证图片";--%>
-            <%--}else if(!phoneNumReady && smoothCaptchObject.captchaReady){--%>
-                <%--errStr = "请输入正确的电话号码";--%>
-            <%--}else if(phoneNumReady && !smoothCaptchObject.captchaReady){--%>
-                <%--errStr = "请滑动验证图片";--%>
-            <%--}--%>
-            <%--document.getElementById(errorMap[CAPTCHA_ID]).innerHTML = errStr;--%>
-        <%--}--%>
-        <%--return false;--%>
+    <%--return;--%>
+    <%--if($(element).hasClass("disabled")){--%>
+    <%--return false;--%>
+    <%--}--%>
+    <%--var phoneNumReady = checkElement(document.getElementById(PHONE_ID));--%>
+    <%--if(phoneNumReady && smoothCaptchObject.captchaReady){--%>
+    <%--document.getElementById(errorMap[CAPTCHA_ID]).innerHTML = "";--%>
+    <%--if(phoneNumCheckObject.accessValue != document.getElementById(PHONE_ID).value){--%>
+    <%--phoneNumCheckObject.toCaptcha = true;--%>
+    <%--phoneNumValid();--%>
+    <%--return false;--%>
+    <%--}--%>
+    <%--var errorElement = document.getElementById(errorMap[CAPTCHA_ID]);--%>
+    <%--$.ajax({--%>
+    <%--type: "GET",--%>
+    <%--async: true,--%>
+    <%--url: GET_PHONE_CAPTCHA_URL,--%>
+    <%--data: {phoneNum:phoneNumCheckObject.accessValue,geetest_challenge:smoothCaptchObject.challenge,geetest_validate:smoothCaptchObject.validate,geetest_seccode:smoothCaptchObject.seccode},--%>
+    <%--dataType: "json",--%>
+    <%--success: function (data) {--%>
+    <%--if(!data.success){--%>
+    <%--errorElement.innerHTML = data.msg;--%>
+    <%--}--%>
+    <%--},--%>
+    <%--error: function (data) {--%>
+    <%--errorElement.innerHTML = "验证码发送失败，请稍后尝试！";--%>
+    <%--}--%>
+    <%--});--%>
+    <%--captchaTimeSpan(element);--%>
+    <%--return true;--%>
+    <%--}else{--%>
+    <%--var errStr = "";--%>
+    <%--if(!phoneNumReady && !smoothCaptchObject.captchaReady){--%>
+    <%--errStr = "请输入正确的电话号码和滑动验证图片";--%>
+    <%--}else if(!phoneNumReady && smoothCaptchObject.captchaReady){--%>
+    <%--errStr = "请输入正确的电话号码";--%>
+    <%--}else if(phoneNumReady && !smoothCaptchObject.captchaReady){--%>
+    <%--errStr = "请滑动验证图片";--%>
+    <%--}--%>
+    <%--document.getElementById(errorMap[CAPTCHA_ID]).innerHTML = errStr;--%>
+    <%--}--%>
+    <%--return false;--%>
     <%--}--%>
 
 
-//http://www.geetest.com/install/sections/idx-client-sdk.html#api
+    //http://www.geetest.com/install/sections/idx-client-sdk.html#api
     var handlerEmbed = function (captchaObj) {
 
         $("#jsGetPhoneCaptchaBtn").click(function (e) {
@@ -185,12 +213,12 @@
             }
             $.ajax({
 //                url: "VerifyLoginServlet", // 进行二次验证
-                url:"/workman/phoneCaptcha",
+                url: "/workman/phoneCaptcha",
                 type: "post",
                 dataType: "json",
                 data: {
                     // 二次验证所需的三个值
-                    phoneNum:getKeyword(),
+                    phoneNum: getKeyword(),
                     geetest_challenge: validate.geetest_challenge,
                     geetest_validate: validate.geetest_validate,
                     geetest_seccode: validate.geetest_seccode
@@ -202,23 +230,23 @@
             });
         });
 
-        $("#submitBtn").click(function(){
+        $("#submitBtn").click(function () {
             var captchaText = $("#captchaText").val();
             $.ajax({
 //                url: "VerifyLoginServlet", // 进行二次验证
-                url:"/workman/login",
+                url: "/workman/login",
                 type: "post",
                 dataType: "json",
                 data: {
                     // 二次验证所需的三个值
-                    phoneNum:getKeyword(),
-                    captchaText:captchaText
+                    phoneNum: getKeyword(),
+                    captchaText: captchaText
                 },
                 success: function (data) {
-                    if(data.status){
+                    if (data.status) {
                         var id = data.result;
-                        self.location.href = "${ctx}/html/workman/self/"+id;
-                    }else{
+                        self.location.href = "${ctx}/html/workman/self/" + id;
+                    } else {
                         showContent(data);
                         captchaObj.refresh();
                     }
@@ -238,7 +266,7 @@
     $.ajax({
         // 获取id，challenge，success（是否启用failback）
 //        url: "StartCaptchaServlet",
-        url:"${ctx}/workman/initCaptcha",
+        url: "${ctx}/workman/initCaptcha",
         type: "get",
         dataType: "json",
         success: function (data) {

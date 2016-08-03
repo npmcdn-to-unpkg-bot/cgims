@@ -44,6 +44,7 @@ public class AliyunOSSService implements IAliyunOSSService {
 	public static final String ALIYUN_OSS_IMAGE_PARAMS_TYPE_PHOTO_SMALL_IMG = "0e_100w_100h_0c_0i_1o_90Q_1x.{suffix}";
 	public static final String ALIYUN_OSS_IMAGE_PARAMS_TYPE_PHOTO_IMG = "0e_800w_800h_1c_0i_0o_90Q_1x.{suffix}" + ALIYUN_OSS_IMAGE_PARAMS_AND + ALIYUN_OSS_IMAGE_WATER_MARK;
 	public static final String ALIYUN_OSS_IMAGE_PARAMS_TYPE_BANNER = "1e_400w_300h_1c_0i_1o_90Q_1x.{suffix}" + ALIYUN_OSS_IMAGE_PARAMS_AND + ALIYUN_OSS_IMAGE_WATER_MARK;
+	public static final String ALIYUN_OSS_IMAGE_PARAMS_TYPE_IDENTITY = "1e_400w_300h_1c_0i_1o_90Q_1x.{suffix}";
 	public static final String ALIYUN_OSS_IMAGE_PARAMS_TYPE_AD = "1e_400w_100h_1c_0i_1o_90Q_1x.{suffix}";
 	public static final String ALIYUN_OSS_IMAGE_PARAMS_TYPE_AD_SMALL = "1e_100w_100h_1c_0i_1o_90Q_1x.{suffix}";
 	public static final String ALIYUN_OSS_IMAGE_PARAMS_TYPE_HEAD_IMG = "1e_100w_100h_1c_0i_1o_90Q_1x.{suffix}";
