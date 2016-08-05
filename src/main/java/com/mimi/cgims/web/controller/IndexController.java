@@ -20,7 +20,7 @@ public class IndexController {
     @Resource
     private Config config;
 
-    @RequestMapping(value = "/error", method = {RequestMethod.GET})
+    @RequestMapping(value = {"/error","/error_all"}, method = {RequestMethod.GET})
     public String error(HttpServletRequest request) {
         return "error_all";
     }

@@ -30,6 +30,7 @@ public class WorkmanService extends BaseService<WorkmanModel, String> implements
     public void initTestData() {
         int count = workmanDao.count();
         if (count == 0) {
+            Random random = new Random();
             for (int i = 0; i < 100; i++) {
                 Date today = DateUtil.randomDate("2014-01-01 00:00:00","2015-01-01 00:00:00");
                 Calendar c = Calendar.getInstance();
@@ -57,6 +58,7 @@ public class WorkmanService extends BaseService<WorkmanModel, String> implements
                 workman.setIdCardFace("http://upload.admin5.com/upimg/allimg/100926/1000401.jpg");
                 workman.setIdCardBack("http://epaper.cnsq.com.cn/jjwb/res/1/10/2011-01/07/06/res01_attpic_brief.jpg");
                 workman.setHeadImg("http://www.itotii.com/wp-content/uploads/2016/06/06/1465202291_jrhAYEHC.jpg");
+                workman.setScore((float)(Math.round(random.nextFloat()*5*100)/100));
 
                 if (Math.random() > 0.5) {
                     workman.setServiceType(Constants.SERVICE_TYPE_PSAZ);
@@ -64,14 +66,20 @@ public class WorkmanService extends BaseService<WorkmanModel, String> implements
                     workman.setServiceType(Constants.SERVICE_TYPE_WX);
                 }
                 Map<String, String[]> serviceItems = Constants.getServiceItemsMap();
-                Map<String, List> newItemsMap = new HashMap<>();
+//                Map<String, List> newItemsMap = new HashMap<>();
+                Map<String, String> newItemsMap = new HashMap<>();
                 for (String key : serviceItems.keySet()) {
                     if (Math.random() > 0.5) {
-                        List<String> newItems = new ArrayList<>();
+//                        List<String> newItems = new ArrayList<>();
+                        String newItems = "";
                         String[] items = serviceItems.get(key);
                         for (String item : items) {
                             if (Math.random() > 0.5) {
-                                newItems.add(item);
+//                                newItems.add(item);
+                                if(StringUtils.isBlank(newItems)){
+                                    newItems+=",";
+                                }
+                                newItems+=item;
                             }
                         }
                         if (!newItems.isEmpty()) {

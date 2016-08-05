@@ -130,6 +130,12 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
         }
         return imgStr;
     }
+    @Override
+    public OrderModel get(String id){
+        OrderModel order = orderDao.get(id);
+        DaoUtil.cleanLazyData(order);
+        return order;
+    }
 
     @Override
     public Object list4Page(String searchKeyword, String orderStatus, String serviceType, String userId,String workmanId,  String beginTime, String endTime, int targetPage, int pageSize) {

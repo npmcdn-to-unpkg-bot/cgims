@@ -7,6 +7,7 @@
 <%request.setAttribute("ctx", request.getContextPath());%>
 <html>
 <head>
+    <title>师傅登录</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <link href="${ctx }/assets/css/ui.css" rel="stylesheet" type="text/css"/>
@@ -16,11 +17,6 @@
 
     <!-- 引入封装了failback的接口--initGeetest -->
     <script src="http://static.geetest.com/static/tools/gt.js"></script>
-    <style>
-        .text {
-            width: 300px;
-        }
-    </style>
 </head>
 <body style="zoom: 1;">
 <div class="workmanLoginMain">
@@ -35,17 +31,14 @@
     <div class="line">
         <div class="form">
 
-            <input type="text" id="phoneNum" name="phoneNum" value="请填写您希望收到验证码的手机号" class="ipt-text mt10"
-                   maxlength="11" onkeyup="return inputOnKeyup(event,this)" onfocus="return inputOnFocus(event,this)"
-                   onblur="return inputOnBlus(event,this)" style="color: #999999;">
+            <input type="text" id="phoneNum" name="phoneNum" placeholder="请填写您的手机号" class="ipt-text mt10"
+                   maxlength="11"style="color: #999999;">
         </div>
     </div>
     <div class="line">
         <div class="form">
-            <input type="text" id="captchaText" name="captcha" value="请输入手机验证码" class="ipt-text shortText" maxlength="6"
-                   onkeyup="return inputOnKeyup(event,this)" onfocus="return inputOnFocus(event,this)"
-                   onblur="return inputOnBlus(event,this)" style="color: #999999;">
-            <input type="button" id="jsGetPhoneCaptchaBtn" class="formbtn01" onclick="getPhoneCaptcha(this);"
+            <input type="text" id="captchaText" name="captcha" placeholder="请输入手机验证码" class="ipt-text shortText" maxlength="6" style="color: #999999;">
+            <input type="button" id="jsGetPhoneCaptchaBtn" class="formbtn01"
                    value="获取验证码">
         </div>
     </div>
@@ -131,86 +124,50 @@
         });
     }
 
-    <%--var smoothCaptchObject = new Object();--%>
-    <%--smoothCaptchObject.captchaReady = false;--%>
-    <%--function gt_custom_ajax(result, selector) {--%>
-    <%--if (result) {--%>
-    <%--smoothCaptchObject.captchaReady = true;--%>
-    <%--$("#captchaerror").css("display","none");--%>
-    <%--smoothCaptchObject.challenge = selector(".geetest_challenge").value;--%>
-    <%--smoothCaptchObject.validate = selector(".geetest_validate").value;--%>
-    <%--smoothCaptchObject.seccode = selector(".geetest_seccode").value;--%>
-    <%--$("[name='geetest_challenge']").val(smoothCaptchObject.challenge);--%>
-    <%--$("[name='geetest_validate']").val(smoothCaptchObject.validate);--%>
-    <%--$("[name='geetest_seccode']").val(smoothCaptchObject.seccode);--%>
-    <%--}else{--%>
-    <%--smoothCaptchObject.captchaReady = false;--%>
-    <%--}--%>
-    <%--}--%>
-    <%--function getPhoneCaptcha(element) {--%>
-    <%--if(smoothCaptchObject.captchaReady){--%>
-    <%--var url = "${ctx}/workman/phoneCaptcha";--%>
-    <%--var data = {phoneNum:getKeyword(),geetest_challenge:smoothCaptchObject.challenge,geetest_validate:smoothCaptchObject.validate,geetest_seccode:smoothCaptchObject.seccode};--%>
-    <%--var method = "GET";--%>
-    <%--normalAjax(url,method,data)--%>
-    <%--}else{--%>
-    <%--alert(smoothCaptchObject.captchaReady);--%>
-    <%--}--%>
-
-    <%--return;--%>
-    <%--if($(element).hasClass("disabled")){--%>
-    <%--return false;--%>
-    <%--}--%>
-    <%--var phoneNumReady = checkElement(document.getElementById(PHONE_ID));--%>
-    <%--if(phoneNumReady && smoothCaptchObject.captchaReady){--%>
-    <%--document.getElementById(errorMap[CAPTCHA_ID]).innerHTML = "";--%>
-    <%--if(phoneNumCheckObject.accessValue != document.getElementById(PHONE_ID).value){--%>
-    <%--phoneNumCheckObject.toCaptcha = true;--%>
-    <%--phoneNumValid();--%>
-    <%--return false;--%>
-    <%--}--%>
-    <%--var errorElement = document.getElementById(errorMap[CAPTCHA_ID]);--%>
-    <%--$.ajax({--%>
-    <%--type: "GET",--%>
-    <%--async: true,--%>
-    <%--url: GET_PHONE_CAPTCHA_URL,--%>
-    <%--data: {phoneNum:phoneNumCheckObject.accessValue,geetest_challenge:smoothCaptchObject.challenge,geetest_validate:smoothCaptchObject.validate,geetest_seccode:smoothCaptchObject.seccode},--%>
-    <%--dataType: "json",--%>
-    <%--success: function (data) {--%>
-    <%--if(!data.success){--%>
-    <%--errorElement.innerHTML = data.msg;--%>
-    <%--}--%>
-    <%--},--%>
-    <%--error: function (data) {--%>
-    <%--errorElement.innerHTML = "验证码发送失败，请稍后尝试！";--%>
-    <%--}--%>
-    <%--});--%>
-    <%--captchaTimeSpan(element);--%>
-    <%--return true;--%>
-    <%--}else{--%>
-    <%--var errStr = "";--%>
-    <%--if(!phoneNumReady && !smoothCaptchObject.captchaReady){--%>
-    <%--errStr = "请输入正确的电话号码和滑动验证图片";--%>
-    <%--}else if(!phoneNumReady && smoothCaptchObject.captchaReady){--%>
-    <%--errStr = "请输入正确的电话号码";--%>
-    <%--}else if(phoneNumReady && !smoothCaptchObject.captchaReady){--%>
-    <%--errStr = "请滑动验证图片";--%>
-    <%--}--%>
-    <%--document.getElementById(errorMap[CAPTCHA_ID]).innerHTML = errStr;--%>
-    <%--}--%>
-    <%--return false;--%>
-    <%--}--%>
-
-
+    var waiting = false;
+    var timer = null;
+    const DEFAULT_LIMIT = 120;
+    const DEFAULT_TEXT = "获取验证码";
+    var limit = DEFAULT_LIMIT;
+    function beginWait(){
+        waiting = true;
+        if(!timer){
+            timer = setInterval(function(){
+                if(--limit>0){
+                    $("#jsGetPhoneCaptchaBtn").attr("disabled","disabled");
+                    $("#jsGetPhoneCaptchaBtn").val(limit+"秒");
+                }else{
+                    endWait();
+                }
+            },1000);
+        }
+    }
+    function endWait(){
+        if(timer){
+            window.clearInterval(timer);
+            timer = null;
+        }
+        $("#jsGetPhoneCaptchaBtn").val(DEFAULT_TEXT);
+        $("#jsGetPhoneCaptchaBtn").removeAttr("disabled");
+        waiting = false;
+    }
     //http://www.geetest.com/install/sections/idx-client-sdk.html#api
     var handlerEmbed = function (captchaObj) {
 
         $("#jsGetPhoneCaptchaBtn").click(function (e) {
+            if(waiting){
+                return;
+            }
             var validate = captchaObj.getValidate();
             if (!validate) {
                 alert('请先完成验证！');
                 return;
             }
+            if(!getKeyword()){
+                alert("手机号码不能为空");
+                return;
+            }
+            beginWait();
             $.ajax({
 //                url: "VerifyLoginServlet", // 进行二次验证
                 url: "/workman/phoneCaptcha",
@@ -223,15 +180,23 @@
                     geetest_validate: validate.geetest_validate,
                     geetest_seccode: validate.geetest_seccode
                 },
-                success: function (data) {
-                    showContent(data);
-                    captchaObj.refresh();
+                success: function (json) {
+                    if(json.status){
+                        showContent(json);
+                    }else{
+                        alert(json.msg);
+                        captchaObj.refresh();
+                    }
                 }
             });
         });
 
         $("#submitBtn").click(function () {
             var captchaText = $("#captchaText").val();
+            if(!captchaText || !getKeyword()){
+                alert("手机号码和验证码不能为空");
+                return;
+            }
             $.ajax({
 //                url: "VerifyLoginServlet", // 进行二次验证
                 url: "/workman/login",
@@ -242,12 +207,12 @@
                     phoneNum: getKeyword(),
                     captchaText: captchaText
                 },
-                success: function (data) {
-                    if (data.status) {
-                        var id = data.result;
+                success: function (json) {
+                    if (json.status) {
+                        var id = json.result;
                         self.location.href = "${ctx}/html/workman/self/" + id;
                     } else {
-                        showContent(data);
+                        alert(json.msg);
                         captchaObj.refresh();
                     }
                 }

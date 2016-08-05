@@ -42,7 +42,10 @@ public class WorkmanController {
     }
 
     @RequestMapping(value = "/html/workman/self/{id}", method = {RequestMethod.GET})
-    public String workmanSelf(HttpServletRequest request) {
+    public String workmanSelf(@PathVariable String id, HttpServletRequest request) {
+        WorkmanModel workman = workmanService.get(id);
+        request.setAttribute("workman",workman);
+        request.setAttribute("provinces",CityUtil.provinces);
         return "workmanSelf";
     }
 
@@ -143,18 +146,18 @@ public class WorkmanController {
         while (rNumStr.length() < 6) {
             rNumStr = "0" + rNumStr;
         }
-        HashMap<String, Object> receiveMap = ytxAPI.sendTemplateSMS(
-                phoneNum, config.getYtxTemplateId(), new String[]{rNumStr, "15"});
-        if ("000000".equals(receiveMap.get("statusCode"))) {
-            request.getSession().setAttribute(Constants.ACCESS_PHONE_NUM,
-                    phoneNum);
-            request.getSession().setAttribute(
-                    Constants.ACCESS_PHONE_CAPTCHA, rNumStr);
-        } else {
-            return ResultUtil.getFailResultMap("发送验证码出错，请稍后重试");
-        }
-//        String captcha = "414141";
-//        LoginUtil.initPhoneCaptcha(request,phoneNum,captcha);
+//        HashMap<String, Object> receiveMap = ytxAPI.sendTemplateSMS(
+//                phoneNum, config.getYtxTemplateId(), new String[]{rNumStr, "15"});
+//        if ("000000".equals(receiveMap.get("statusCode"))) {
+//            request.getSession().setAttribute(Constants.ACCESS_PHONE_NUM,
+//                    phoneNum);
+//            request.getSession().setAttribute(
+//                    Constants.ACCESS_PHONE_CAPTCHA, rNumStr);
+//        } else {
+//            return ResultUtil.getFailResultMap("发送验证码出错，请稍后重试");
+//        }
+        String captcha = "414141";
+        LoginUtil.initPhoneCaptcha(request,phoneNum,captcha);
         return ResultUtil.getSuccessResultMap();
     }
 
@@ -167,7 +170,7 @@ public class WorkmanController {
     }
 
     @RequestMapping(value = {
-            "/workman/update/headImg"}, method = { RequestMethod.POST })
+            "/workman/upload/headImg"}, method = { RequestMethod.POST })
     public @ResponseBody
     Object uploadHeadImg(HttpServletRequest request,
                   @RequestParam("theFile") MultipartFile theFile) {
@@ -175,8 +178,8 @@ public class WorkmanController {
     }
 
     @RequestMapping(value = {
-            "/workman/update/idCardBack",
-            "/workman/update/idCardFace"}, method = { RequestMethod.POST })
+            "/workman/upload/idCardBack",
+            "/workman/upload/idCardFace"}, method = { RequestMethod.POST })
     public @ResponseBody
     Object upload(HttpServletRequest request,
                   @RequestParam("theFile") MultipartFile theFile) {
