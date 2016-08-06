@@ -58,7 +58,7 @@ public class WorkmanService extends BaseService<WorkmanModel, String> implements
                 workman.setIdCardFace("http://upload.admin5.com/upimg/allimg/100926/1000401.jpg");
                 workman.setIdCardBack("http://epaper.cnsq.com.cn/jjwb/res/1/10/2011-01/07/06/res01_attpic_brief.jpg");
                 workman.setHeadImg("http://www.itotii.com/wp-content/uploads/2016/06/06/1465202291_jrhAYEHC.jpg");
-                workman.setScore((float)(Math.round(random.nextFloat()*5*100)/100));
+                workman.setScore((float)(Math.round(random.nextFloat()*5*100))/100);
 
                 if (Math.random() > 0.5) {
                     workman.setServiceType(Constants.SERVICE_TYPE_PSAZ);
@@ -76,8 +76,11 @@ public class WorkmanService extends BaseService<WorkmanModel, String> implements
                         for (String item : items) {
                             if (Math.random() > 0.5) {
 //                                newItems.add(item);
-                                if(StringUtils.isBlank(newItems)){
+                                if(StringUtils.isNotBlank(newItems)){
                                     newItems+=",";
+                                }
+                                if(item.equals("其他")){
+                                    item = "阿里山的风景阿拉山口大就发生的";
                                 }
                                 newItems+=item;
                             }

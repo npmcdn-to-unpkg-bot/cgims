@@ -46,25 +46,21 @@
             <input type="radio" name="receiveType" id="receiveTypeBank" value="1" class="radio" onchange="receiveTypeChange()"/><label
                 for="receiveTypeBank">银行卡</label>
         </div>
-        <input type="text" class="text" name="alipayAccount" placeholder="支付宝" value="${workman.alipayAccount}"/>
-        <input type="text" class="text" name="bank" placeholder="银行名称" value="${workman.bank}"/>
-        <input type="text" class="text" name="cardNum" placeholder="银行卡号" value="${workman.cardNum}"/>
+        <input type="text" class="text" id="alipayAccount" name="alipayAccount" placeholder="支付宝" value="${workman.alipayAccount}"/>
+        <input type="text" class="text" id="bank" name="bank" placeholder="银行名称" value="${workman.bank}"/>
+        <input type="text" class="text" id="cardNum" name="cardNum" placeholder="银行卡号" value="${workman.cardNum}"/>
         <div class="line">
             <input type="date" class="date"/><label>出生日期</label>
         </div>
-        <div class="line">
-            <label>所在地：</label>
-            <select>
-                <option value ="volvo">Volvo</option>
-                <option value ="saab">Saab</option>
+        <div class="line szd">
+            <select id="province">
+                <option value ="">所在省</option>
             </select>
-            <select>
-                <option value ="volvo">Volvo</option>
-                <option value ="saab">Saab</option>
+            <select id="city">
+                <option value ="">所在市</option>
             </select>
-            <select>
-                <option value ="volvo">Volvo</option>
-                <option value ="saab">Saab</option>
+            <select id="area">
+                <option value ="">所在区</option>
             </select>
         </div>
         <input type="text" class="text" name="address" placeholder="详细地址" value="${workman.address}"/>
@@ -94,6 +90,12 @@
 </div>
 </body>
 <script>
+    <%--var provinces = ${provinces};--%>
+//    alert(provinces.length);
+//    var aToStr = JSON.stringify(provinces);
+//    alert(aToStr.length);
+//    var aToObj = JSON.parse(provinces);
+//    alert(aToObj);
     function logout() {
 
         $.ajax({
@@ -102,19 +104,88 @@
             type: "post",
             dataType: "json",
             success: function (json) {
-
+                self.location.href = "${ctx}/html/workman/login";
             }
         });
     }
     function receiveTypeChange(){
         var type = $("input[name='receiveType']:checked").val();
-        if(type==0){
 
+        if(type==0){
+            $("#alipayAccount").show();
+            $("#bank").hide();
+            $("#cardNum").hide();
+        }else{
+            $("#alipayAccount").hide();
+            $("#bank").show();
+            $("#cardNum").show();
         }
     }
+    var provinces = ${provinces2};
     function init(){
         receiveTypeChange();
+        $('#cardNum').bind('focus',filter_time);
+
+        for(var key in provinces){
+            $("#province").append('<option value ="'+key+'">'+key+'</option>');
+        }
+        $("#province").change(function(){
+            refreshCity();
+            refreshArea();
+        })
+        $("#city").change(function(){
+            refreshArea();
+        })
     }
-    init();
+    function refreshCity(){
+       var val =  $("#province").val();
+        $("#city").html('<option value ="">所在市</option>');
+        if(val){
+            for(var key in provinces[val]){
+                $("#city").append('<option value ="'+key+'">'+key+'</option>');
+            }
+        }
+    }
+    function refreshArea(){
+        var val =  $("#city").val();
+        $("#area").html('<option value ="">所在区</option>');
+        if(val){
+            var valP =  $("#province").val();
+            var list = provinces[valP][val];
+            for( var i=0;i<list.length;i++){
+                $("#area").append('<option value ="'+list[i]+'">'+list[i]+'</option>');
+            }
+//            for(var key in provinces[valP][val]){
+//                $("#area").append('<option value ="'+key+'">'+key+'</option>');
+//            }
+        }
+    }
+
+    $(function () {
+        init();
+    });
+
+    filter_time = function(){
+        var time = setInterval(filter_staff_from_exist, 100);
+        $(this).bind('blur',function(){
+            clearInterval(time);
+        });
+    };
+
+    filter_staff_from_exist = function(){
+        var now = $.trim($('#cardNum').val());
+        now = insertSpace(now,4);
+        now = insertSpace(now,9);
+        now = insertSpace(now,14);
+        $("#cardNum").val(now);
+    }
+    function insertSpace(str,position){
+        if(str.length>position){
+            if(str.charAt(position)!=" "){
+                str = str.substr(0,position)+" "+str.substring(position,str.length);
+            }
+        }
+        return str;
+    }
 </script>
 </html>

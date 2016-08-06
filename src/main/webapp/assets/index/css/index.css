@@ -1,0 +1,20 @@
+.container{margin-top:30px;}
+	h2{margin:40px 0;}
+	.download-btns{width:80%; margin-top:60px;}
+		.download-btns .btn-lg{border-radius:2px;}
+	.intro-list{margin-top:50px; margin-bottom:100px;}
+
+	.intro-holder{margin-top:30px;}
+		.intro-holder h2.text-holder{margin-bottom:15px;}
+	.intro-device{margin:30px 20px;}
+		.intro-device img{max-width:450px; width:100%;}
+	.xs-download-btns{width:240px; margin-bottom:40px;}
+		.xs-download-btns .btn{margin-bottom:15px; height:44px; line-height:32px;}
+	.xs-intro-list{padding-bottom:30px;}
+		.xs-intro-list .center-block{margin:40px auto;}
+
+	.btn-woniu{margin-top:10px; border:1px solid #49BCB7;}
+
+.footer{padding:35px 0 40px; line-height:24px; border-top:1px solid #c3c3c6; background-color:#eeeff3; color:#c7cbd7;}
+	.footer a.grey, .footer a.grey:visited, .footer a.grey:link, .footer a.grey:active, .footer a.grey:focus, .footer a.grey:hover{color:#c7cbd7; text-decoration:none;}
+	

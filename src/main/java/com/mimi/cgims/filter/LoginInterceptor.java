@@ -36,7 +36,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         if (StringUtils.isBlank(sp) || "/".equals(sp.trim())) {
             return responseOut(request, response, indexUrl, true, "", ResultUtil.RESULT_SUCCESS);
         }
-        String[] freeUrl={indexUrl,"/user/login","/user/logout","/workman/phoneCaptcha","/workman/login","/workman/logout","/error","/workman/initCaptcha"};
+        String[] freeUrl={indexUrl,"/user/login","/user/logout","/html/workman/index","/workman/phoneCaptcha","/workman/login","/workman/logout","/error","/error_all","/workman/initCaptcha"};
         for(String url:freeUrl){
             if(sp.startsWith(url)){
                 return true;
@@ -64,7 +64,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             if (LoginUtil.isUserLogined(request)) {
                 return true;
             } else {
-                return responseOut(request, response, loginUrl, true, "请登录", ResultUtil.RESULT_FAIL);
+                return responseOut(request, response, loginUrl, true, "请登录", ResultUtil.RESULT_FAIL_AUTHENTICATION);
             }
         }
 //        if (isIndexPage(sp) || sp.startsWith("/user/self")) {
@@ -91,7 +91,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         if (checkPermission(sp, request.getMethod(), LoginUtil.getUserPermissionCodes(request),LoginUtil.getUserSlaveIds(request))) {
             return true;
         } else {
-            return responseOut(request, response, indexUrl, true, "没有足够权限", ResultUtil.RESULT_FAIL);
+            return responseOut(request, response, indexUrl, true, "没有足够权限", ResultUtil.RESULT_FAIL_AUTHORIZATION);
         }
     }
 

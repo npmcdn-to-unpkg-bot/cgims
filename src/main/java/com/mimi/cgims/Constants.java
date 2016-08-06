@@ -148,7 +148,7 @@ public class Constants {
         return Collections.unmodifiableMap(serviceItemsMap);
     }
 
-    public static final String ORDER_STATUS_WSWF = "为收未付";
+    public static final String ORDER_STATUS_WSWF = "未收未付";
     public static final String ORDER_STATUS_WSXF = "未收需付";
     public static final String ORDER_STATUS_YSWF = "已收未付";
     public static final String ORDER_STATUS_YSXF = "已收需付";
@@ -158,8 +158,9 @@ public class Constants {
     public static final String ORDER_STATUS_YSWC = "已收完成";
     public static final String ORDER_STATUS_WSSB = "未收失败";
     public static final String ORDER_STATUS_YSSB = "已收失败";
+    public static final String ORDER_STATUS_YSDT = "已收待退";
 
-    public static final String[] ORDER_STATUS_LIST = {ORDER_STATUS_WSWF, ORDER_STATUS_WSXF, ORDER_STATUS_YSWF, ORDER_STATUS_YSXF, ORDER_STATUS_WSWW, ORDER_STATUS_WSWC, ORDER_STATUS_YSWW, ORDER_STATUS_YSWC, ORDER_STATUS_WSSB, ORDER_STATUS_YSSB};
+    public static final String[] ORDER_STATUS_LIST = {ORDER_STATUS_WSWF, ORDER_STATUS_WSXF, ORDER_STATUS_YSWF, ORDER_STATUS_YSXF, ORDER_STATUS_WSWW, ORDER_STATUS_WSWC, ORDER_STATUS_YSWW, ORDER_STATUS_YSWC, ORDER_STATUS_WSSB, ORDER_STATUS_YSSB,ORDER_STATUS_YSDT};
     public static final String[] PERSON_ORDER_STATUS_VIEW = {ORDER_STATUS_WSWF, ORDER_STATUS_YSWF};
     public static final String[] PERSON_ORDER_STATUS_OPERATION = {ORDER_STATUS_WSWF, ORDER_STATUS_WSXF, ORDER_STATUS_YSWF, ORDER_STATUS_YSXF, ORDER_STATUS_WSSB, ORDER_STATUS_YSSB};
 

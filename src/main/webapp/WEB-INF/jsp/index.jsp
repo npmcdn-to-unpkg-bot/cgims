@@ -13,7 +13,7 @@
     <script>window.__BASE_PATH__ = 'http://localhost:8080'</script>
     <%--<script>window.__BASE_PATH__ = 'http://www.chengongjiaju.cn'</script>--%>
     <script>
-        window._LOGIN_USER__ = ${loginUserMap};
+        window.__LOGIN_USER__ = ${loginUserMap};
     </script>
 
     <link rel=stylesheet href=${ctx}/assets/css/admin.css>

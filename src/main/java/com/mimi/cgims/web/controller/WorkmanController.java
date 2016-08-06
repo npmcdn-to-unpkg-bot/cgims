@@ -1,7 +1,6 @@
 package com.mimi.cgims.web.controller;
 
 import com.cloopen.rest.sdk.CCPRestSmsSDK;
-import com.geetest.sdk.java.GeetestLib;
 import com.mimi.cgims.Config;
 import com.mimi.cgims.Constants;
 import com.mimi.cgims.model.WorkmanModel;
@@ -9,9 +8,7 @@ import com.mimi.cgims.service.IAliyunOSSService;
 import com.mimi.cgims.service.IWorkmanService;
 import com.mimi.cgims.service.impl.AliyunOSSService;
 import com.mimi.cgims.util.*;
-import net.sf.json.JSONException;
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +32,11 @@ public class WorkmanController {
 
     private String[] ignores = {"id", "workmanNumber", "cooperateTimes", "score"};
 
+    @RequestMapping(value = "/html/workman/index", method = {RequestMethod.GET})
+    public String workmanIndex(HttpServletRequest request) {
+        return "workmanIndex";
+    }
+
     @RequestMapping(value = "/html/workman/login", method = {RequestMethod.GET})
     public String workmanLogin(HttpServletRequest request) {
         return "workmanLogin";
@@ -46,6 +47,7 @@ public class WorkmanController {
         WorkmanModel workman = workmanService.get(id);
         request.setAttribute("workman",workman);
         request.setAttribute("provinces",CityUtil.provinces);
+        request.setAttribute("provinces2",CityUtil.jsonDatas);
         return "workmanSelf";
     }
 
@@ -139,24 +141,24 @@ public class WorkmanController {
                 return ResultUtil.getFailResultMap(Constants.SMOOTH_CAPTCHA_ERROR);
             }
         if (!FormatUtil.checkValueFormat(phoneNum, FormatUtil.REGEX_COMMON_PHONENUM, true)) {
-            return ResultUtil.getFailResultMap("手机号码格式有误");
+            return ResultUtil.getFailResultMap("手机号码格式有误33");
         }
         int rNum = (int) (Math.random() * 999999);
-        String rNumStr = String.valueOf(rNum);
-        while (rNumStr.length() < 6) {
-            rNumStr = "0" + rNumStr;
+        String captcha = String.valueOf(rNum);
+        while (captcha.length() < 6) {
+            captcha = "0" + captcha;
         }
-//        HashMap<String, Object> receiveMap = ytxAPI.sendTemplateSMS(
-//                phoneNum, config.getYtxTemplateId(), new String[]{rNumStr, "15"});
-//        if ("000000".equals(receiveMap.get("statusCode"))) {
-//            request.getSession().setAttribute(Constants.ACCESS_PHONE_NUM,
-//                    phoneNum);
-//            request.getSession().setAttribute(
-//                    Constants.ACCESS_PHONE_CAPTCHA, rNumStr);
-//        } else {
-//            return ResultUtil.getFailResultMap("发送验证码出错，请稍后重试");
-//        }
-        String captcha = "414141";
+        HashMap<String, Object> receiveMap = ytxAPI.sendTemplateSMS(
+                phoneNum, config.getYtxTemplateId(), new String[]{captcha, "15"});
+        if ("000000".equals(receiveMap.get("statusCode"))) {
+            request.getSession().setAttribute(Constants.ACCESS_PHONE_NUM,
+                    phoneNum);
+            request.getSession().setAttribute(
+                    Constants.ACCESS_PHONE_CAPTCHA, captcha);
+        } else {
+            return ResultUtil.getFailResultMap("发送验证码出错，请稍后重试");
+        }
+//        String captcha = "414141";
         LoginUtil.initPhoneCaptcha(request,phoneNum,captcha);
         return ResultUtil.getSuccessResultMap();
     }

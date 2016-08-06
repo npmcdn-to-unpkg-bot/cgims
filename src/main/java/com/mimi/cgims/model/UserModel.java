@@ -35,7 +35,7 @@ public class UserModel extends BaseModel{
     @Pattern(regexp = "[A-Za-z0-9]{6,200}", message = "密码格式有误")
     private String password;
 
-    @Pattern(regexp = "[A-Za-z0-9]{15,18}", message = "身份证格式有误")
+    @Pattern(regexp = "[A-Za-z0-9]{0,18}", message = "身份证格式有误")
     private String identity;
 
     @Size(max = 200)

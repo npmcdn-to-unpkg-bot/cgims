@@ -27,6 +27,10 @@ public class ResultUtil {
 
     public static final int RESULT_FAIL = 0;
 
+    public static final int RESULT_FAIL_AUTHENTICATION = -2;
+
+    public static final int RESULT_FAIL_AUTHORIZATION= -1;
+
     public static Map<String, Object> getResultMap(int success, String msg, Object result) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put(MAP_KEY_STATUS, success);

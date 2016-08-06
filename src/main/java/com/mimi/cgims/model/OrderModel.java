@@ -60,7 +60,7 @@ public class OrderModel extends BaseModel {
     @Size(max = 6000)
     private String repairImgs;
 
-    private Boolean isChecked;
+    private Boolean checked;
 
     @Size(max = 50)
     private String checkInfo;
@@ -214,11 +214,11 @@ public class OrderModel extends BaseModel {
     }
 
     public Boolean getChecked() {
-        return isChecked;
+        return checked;
     }
 
     public void setChecked(Boolean checked) {
-        isChecked = checked;
+        this.checked = checked;
     }
 
     public String getCheckInfo() {

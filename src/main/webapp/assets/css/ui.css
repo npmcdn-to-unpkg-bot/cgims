@@ -26,6 +26,7 @@ textarea {
   text-align: center;
   line-height: 56px;
   background-color: #ffa500;
+  border-radius: 0 0 10px 10px;
 }
 .workmanLoginMain .line {
   width: 100%;
@@ -127,6 +128,15 @@ textarea {
 .workmanSelfMain .line span,
 .workmanSelfMain .line input {
   float: left;
+}
+.workmanSelfMain .line .szd select {
+  border: none;
+  float: left;
+  height: 32px;
+  padding: 5px;
+  width: 30%;
+  margin-right: 2px;
+  margin-left: 5px;
 }
 .workmanSelfMain .title {
   width: 100%;

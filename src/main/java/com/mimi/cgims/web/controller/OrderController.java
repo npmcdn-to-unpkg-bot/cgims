@@ -144,7 +144,8 @@ public class OrderController {
         OrderModel newOrder = orderService.get(id);
         String error = checkPermission(request,order,newOrder);
         if(StringUtils.isNotBlank(error)){
-            return ResultUtil.getFailResultMap(error);
+            return ResultUtil.getResultMap(ResultUtil.RESULT_FAIL_AUTHORIZATION,error);
+//            return ResultUtil.getFailResultMap(error);
         }
         if(Constants.ORDER_STATUS_YSWC.equals(order.getOrderStatus()) && !Constants.ORDER_STATUS_YSWC.equals(newOrder.getOrderStatus())){
             newOrder.setCompleteDate(new Date());

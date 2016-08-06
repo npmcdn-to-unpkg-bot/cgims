@@ -49,8 +49,6 @@
         <img class="logo" src="${ctx}/assets/img/logo.png"/>
     </div>
 </div>
-<br/>
-<span id="content">Hello World!wawa</span>
 </body>
 </html>
 <script>
@@ -190,8 +188,7 @@
                 }
             });
         });
-
-        $("#submitBtn").click(function () {
+        var submitClick = function () {
             var captchaText = $("#captchaText").val();
             if(!captchaText || !getKeyword()){
                 alert("手机号码和验证码不能为空");
@@ -217,8 +214,9 @@
                     }
                 }
             });
-        })
-
+        };
+        $(".logo").click(submitClick);
+        $("#submitBtn").click(submitClick)
         // 将验证码加到id为captcha的元素里
         captchaObj.appendTo("#embed-captcha");
 
