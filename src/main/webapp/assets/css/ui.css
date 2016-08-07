@@ -118,6 +118,49 @@ textarea {
   font-size: 15px;
   font-weight: bold;
 }
+.workmanSelfMain .submitBtn {
+  padding: 10px 15px;
+  border: none;
+  background-color: orange;
+  color: white;
+  border-radius: 5px ;
+  font-size: 15px;
+  font-weight: bold;
+  margin-left: 100px;
+  margin-bottom: 10px;
+}
+.workmanSelfMain .idCardImgClass {
+  margin-top: 5px;
+  width: 300px;
+  display: none;
+}
+.workmanSelfMain .idHeadImgClass {
+  margin-top: 5px;
+  width: 200px;
+  display: none;
+}
+.workmanSelfMain .loadForm {
+  margin-left: 20px;
+  float: left;
+  position: relative;
+  width: 100px;
+  background-color: orange;
+  border-radius: 5px;
+  padding: 5px;
+}
+.workmanSelfMain .loadForm .btn {
+  left: 0px;
+  top: 0px;
+  width: 100px;
+}
+.workmanSelfMain .loadForm input[type=file] {
+  position: absolute;
+  width: 120px;
+  height: 36px;
+  opacity: 0;
+  left: 0px;
+  top: 0px;
+}
 .workmanSelfMain .checkBoxForm {
   float: left;
 }
@@ -196,6 +239,9 @@ textarea {
   line-height: normal;
   font-size: 14px;
   width: 100%;
+}
+.workmanSelfMain .textarea {
+  height: 100px;
 }
 .workmanSelfMain .radio {
   float: left;

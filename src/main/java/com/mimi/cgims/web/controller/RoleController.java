@@ -26,10 +26,10 @@ public class RoleController {
         return roleService.list4Page(searchKeyword, curPage, pageSize);
     }
 
-    @RequestMapping(value = "/role/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/role/{roleId}", method = RequestMethod.GET)
     @ResponseBody
-    public Object get(@PathVariable String id) {
-        return ResultUtil.getSuccessResultMap(roleService.getWithPermissions(id));
+    public Object get(@PathVariable String roleId) {
+        return ResultUtil.getSuccessResultMap(roleService.getWithPermissions(roleId));
     }
 
     @RequestMapping(value = "/role", method = RequestMethod.POST)
@@ -43,9 +43,9 @@ public class RoleController {
         return ResultUtil.getSuccessResultMap(roleService.add(role));
     }
 
-    @RequestMapping(value = "/role/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/role/{roleId}", method = RequestMethod.POST)
     @ResponseBody
-    public Object update(@PathVariable String id, RoleModel role, String permissionIds) {
+    public Object update(@PathVariable String roleId, RoleModel role, String permissionIds) {
         String error = roleService.checkUpdate(role);
         if (StringUtils.isNotBlank(error)) {
             return ResultUtil.getFailResultMap(error);
@@ -53,7 +53,7 @@ public class RoleController {
         if(Constants.ROLE_NAME_ADMIN.equals(role.getName())){
             return ResultUtil.getFailResultMap("不能修改超级管理员角色");
         }
-        RoleModel newModel = roleService.get(id);
+        RoleModel newModel = roleService.get(roleId);
         BeanUtils.copyProperties(role, newModel, "id", "users", "permissions");
         newModel.setPermissions(buildPermissions(permissionIds));
         roleService.update(newModel);

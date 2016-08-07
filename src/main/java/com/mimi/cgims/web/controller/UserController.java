@@ -47,10 +47,10 @@ public class UserController {
         return map;
     }
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
     @ResponseBody
-    public Object get(@PathVariable String id) {
-        UserModel user = userService.getWithDatas(id);
+    public Object get(@PathVariable String userId) {
+        UserModel user = userService.getWithDatas(userId);
         cleanPwd(user);
         return ResultUtil.getSuccessResultMap(user);
     }
@@ -69,9 +69,9 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.POST)
     @ResponseBody
-    public Object update(@PathVariable String id, UserModel user, String roleIds, String slaveIds) {
+    public Object update(@PathVariable String userId, UserModel user, String roleIds, String slaveIds) {
         if (LoginUtil.isAdmin(user.getLoginName())) {
             return ResultUtil.getFailResultMap("不能修改超级管理员");
         }
@@ -79,7 +79,7 @@ public class UserController {
         if (StringUtils.isNotBlank(error)) {
             return ResultUtil.getFailResultMap(error);
         }
-        UserModel newModel = userService.get(id);
+        UserModel newModel = userService.get(userId);
         if (StringUtils.isBlank(user.getPassword())) {
             BeanUtils.copyProperties(user, newModel, ignoresWithPws);
         } else {
@@ -189,12 +189,13 @@ public class UserController {
         if(StringUtils.isBlank(id)){
             return ResultUtil.getFailResultMap("请先登录");
         }
-        UserModel user = userService.get(id);
-        user.setPassword(null);
+        UserModel user = userService.getWithDatas(id);
+        cleanPwd(user);
         return ResultUtil.getSuccessResultMap(user);
     }
 
     @RequestMapping(value = "/user/self", method = RequestMethod.POST)
+    @ResponseBody
     public Object userSelfUpdate(HttpServletRequest request, UserModel user) {
         String id = LoginUtil.getCurUserId(request);
         if(StringUtils.isBlank(id)){

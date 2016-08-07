@@ -206,8 +206,7 @@
                 },
                 success: function (json) {
                     if (json.status) {
-                        var id = json.result;
-                        self.location.href = "${ctx}/html/workman/self/" + id;
+                        self.location.href = "${ctx}/html/workman/self";
                     } else {
                         alert(json.msg);
                         captchaObj.refresh();

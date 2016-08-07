@@ -81,7 +81,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 return true;
             }
         }
-        if (isWorkmanSelfPage(sp) || sp.startsWith("/workman/self/")) {
+        if (isWorkmanSelfPage(sp) || sp.startsWith("/workman/self")) {
             if (LoginUtil.isWorkmanLogined(request)) {
                 return true;
             } else {

@@ -10,13 +10,16 @@ import com.mimi.cgims.service.impl.AliyunOSSService;
 import com.mimi.cgims.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -42,12 +45,12 @@ public class WorkmanController {
         return "workmanLogin";
     }
 
-    @RequestMapping(value = "/html/workman/self/{id}", method = {RequestMethod.GET})
-    public String workmanSelf(@PathVariable String id, HttpServletRequest request) {
+    @RequestMapping(value = "/html/workman/self", method = {RequestMethod.GET})
+    public String workmanSelf(HttpServletRequest request) {
+        String id = LoginUtil.getCurWorkmanId(request);
         WorkmanModel workman = workmanService.get(id);
         request.setAttribute("workman",workman);
-        request.setAttribute("provinces",CityUtil.provinces);
-        request.setAttribute("provinces2",CityUtil.jsonDatas);
+        request.setAttribute("provinces",CityUtil.jsonDatas);
         return "workmanSelf";
     }
 
@@ -84,10 +87,17 @@ public class WorkmanController {
         return workmanService.list4Page(searchKeyword, province, city, area, serviceType, curPage, pageSize);
     }
 
-    @RequestMapping(value = {"/workman/self/{id}", "/workman/{id}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/workman/self"}, method = RequestMethod.GET)
     @ResponseBody
-    public Object get(@PathVariable String id) {
+    public Object selfGet(HttpServletRequest request) {
+        String id = LoginUtil.getCurWorkmanId(request);
         return ResultUtil.getSuccessResultMap(workmanService.get(id));
+    }
+
+    @RequestMapping(value = { "/workman/{workmanId}"}, method = RequestMethod.GET)
+    @ResponseBody
+    public Object get(@PathVariable String workmanId) {
+        return ResultUtil.getSuccessResultMap(workmanService.get(workmanId));
     }
 
     @RequestMapping(value = "/workman", method = RequestMethod.POST)
@@ -102,11 +112,24 @@ public class WorkmanController {
         return ResultUtil.getSuccessResultMap();
     }
 
-
-    @RequestMapping(value = {"/workman/self/{id}", "/workman/{id}"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/workman/self"}, method = RequestMethod.POST)
     @ResponseBody
-    public Object update(@PathVariable String id, WorkmanModel workman) {
+    public Object selfUpdate( HttpServletRequest request,WorkmanModel workman) {
+        String id = LoginUtil.getCurWorkmanId(request);
         WorkmanModel newModel = workmanService.get(id);
+        BeanUtils.copyProperties(workman, newModel, ignores);
+        String error = workmanService.checkUpdate(newModel);
+        if (StringUtils.isNotBlank(error)) {
+            return ResultUtil.getFailResultMap(error);
+        }
+        workmanService.update(newModel);
+        return ResultUtil.getSuccessResultMap();
+    }
+
+    @RequestMapping(value = {"/workman/{workmanId}"}, method = RequestMethod.POST)
+    @ResponseBody
+    public Object update(@PathVariable String workmanId, WorkmanModel workman) {
+        WorkmanModel newModel = workmanService.get(workmanId);
         BeanUtils.copyProperties(workman, newModel, ignores);
         String error = workmanService.checkUpdate(newModel);
         if (StringUtils.isNotBlank(error)) {
@@ -172,6 +195,7 @@ public class WorkmanController {
     }
 
     @RequestMapping(value = {
+            "/workman/self/upload/headImg",
             "/workman/upload/headImg"}, method = { RequestMethod.POST })
     public @ResponseBody
     Object uploadHeadImg(HttpServletRequest request,
@@ -180,6 +204,8 @@ public class WorkmanController {
     }
 
     @RequestMapping(value = {
+            "/workman/self/upload/idCardBack",
+            "/workman/self/upload/idCardFace",
             "/workman/upload/idCardBack",
             "/workman/upload/idCardFace"}, method = { RequestMethod.POST })
     public @ResponseBody
@@ -207,5 +233,10 @@ public class WorkmanController {
         }
         return ResultUtil.getSuccessResultMap(ids);
     }
-
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));   //true:允许输入空值，false:不能为空值
+    }
 }

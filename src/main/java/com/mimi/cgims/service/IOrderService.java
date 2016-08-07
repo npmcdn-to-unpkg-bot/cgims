@@ -3,7 +3,7 @@ package com.mimi.cgims.service;
 import com.mimi.cgims.model.OrderModel;
 
 public interface IOrderService extends IAutoNumService<OrderModel, String> {
-    Object list4Page(String searchKeyword, String orderStatus, String serviceType, String userId, String beginTime, String endTime, String searchKeyword1, int targetPage, int pageSize);
+    Object list4Page(String searchKeyword, String orderStatus, String serviceType, String userId,String workmanId, String beginTime, String endTime,  int targetPage, int pageSize);
 
     String checkAdd(OrderModel order);
 
