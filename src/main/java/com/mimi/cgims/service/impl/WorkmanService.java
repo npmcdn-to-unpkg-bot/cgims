@@ -2,6 +2,7 @@ package com.mimi.cgims.service.impl;
 
 import com.mimi.cgims.Constants;
 import com.mimi.cgims.dao.IBaseDao;
+import com.mimi.cgims.dao.IOrderDao;
 import com.mimi.cgims.dao.IWorkmanDao;
 import com.mimi.cgims.model.WorkmanModel;
 import com.mimi.cgims.service.IWorkmanService;
@@ -18,6 +19,9 @@ import java.util.*;
 public class WorkmanService extends BaseService<WorkmanModel, String> implements IWorkmanService {
 
     private IWorkmanDao workmanDao;
+
+    @Resource
+    private IOrderDao orderDao;
 
     @Resource
     @Override
@@ -110,7 +114,8 @@ public class WorkmanService extends BaseService<WorkmanModel, String> implements
                 workman.setWillingPickAddress("推荐提货点阿拉山口都放假拉升的" + i);
                 workman.setLogistics("提存物流收到风手动发斯蒂芬" + i);
                 workman.setStrength("优势阿里上飞机安乐死的解放路上对方就流口水" + i);
-                workman.setDescription("备注al升得啦分开始叫对方阿斯兰的风景阿阿斯兰的水电费暗杀的反馈收到风阿萨阿斯兰的水电费暗杀的反馈收到风阿萨斯兰的水电费暗杀的反馈收到风阿萨德暗杀发生大事阿萨德是阿萨德发斯蒂芬" + i);
+//                workman.setDescription("备注al升得啦分开始叫对方阿斯兰的风景阿阿斯兰的水电费暗杀的反馈收到风阿萨阿斯兰的水电费暗杀的反馈收到风阿萨斯兰的水电费暗杀的反馈收到风阿萨德暗杀发生大事阿萨德是阿萨德发斯蒂芬" + i);
+                workman.setDescription("备注al升得啦分" + i);
                 workmanDao.add(workman);
             }
         }
@@ -257,5 +262,17 @@ public class WorkmanService extends BaseService<WorkmanModel, String> implements
             return Integer.parseInt(workman.getWorkmanNumber().substring(8));
         }
         return 0;
+    }
+    @Override
+    public void delete(String id){
+        orderDao.cleanWorkmanId(id);
+        super.delete(id);
+    }
+
+    @Override
+    public void batchDelete(String ...ids){
+        for(String id:ids){
+            delete(id);
+        }
     }
 }

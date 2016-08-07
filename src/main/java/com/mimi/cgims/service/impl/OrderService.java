@@ -72,7 +72,7 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
                     order.setCustomerName("客户名称" + i);
                     order.setCustomerPhoneNum("客户电话" + i);
                     order.setCustomerTel("备用电话" + i);
-                    order.setCustomerAddress("客户地址" + i);
+                    order.setCustomerAddress("客户地址 爱上了咖啡就上课了发动机安乐死的" + i);
                     order.setProductInfo("产品信息" + i);
                     order.setProductImgs(randomTestImgs());
                     order.setLogisticsInfo("物流信息" + i);
@@ -88,7 +88,7 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
                     order.setPriceChangeReason("价格变动原因" + i);
                     order.setJudgment(random.nextInt(5) + 1);
                     order.setJudgeReason("评价理由" + i);
-                    order.setDescription("备注" + i);
+                    order.setDescription("备注发神经的饭卡上对方来看阿斯兰的发生的附件案发生的离开房间" + i);
                     if(random.nextBoolean()){
                         order.setUser(user);
                     }
@@ -307,7 +307,6 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
             orderDao.batchUpdate("orderStatus",orderStatus,ids.split(Constants.SPLIT_STRING_IDS));
         }
         if(Constants.BATCH_ACTION_DELETE.equals(action)){
-            orderDao.batchDelete(ids.split(Constants.SPLIT_STRING_IDS));
             List<String> workmanIds = new ArrayList<>();
             for(String id:ids.split(Constants.SPLIT_STRING_IDS)){
                 OrderModel order = orderDao.get(id);
@@ -315,6 +314,7 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
                     workmanIds.add(order.getWorkman().getId());
                 }
             }
+            orderDao.batchDelete(ids.split(Constants.SPLIT_STRING_IDS));
             workmanIds.forEach(this::refreshWorkman);
         }
     }
@@ -343,7 +343,9 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
     public float analysisProfitMargin(String creatorId, String serviceType, String beginTime, String endTime) {
         int income = orderDao.analysisIncome(creatorId,serviceType,beginTime,endTime);
         int expenditure = orderDao.analysisExpenditure(creatorId,serviceType,beginTime,endTime);
-
+        if(income==0){
+            return 0;
+        }
         return (float)(income-expenditure)/income;
     }
 
@@ -351,6 +353,9 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
     public int analysisIncomeP(String creatorId, String serviceType, String beginTime, String endTime) {
         int income = orderDao.analysisIncome(creatorId,serviceType,beginTime,endTime);
         int count = orderDao.analysisOrderCount(creatorId,serviceType,beginTime,endTime);
+        if(count==0){
+            return 0;
+        }
         return income/count;
     }
 
@@ -359,6 +364,9 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
         int income = orderDao.analysisIncome(creatorId,serviceType,beginTime,endTime);
         int expenditure = orderDao.analysisExpenditure(creatorId,serviceType,beginTime,endTime);
         int count = orderDao.analysisOrderCount(creatorId,serviceType,beginTime,endTime);
+        if(count==0){
+            return 0;
+        }
         return (income-expenditure)/count;
     }
 

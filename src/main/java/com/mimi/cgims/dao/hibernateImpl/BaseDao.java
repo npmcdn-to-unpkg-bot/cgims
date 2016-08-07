@@ -205,7 +205,11 @@ public abstract class BaseDao<M extends Serializable, PK extends Serializable>
 
     protected int sum(Criteria criteria,String name){
         criteria.setProjection(Projections.sum(name));
-        Integer count = ((Long)criteria.uniqueResult()).intValue();
+        Object result = criteria.uniqueResult();
+        if(result==null){
+            return 0;
+        }
+        Integer count = ((Long)result).intValue();
         return count;
     }
 }

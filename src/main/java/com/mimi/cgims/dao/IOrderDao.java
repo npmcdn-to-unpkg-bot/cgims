@@ -18,5 +18,7 @@ public interface IOrderDao extends
 
     void cleanUserId(String userId);
 
+    void cleanWorkmanId(String workmanId);
+
     OrderModel getNewest(int year, int month, int day);
 }

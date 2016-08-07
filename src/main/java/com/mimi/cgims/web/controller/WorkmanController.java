@@ -141,24 +141,24 @@ public class WorkmanController {
                 return ResultUtil.getFailResultMap(Constants.SMOOTH_CAPTCHA_ERROR);
             }
         if (!FormatUtil.checkValueFormat(phoneNum, FormatUtil.REGEX_COMMON_PHONENUM, true)) {
-            return ResultUtil.getFailResultMap("手机号码格式有误33");
+            return ResultUtil.getFailResultMap("手机号码格式有误");
         }
-        int rNum = (int) (Math.random() * 999999);
-        String captcha = String.valueOf(rNum);
-        while (captcha.length() < 6) {
-            captcha = "0" + captcha;
-        }
-        HashMap<String, Object> receiveMap = ytxAPI.sendTemplateSMS(
-                phoneNum, config.getYtxTemplateId(), new String[]{captcha, "15"});
-        if ("000000".equals(receiveMap.get("statusCode"))) {
-            request.getSession().setAttribute(Constants.ACCESS_PHONE_NUM,
-                    phoneNum);
-            request.getSession().setAttribute(
-                    Constants.ACCESS_PHONE_CAPTCHA, captcha);
-        } else {
-            return ResultUtil.getFailResultMap("发送验证码出错，请稍后重试");
-        }
-//        String captcha = "414141";
+//        int rNum = (int) (Math.random() * 999999);
+//        String captcha = String.valueOf(rNum);
+//        while (captcha.length() < 6) {
+//            captcha = "0" + captcha;
+//        }
+//        HashMap<String, Object> receiveMap = ytxAPI.sendTemplateSMS(
+//                phoneNum, config.getYtxTemplateId(), new String[]{captcha, "15"});
+//        if ("000000".equals(receiveMap.get("statusCode"))) {
+//            request.getSession().setAttribute(Constants.ACCESS_PHONE_NUM,
+//                    phoneNum);
+//            request.getSession().setAttribute(
+//                    Constants.ACCESS_PHONE_CAPTCHA, captcha);
+//        } else {
+//            return ResultUtil.getFailResultMap("发送验证码出错，请稍后重试");
+//        }
+        String captcha = "414141";
         LoginUtil.initPhoneCaptcha(request,phoneNum,captcha);
         return ResultUtil.getSuccessResultMap();
     }
@@ -197,6 +197,15 @@ public class WorkmanController {
             e.printStackTrace();
             return ResultUtil.getFailResultMap("保存图片失败");
         }
+    }
+
+    @RequestMapping(value = "/workman/batch", method = RequestMethod.POST)
+    @ResponseBody
+    public Object batch(String ids) {
+        if (StringUtils.isNotBlank(ids)) {
+            workmanService.batchDelete(ids.split(Constants.SPLIT_STRING_IDS));
+        }
+        return ResultUtil.getSuccessResultMap(ids);
     }
 
 }

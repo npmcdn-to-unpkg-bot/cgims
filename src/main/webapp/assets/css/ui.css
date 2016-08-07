@@ -118,6 +118,24 @@ textarea {
   font-size: 15px;
   font-weight: bold;
 }
+.workmanSelfMain .checkBoxForm {
+  float: left;
+}
+.workmanSelfMain .checkBoxForm input[type=checkbox] {
+  margin-top: 5px;
+  margin-left: 20px;
+}
+.workmanSelfMain .checkBoxForm input[type=text] {
+  margin-top: 5px;
+  border: none;
+  width: 100px;
+  margin-left: 5px;
+}
+.workmanSelfMain .serviceItem {
+  float: left;
+  width: 100%;
+  margin-bottom: 5px;
+}
 .workmanSelfMain .line {
   position: relative;
   width: 100%;
@@ -125,11 +143,23 @@ textarea {
   margin-top: 10px;
   float: left;
 }
-.workmanSelfMain .line span,
-.workmanSelfMain .line input {
+.workmanSelfMain .sTitle {
+  width: 90%;
+  float: left;
+  text-align: left;
+  padding-left: 10px;
+  margin-bottom: 5px;
+}
+.workmanSelfMain .tTitle {
+  float: left;
+  text-align: left;
+  padding-left: 10px;
+}
+.workmanSelfMain span,
+.workmanSelfMain input {
   float: left;
 }
-.workmanSelfMain .line .szd select {
+.workmanSelfMain .szd select {
   border: none;
   float: left;
   height: 32px;

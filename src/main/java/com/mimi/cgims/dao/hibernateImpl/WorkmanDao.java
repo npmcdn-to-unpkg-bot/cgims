@@ -69,7 +69,7 @@ public class WorkmanDao extends BaseDao<WorkmanModel, String>
             criteria.add(Restrictions.eq("city",city));
         }
         if (StringUtils.isNotBlank(area)) {
-            criteria.add(Restrictions.like("area","%"+area+"%"));
+            criteria.add(Restrictions.like("serviceArea","%"+area+"%"));
         }
         if (StringUtils.isNotBlank(serviceType)) {
             criteria.add(Restrictions.like("serviceType","%"+serviceType+"%"));

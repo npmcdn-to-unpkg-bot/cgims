@@ -62,6 +62,12 @@ public class OrderDao extends BaseDao<OrderModel, String>
     }
 
     @Override
+    public void cleanWorkmanId(String workmanId) {
+        String sql = "update tbl_order set workman_id = ? where workman_id = ?";
+        updateSql(sql, null, workmanId);
+    }
+
+    @Override
     public OrderModel getNewest(int year, int month, int day) {
         Criteria criteria = getCriteria();
         criteria.add(Restrictions.like("orderNumber", DateUtil.convert2String(year, month, day) + "%"));
