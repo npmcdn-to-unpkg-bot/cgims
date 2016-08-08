@@ -1,6 +1,8 @@
 package com.mimi.cgims.util;
 
 import java.io.*;
+import java.text.Collator;
+import java.util.*;
 
 public class FileUtil {
 	private static final int MAX_BUFFER_SIZE = 4 * 1024 * 1024;
@@ -133,17 +135,41 @@ public class FileUtil {
         // 目录此时为空，可以删除
         return dir.delete();
     }
+	public static List<String> readTxtFile(String filePath){
+		List<String> datas = new ArrayList<>();
+		try {
+			String encoding="UTF8";
+			File file=new File(filePath);
+			if(file.isFile() && file.exists()){ //判断文件是否存在
+				InputStreamReader read = new InputStreamReader(
+						new FileInputStream(file),encoding);//考虑到编码格式
+				BufferedReader bufferedReader = new BufferedReader(read);
+				String lineTxt = null;
+				while((lineTxt = bufferedReader.readLine()) != null){
+//					System.out.println(lineTxt);
+					datas.add(lineTxt);
+				}
+				read.close();
+			}else{
+				System.out.println("找不到指定的文件");
+			}
+		} catch (Exception e) {
+			System.out.println("读取文件内容出错");
+			e.printStackTrace();
+		}
+		return datas;
+	}
     /**
      *测试
      */
     public static void main(String[] args) {
-        doDeleteEmptyDir("new_dir1");
-        String newDir2 = "new_dir2";
-        boolean success = deleteDir(new File(newDir2));
-        if (success) {
-            System.out.println("Successfully deleted populated directory: " + newDir2);
-        } else {
-            System.out.println("Failed to delete populated directory: " + newDir2);
-        }     
+//        doDeleteEmptyDir("new_dir1");
+//        String newDir2 = "new_dir2";
+//        boolean success = deleteDir(new File(newDir2));
+//        if (success) {
+//            System.out.println("Successfully deleted populated directory: " + newDir2);
+//        } else {
+//            System.out.println("Failed to delete populated directory: " + newDir2);
+//        }
     }
 }

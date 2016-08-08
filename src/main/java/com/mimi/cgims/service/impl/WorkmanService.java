@@ -215,7 +215,7 @@ public class WorkmanService extends BaseService<WorkmanModel, String> implements
         if (StringUtils.isNotBlank(error)) {
             errors.add(error);
         }
-        error = FormatUtil.checkLengthOnly(workman.getIdCardBack(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "身份证背面");
+        error = FormatUtil.checkLengthOnly(workman.getIdCardBack(), FormatUtil.MAX_LENGTH_COMMON_NORMAL_L2, "身份证背面");
         if (StringUtils.isNotBlank(error)) {
             errors.add(error);
         }

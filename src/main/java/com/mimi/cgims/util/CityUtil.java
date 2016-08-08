@@ -2,11 +2,13 @@ package com.mimi.cgims.util;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.Collator;
 import java.util.*;
 
 public class CityUtil {
@@ -156,8 +158,97 @@ public class CityUtil {
 //        System.out.println(JSONObject.fromObject( CityUtil.provinces).toString());
     }
 
+    public static void buildJson(){
+
+    }
+
+    public static void buildMap(){
+        String url = "C:/Users/Administrator/IdeaProjects/cgims/target/classes/pca";
+        Map<String,Map> pm = new HashMap<>();
+        List<String> datas = FileUtil.readTxtFile(url);
+//        List<String> p = new ArrayList<>();
+        String lastPNum = "";
+        String lastCNum = "";
+        String lastANum = "";
+        String lastPName = "";
+        String lastCName = "";
+        String lastAName = "";
+        Map<String,List> cm = new HashMap<>();
+        List<String> al = new ArrayList<>();
+        for(int i=0;i<datas.size();i++){
+            String data = datas.get(i);
+            String num = data.substring(0,6);
+            String name = data.substring(6).replaceAll("\\r|\\n|\\t| ","");
+            String pNum = num.substring(0,2);
+            String cNum = num.substring(2,4);
+            String aNum = num.substring(4,6);
+            if(num.endsWith("0000")){
+                lastPName = name;
+                lastPNum = pNum;
+            }else if(num.endsWith("00")){
+                lastCName = name;
+                lastCNum = cNum;
+            }else{
+                lastAName = name;
+                lastANum = aNum;
+            }
+            if(i+1==datas.size()){
+                if(StringUtils.isBlank(lastCName)){
+                    lastCName = lastPName;
+                }
+                if(StringUtils.isBlank(lastAName)){
+                    lastAName = lastCName;
+                }
+                al.add(lastAName);
+                cm.put(lastCName,al);
+                pm.put(lastPName,cm);
+            }else{
+                String nData = datas.get(i+1);
+                String nNum = nData.substring(0,6);
+                String nName = nData.substring(6).replaceAll("\\r|\\n|\\t| ","");
+                String nPNum = nNum.substring(0,2);
+                String nCNum = nNum.substring(2,4);
+                String nANum = nNum.substring(4,6);
+                if(nPNum != pNum){
+
+                }
+
+            }
+//            if(!nowNum.equals(lastPNum)){
+//                lastPNum = nowNum;
+//                if(StringUtils.isNotBlank(lastPName)){
+//                    if(al.isEmpty()){
+//                        al.add(lastPName);
+//                    }
+//                    if(cm.isEmpty()){
+//                        cm.put(lastPName,al);
+//                    }
+//                    pm.put(lastPName,cm);
+//                }
+//                lastPName = name;
+//            }
+//            if(num.endsWith("0000")){
+//                pm.put()
+//            }
+
+//            if(data.substring(2,6).endsWith("0000")){
+//                data = data.substring(6);
+//                data = data.replaceAll("\\r|\\n|\\t| ","");
+//                p.add(data);
+//            }
+        }
+//        Comparator cmp = Collator.getInstance(java.util.Locale.CHINA);
+//        p.sort(cmp);
+//        p.add(3,p.get(p.size()-1));
+//        p.remove(p.size()-1);
+//        for(String pn:p){
+//            System.out.println(pn);
+//        }
+    }
+
     public static void main(String[] args) {
-        init();
+//        init();
+        buildMap();
 //        String jsonStr = readFile("C:\\Users\\Administrator\\Desktop\\ab.json");
 //        JSONObject json = JSONObject.fromObject(jsonStr);
 //        JSONArray provinces = json.getJSONArray("p");

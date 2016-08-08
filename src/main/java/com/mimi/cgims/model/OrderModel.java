@@ -68,6 +68,9 @@ public class OrderModel extends BaseModel {
     @Size(max = 50)
     private String shopInfo;
 
+    @Size(max = 50)
+    private String qq;
+
     private Integer orderPrice;
 
     private Integer servicePrice;
@@ -100,6 +103,14 @@ public class OrderModel extends BaseModel {
     @ManyToOne(targetEntity = WorkmanModel.class)
     @JoinColumn(name = "workman_id", updatable = false)
     private WorkmanModel workman;
+
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
 
     public String getId() {
         return id;

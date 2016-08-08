@@ -231,6 +231,10 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
         if (StringUtils.isNotBlank(error)) {
             errors.add(error);
         }
+        error = FormatUtil.checkLengthOnly(order.getQq(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "QQ");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
         error = FormatUtil.checkLengthOnly(order.getPriceChangeReason(), FormatUtil.MAX_LENGTH_COMMON_NORMAL_L2, "价格变动原因");
         if (StringUtils.isNotBlank(error)) {
             errors.add(error);
