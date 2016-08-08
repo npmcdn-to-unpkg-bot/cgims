@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><%
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %><%
     Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
     String message = (String) request.getAttribute("javax.servlet.error.message");
     String servletName = (String) request.getAttribute("javax.servlet.error.servlet_name");

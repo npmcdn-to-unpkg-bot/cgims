@@ -1,11 +1,10 @@
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%request.setAttribute("ctx", request.getContextPath());%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>师傅信息</title>
@@ -34,7 +33,7 @@
         <span class="head">
             个人信息
         </span>
-        <input type="text" class="text" name="phoneNum" placeholder="手机号码" value="${workman.phoneNum}"/>
+        <input type="text" class="text" name="phoneNum" placeholder="手机号码" readonly="readonly" value="${workman.phoneNum}"/>
         <input type="hidden" class="text" name="id" placeholder="" value="${workman.id}"/>
         <input type="hidden" class="text" name="workmanNumber" placeholder="工号" value="${workman.workmanNumber}"/>
         <input type="text" class="text" name="name" placeholder="名称" value="${workman.name}"/>

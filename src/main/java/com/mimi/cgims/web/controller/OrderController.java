@@ -70,14 +70,15 @@ public class OrderController {
 
     @RequestMapping(value = "/user/{userId}/order", method = RequestMethod.GET)
     @ResponseBody
-    public Object userSearch(HttpServletRequest request,String searchKeyword,String orderStatus,String serviceType,String creatorId,String beginTime,String endTime,@RequestParam(defaultValue = "1") Integer curPage,@RequestParam(defaultValue = "10") Integer pageSize) {
+    public Object userSearch(@PathVariable String userId, HttpServletRequest request,String searchKeyword,String orderStatus,String serviceType,String creatorId,String beginTime,String endTime,@RequestParam(defaultValue = "1") Integer curPage,@RequestParam(defaultValue = "10") Integer pageSize) {
         beginTime = buildBeginTime(beginTime);
         endTime = buildEndTime(endTime);
-        String slaveIds = LoginUtil.getUserSlaveIds(request);
-        if(StringUtils.isBlank(slaveIds) || !slaveIds.contains(creatorId)){
-            return ResultUtil.getFailResultMap("权限不足");
-        }
-        return orderService.list4Page(searchKeyword,orderStatus,serviceType,creatorId,null,beginTime,endTime,curPage, pageSize);
+//        String slaveIds = LoginUtil.getUserSlaveIds(request);
+//        if(StringUtils.isBlank(slaveIds) || !slaveIds.contains(creatorId)){
+//            return ResultUtil.getFailResultMap("权限不足");
+//        }
+//        return orderService.list4Page(searchKeyword,orderStatus,serviceType,creatorId,null,beginTime,endTime,curPage, pageSize);
+        return orderService.list4Page(searchKeyword,orderStatus,serviceType,userId,null,beginTime,endTime,curPage, pageSize);
     }
 
     @RequestMapping(value = "/workman/{workmanId}/order", method = RequestMethod.GET)

@@ -76,7 +76,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 //        }
         if (isWorkmanLoginPage(sp)) {
             if (LoginUtil.isWorkmanLogined(request)) {
-                return responseOut(request, response, "/html/workman/self/" + LoginUtil.getCurWorkmanId(request), true, "已登录", ResultUtil.RESULT_SUCCESS);
+                return responseOut(request, response, "/html/workman/self" , true, "已登录", ResultUtil.RESULT_SUCCESS);
             } else {
                 return true;
             }

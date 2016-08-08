@@ -20,6 +20,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -166,22 +167,24 @@ public class WorkmanController {
         if (!FormatUtil.checkValueFormat(phoneNum, FormatUtil.REGEX_COMMON_PHONENUM, true)) {
             return ResultUtil.getFailResultMap("手机号码格式有误");
         }
-//        int rNum = (int) (Math.random() * 999999);
-//        String captcha = String.valueOf(rNum);
-//        while (captcha.length() < 6) {
-//            captcha = "0" + captcha;
-//        }
+        int rNum = (int) (Math.random() * 999999);
+        String captcha = String.valueOf(rNum);
+        while (captcha.length() < 6) {
+            captcha = "0" + captcha;
+        }
 //        HashMap<String, Object> receiveMap = ytxAPI.sendTemplateSMS(
 //                phoneNum, config.getYtxTemplateId(), new String[]{captcha, "15"});
-//        if ("000000".equals(receiveMap.get("statusCode"))) {
-//            request.getSession().setAttribute(Constants.ACCESS_PHONE_NUM,
-//                    phoneNum);
-//            request.getSession().setAttribute(
-//                    Constants.ACCESS_PHONE_CAPTCHA, captcha);
-//        } else {
-//            return ResultUtil.getFailResultMap("发送验证码出错，请稍后重试");
-//        }
-        String captcha = "414141";
+        HashMap<String, Object> receiveMap = ytxAPI.sendTemplateSMS(
+                phoneNum, config.getYtxTemplateId(), new String[]{captcha});
+        if ("000000".equals(receiveMap.get("statusCode"))) {
+            request.getSession().setAttribute(Constants.ACCESS_PHONE_NUM,
+                    phoneNum);
+            request.getSession().setAttribute(
+                    Constants.ACCESS_PHONE_CAPTCHA, captcha);
+        } else {
+            return ResultUtil.getFailResultMap("发送验证码出错，请稍后重试");
+        }
+//        String captcha = "414141";
         LoginUtil.initPhoneCaptcha(request,phoneNum,captcha);
         return ResultUtil.getSuccessResultMap();
     }
