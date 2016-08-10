@@ -101,7 +101,7 @@ public class OrderModel extends BaseModel {
     private UserModel user;
 
     @ManyToOne(targetEntity = WorkmanModel.class)
-    @JoinColumn(name = "workman_id", updatable = false)
+    @JoinColumn(name = "workman_id")
     private WorkmanModel workman;
 
     public String getQq() {
