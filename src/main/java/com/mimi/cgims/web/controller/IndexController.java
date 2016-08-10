@@ -1,6 +1,7 @@
 package com.mimi.cgims.web.controller;
 
 import com.mimi.cgims.Config;
+import com.mimi.cgims.util.CityUtil;
 import com.mimi.cgims.util.LoginUtil;
 import com.mimi.cgims.util.ResultUtil;
 import com.mimi.cgims.util.TestUtil;
@@ -30,6 +31,8 @@ public class IndexController {
     public String index(HttpServletRequest request) {
         Map<String,String> map = LoginUtil.getUserLoginMsg(request);
         request.setAttribute("loginUserMap", JSONObject.fromObject(map));
+        request.setAttribute("provinces",CityUtil.jsonDatas);
+        request.setAttribute("provinceNames", CityUtil.defaultProvinceNames);
         return "index";
     }
 

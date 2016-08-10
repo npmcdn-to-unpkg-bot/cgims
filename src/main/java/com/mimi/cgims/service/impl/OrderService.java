@@ -5,16 +5,13 @@ import com.mimi.cgims.dao.IBaseDao;
 import com.mimi.cgims.dao.IOrderDao;
 import com.mimi.cgims.dao.IUserDao;
 import com.mimi.cgims.dao.IWorkmanDao;
-import com.mimi.cgims.enums.OrderStatus;
 import com.mimi.cgims.model.OrderModel;
 import com.mimi.cgims.model.UserModel;
 import com.mimi.cgims.model.WorkmanModel;
-import com.mimi.cgims.service.IAutoNumService;
 import com.mimi.cgims.service.IOrderService;
 import com.mimi.cgims.util.*;
 import com.mimi.cgims.util.page.PageUtil;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -59,7 +56,8 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
                     AutoNumUtil.setC(c);
                     OrderModel order = new OrderModel();
                     order.setOrderNumber(AutoNumUtil.getOrderNum());
-                    order.setOrderStatus(OrderStatus.random().getName());
+//                    order.setOrderStatus(OrderStatus.random().getName());
+                    order.setOrderStatus(Constants.ORDER_STATUS_LIST[random.nextInt(Constants.ORDER_STATUS_LIST.length)]);
                     if (Math.random() > 0.5) {
                         order.setServiceType(Constants.SERVICE_TYPE_PSAZ);
                     } else {
@@ -95,7 +93,8 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
                     order.setCreateDate(today);
                     order.setOrderPriceChanged(random.nextBoolean());
                     order.setServicePriceChanged(random.nextBoolean());
-                    if (OrderStatus.YSWC.getName().equals(order.getOrderStatus())) {
+//                    if (OrderStatus.YSWC.getName().equals(order.getOrderStatus())) {
+                    if (Constants.ORDER_STATUS_YSWC.equals(order.getOrderStatus())) {
                         order.setCompleteDate(DateUtil.randomDate("2015-01-01 00:00:00","2016-01-01 00:00:00"));
                     }
                     if(random.nextBoolean()){

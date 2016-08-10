@@ -2,18 +2,16 @@ package com.mimi.cgims.web.controller;
 
 import com.mimi.cgims.Constants;
 import com.mimi.cgims.common.BaseJunit4Test;
-import com.mimi.cgims.enums.OrderStatus;
 import com.mimi.cgims.model.OrderModel;
 import com.mimi.cgims.model.UserModel;
 import com.mimi.cgims.model.WorkmanModel;
-import com.mimi.cgims.util.*;
+import com.mimi.cgims.util.AutoNumUtil;
+import com.mimi.cgims.util.DateUtil;
+import com.mimi.cgims.util.ListUtil;
+import com.mimi.cgims.util.ResultUtil;
 import org.apache.commons.lang.StringUtils;
-import org.aspectj.weaver.ast.Or;
-import org.hibernate.Query;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.annotation.Order;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -174,7 +172,7 @@ public class OrderControllerTest extends BaseJunit4Test {
             Date completeDate = DateUtil.randomDate("2015-01-01 00:00:00","2016-01-01 00:00:00");
             String workmanId = workman.getId();
             String serviceType = Constants.SERVICE_TYPE_LIST[random.nextInt(2)];
-            String orderStatus = OrderStatus.random().getName();
+            String orderStatus = Constants.ORDER_STATUS_LIST[random.nextInt(Constants.ORDER_STATUS_LIST.length)];
 
             UserModel loginUser = new UserModel();
 //            loginUser.setLoginName(Constants.USER_LOGIN_NAME_ADMIN);
@@ -221,7 +219,7 @@ public class OrderControllerTest extends BaseJunit4Test {
                 order.setCreateDate(today);
                 order.setOrderPriceChanged(orderPriceChanged);
                 order.setServicePriceChanged(servicePriceChanged);
-                if (OrderStatus.YSWC.getName().equals(order.getOrderStatus())) {
+                if (Constants.ORDER_STATUS_YSWC.equals(order.getOrderStatus())) {
                     order.setCompleteDate(completeDate);
                 }
 //                if(i%3==0){
@@ -261,7 +259,7 @@ public class OrderControllerTest extends BaseJunit4Test {
             assertTrue(null!=newOrder.getCreateDate());
             assertEquals(false,newOrder.getOrderPriceChanged());
             assertEquals(false,newOrder.getServicePriceChanged());
-            if (OrderStatus.YSWC.getName().equals((newOrder.getOrderStatus()))) {
+            if (Constants.ORDER_STATUS_YSWC.equals((newOrder.getOrderStatus()))) {
                 assertEquals(completeDate,newOrder.getCompleteDate());
             }
 //            if(i%3==0){
@@ -341,7 +339,7 @@ public class OrderControllerTest extends BaseJunit4Test {
             Date completeDate = DateUtil.randomDate("2015-01-01 00:00:00","2016-01-01 00:00:00");
             String workmanId = workman.getId();
             String serviceType = Constants.SERVICE_TYPE_LIST[random.nextInt(2)];
-            String orderStatus = OrderStatus.random().getName();
+            String orderStatus = Constants.ORDER_STATUS_LIST[random.nextInt(Constants.ORDER_STATUS_LIST.length)];
 
             UserModel loginUser = new UserModel();
             assertResultSuccess(userController.login(request, user));
@@ -382,7 +380,7 @@ public class OrderControllerTest extends BaseJunit4Test {
             order.setCreateDate(today);
             order.setOrderPriceChanged(orderPriceChanged);
             order.setServicePriceChanged(servicePriceChanged);
-            if (OrderStatus.YSWC.getName().equals(order.getOrderStatus())) {
+            if (Constants.ORDER_STATUS_YSWC.equals(order.getOrderStatus())) {
                 order.setCompleteDate(completeDate);
             }
 //                if(i%3==0){
@@ -428,7 +426,7 @@ public class OrderControllerTest extends BaseJunit4Test {
             assertEquals(oldOrderPrice!=orderPrice || oldOrderPriceChanged,newOrder.getOrderPriceChanged());
             System.out.println(oldServicePrice+":"+servicePrice+":"+oldServicePriceChanged+":"+newOrder.getServicePriceChanged());
             assertEquals(oldServicePrice!=servicePrice || oldServicePriceChanged,newOrder.getServicePriceChanged());
-            if (OrderStatus.YSWC.getName().equals((newOrder.getOrderStatus()))) {
+            if (Constants.ORDER_STATUS_YSWC.equals((newOrder.getOrderStatus()))) {
                 assertNotEquals(null,newOrder.getCompleteDate());
             }
 //            if(i%3==0){

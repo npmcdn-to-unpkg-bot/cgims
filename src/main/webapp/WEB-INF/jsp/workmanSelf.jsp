@@ -199,7 +199,7 @@
     }
     function buildCheckBoxDiv(id, text) {
         if (text == "其他") {
-            return '<div class="checkBoxForm"><input type="checkbox" id="' + id + '" /><label for="' + id + '">' + text + '</label><input type="text"/> </div>';
+            return '<div class="checkBoxForm"><input type="checkbox" id="' + id + '" /><label for="' + id + '">' + text + '</label><input type="text" placeholder="多项服务请用“；”隔开"/> </div>';
         }
         return '<div class="checkBoxForm"><input type="checkbox" id="' + id + '" /><label for="' + id + '">' + text + '</label></div>';
     }
@@ -275,13 +275,19 @@
         }
     }
     var provinces = ${provinces};
+    var provinceNames = "${provinceNames}";
+    provinceNames = provinceNames.split(",");
     function init() {
         receiveTypeChange();
         $('#cardNum').bind('focus', filter_time);
 
-        for (var key in provinces) {
+        for(var i=0;i<provinceNames.length;i++){
+            var key = provinceNames[i];
             $("#province").append('<option value ="' + key + '">' + key + '</option>');
         }
+//        for (var key in provinces) {
+//            $("#province").append('<option value ="' + key + '">' + key + '</option>');
+//        }
         $("#province").change(function () {
             refreshCity();
             refreshArea();

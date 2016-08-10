@@ -60,13 +60,13 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 //                return true;
 //            }
 //        }
-        if(sp.startsWith("/user/self")){
-            if (LoginUtil.isUserLogined(request)) {
-                return true;
-            } else {
-                return responseOut(request, response, loginUrl, true, "请登录", ResultUtil.RESULT_FAIL_AUTHENTICATION);
-            }
-        }
+//        if(sp.startsWith("/user/self")){
+//            if (LoginUtil.isUserLogined(request)) {
+//                return true;
+//            } else {
+//                return responseOut(request, response, loginUrl, true, "请登录", ResultUtil.RESULT_FAIL_AUTHENTICATION);
+//            }
+//        }
 //        if (isIndexPage(sp) || sp.startsWith("/user/self")) {
 //            if (LoginUtil.isUserLogined(request)) {
 //                return true;
@@ -88,7 +88,10 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 return responseOut(request, response, "/html/workman/login", true, "请登录登录", ResultUtil.RESULT_FAIL);
             }
         }
-        if (checkPermission(sp, request.getMethod(), LoginUtil.getUserPermissionCodes(request),LoginUtil.getUserSlaveIds(request))) {
+        if (!LoginUtil.isUserLogined(request)) {
+            return responseOut(request, response, loginUrl, true, "请登录", ResultUtil.RESULT_FAIL_AUTHENTICATION);
+        }
+        if (sp.startsWith("/user/self") || checkPermission(sp, request.getMethod(), LoginUtil.getUserPermissionCodes(request),LoginUtil.getUserSlaveIds(request))) {
             return true;
         } else {
             return responseOut(request, response, indexUrl, true, "没有足够权限", ResultUtil.RESULT_FAIL_AUTHORIZATION);
