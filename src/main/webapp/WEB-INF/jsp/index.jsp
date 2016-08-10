@@ -29,5 +29,5 @@
 <script type=text/javascript src=${ctx}/assets/js/vendor.js></script>
 <script type=text/javascript src=${ctx}/assets/js/app.js></script>
 </body>
-<script src="assets/my97datepicker/WdatePicker.js"></script>
+<script src="${ctx}/assets/my97datepicker/WdatePicker.js"></script>
 </html>

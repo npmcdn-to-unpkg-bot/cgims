@@ -106,7 +106,7 @@ public class OrderDao extends BaseDao<OrderModel, String>
         }
 
         if (StringUtils.isNotBlank(orderStatus)) {
-            criteria.add(Restrictions.eq("orderStatus", orderStatus));
+            criteria.add(Restrictions.in("orderStatus", orderStatus.split(Constants.SPLIT_STRING_PARAMS)));
         }
         if (StringUtils.isNotBlank(serviceType)) {
             criteria.add(Restrictions.like("serviceType", "%" + serviceType + "%"));

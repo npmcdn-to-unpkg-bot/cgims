@@ -124,7 +124,7 @@
         <input type="text" class="text" name="tonnage" placeholder="货车吨位" value="${workman.tonnage}"/>
         <input type="text" class="text" name="willingPickAddress" placeholder="推荐提货点"
                value="${workman.willingPickAddress}"/>
-        <input type="text" class="text" name="logistics" placeholder="提货物流" value="${workman.logistics}"/>
+        <input type="text" class="text" name="logistics" placeholder="推荐物流" value="${workman.logistics}"/>
         <textarea class="text textarea" name="strength" placeholder="优势" >${workman.strength}</textarea>
     </div>
     <div class="line">

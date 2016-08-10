@@ -36,11 +36,14 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         if (StringUtils.isBlank(sp) || "/".equals(sp.trim())) {
             return responseOut(request, response, indexUrl, true, "", ResultUtil.RESULT_SUCCESS);
         }
-        String[] freeUrl={indexUrl,"/user/login","/user/logout","/html/workman/index","/workman/phoneCaptcha","/workman/login","/workman/logout","/error","/error_all","/workman/initCaptcha"};
+        String[] freeUrl={indexUrl,"/user?","/user/login","/user/logout","/html/workman/index","/workman/phoneCaptcha","/workman/login","/workman/logout","/error","/error_all","/workman/initCaptcha"};
         for(String url:freeUrl){
             if(sp.startsWith(url)){
                 return true;
             }
+        }
+        if(sp.equals("/user") && request.getMethod().equalsIgnoreCase("GET")){
+            return true;
         }
 //        if (sp.startsWith("/user/login") || sp.startsWith("/workman/phoneCaptcha") || sp.startsWith("/workman/login") || sp.startsWith("/error") || sp.startsWith("/user/logout")) {
 //            return true;
@@ -117,7 +120,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return permissionCodesStr.contains(Constants.PERMISSION_CODE_USER_MANAGER);
         } else if (sp.startsWith("/order")) {
             if (method.equalsIgnoreCase("GET")) {
-                return permissionCodesStr.contains(Constants.PERMISSION_CODE_ORDER_MANAGER) || permissionCodesStr.contains(Constants.PERMISSION_CODE_ORDER_VIEW);
+                return permissionCodesStr.contains(Constants.PERMISSION_CODE_ORDER_MANAGER) || permissionCodesStr.contains(Constants.PERMISSION_CODE_ORDER_VIEW) || permissionCodesStr.contains(Constants.PERMISSION_CODE_WORKMAN_MANAGER);
             }
             return permissionCodesStr.contains(Constants.PERMISSION_CODE_ORDER_MANAGER);
         } else if (sp.startsWith("/workman")) {
