@@ -149,7 +149,11 @@ public class OrderController {
     }
 
     private Object updateAction(HttpServletRequest request,String id,OrderModel order,String workmanId,String userId){
+        String oldWorkmanId = null;
         OrderModel newOrder = orderService.get(id);
+        if(newOrder.getWorkman()!=null){
+            oldWorkmanId = newOrder.getWorkman().getId();
+        }
         String error = checkPermission(request,order,newOrder);
         if(StringUtils.isNotBlank(error)){
             return ResultUtil.getResultMap(ResultUtil.RESULT_FAIL_AUTHORIZATION,error);
@@ -160,10 +164,11 @@ public class OrderController {
         }
 //        newOrder.setOrderPriceChanged(order.getOrderPriceChanged());
 //        newOrder.setServicePriceChanged(order.getServicePriceChanged());
-        if(order.getOrderPrice()!=newOrder.getOrderPrice()){
+        if(newOrder.getOrderPrice()!=null && order.getOrderPrice()!=null && newOrder.getOrderPrice().intValue()!=0 && order.getOrderPrice().intValue()!=newOrder.getOrderPrice().intValue()){
             newOrder.setOrderPriceChanged(true);
         }
-        if(order.getServicePrice()!=newOrder.getServicePrice()){
+//        if(order.getServicePrice()!=newOrder.getServicePrice()){
+        if(newOrder.getServicePrice()!=null && order.getServicePrice()!=null && newOrder.getServicePrice().intValue()!=0 && order.getServicePrice().intValue()!=newOrder.getServicePrice().intValue()){
             newOrder.setServicePriceChanged(true);
         }
         BeanUtils.copyProperties(order, newOrder, ignores);
@@ -177,7 +182,7 @@ public class OrderController {
         if (StringUtils.isNotBlank(error)) {
             return ResultUtil.getFailResultMap(error);
         }
-        orderService.updateAndRefresh(newOrder);
+        orderService.updateAndRefresh(newOrder,oldWorkmanId);
         return ResultUtil.getSuccessResultMap();
     }
 

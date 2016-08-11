@@ -11,7 +11,7 @@ public interface IOrderService extends IAutoNumService<OrderModel, String> {
 
     String addAndRefresh(OrderModel order);
 
-    void updateAndRefresh(OrderModel order);
+    void updateAndRefresh(OrderModel order,String oldWorkmanId);
 
     void deleteAndRefresh(String id);
 

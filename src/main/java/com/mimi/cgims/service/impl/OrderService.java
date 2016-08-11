@@ -61,11 +61,12 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
                     if (Math.random() > 0.5) {
                         order.setServiceType(Constants.SERVICE_TYPE_PSAZ);
                     } else {
-                        if (Math.random() > 0.5) {
-                            order.setServiceType(Constants.SERVICE_TYPE_WX);
-                        } else {
-                            order.setServiceType(Constants.SERVICE_TYPE_WX + "," + Constants.SERVICE_TYPE_PSAZ);
-                        }
+                        order.setServiceType(Constants.SERVICE_TYPE_WX);
+//                        if (Math.random() > 0.5) {
+//                            order.setServiceType(Constants.SERVICE_TYPE_WX);
+//                        } else {
+//                            order.setServiceType(Constants.SERVICE_TYPE_WX + "," + Constants.SERVICE_TYPE_PSAZ);
+//                        }
                     }
                     order.setCustomerName("客户名称" + i);
                     order.setCustomerPhoneNum("客户电话" + i);
@@ -261,9 +262,12 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
     }
 
     @Override
-    public void updateAndRefresh(OrderModel order) {
+    public void updateAndRefresh(OrderModel order,String oldWorkmanId) {
         orderDao.update(order);
-        refreshWorkman(order.getWorkman());
+        if(order.getWorkman()!=null && !order.getWorkman().getId().equals(oldWorkmanId)){
+            refreshWorkman(order.getWorkman());
+        }
+        refreshWorkman(oldWorkmanId);
     }
 
     @Override
