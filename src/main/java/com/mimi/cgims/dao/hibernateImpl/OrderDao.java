@@ -29,6 +29,7 @@ public class OrderDao extends BaseDao<OrderModel, String>
     public List<OrderModel> list(String searchKeyword, String orderStatus, String serviceType, String userId, String workmanId, String beginTime, String endTime, int targetPage, int pageSize) {
         Criteria criteria = getCriteria();
         setParams(criteria, searchKeyword, orderStatus, serviceType, userId, workmanId, beginTime, endTime);
+        criteria.addOrder(Order.desc("orderNumber"));
         List<OrderModel> orders = list(criteria, targetPage, pageSize);
         DaoUtil.cleanLazyDataOrders(orders);
         return orders;

@@ -7,9 +7,6 @@ import java.util.Map;
 public class Constants {
     public static final String PROJECT_NAME = "cgims";
 
-    public static final String GEETEST_ID = "61658dd2f0dfc210aeb78192ea4fde05";
-    public static final String GEETEST_KEY = "abceaa2fd512253fb743ba7e06780635";
-
     public static final String ACCESS_PHONE_NUM = "accessPhoneNum";
     public static final String ACCESS_PHONE_CAPTCHA = "accessPhoneCaptcha";
 
@@ -106,6 +103,8 @@ public class Constants {
             {PERMISSION_CODE_USER_MANAGER, PERMISSION_CODE_ORDER_MANAGER, PERMISSION_CODE_WORKMAN_MANAGER, PERMISSION_CODE_ANALYSIS_MANAGER}};
 
     public static final String USER_LOGIN_NAME_ADMIN = "admin";
+    public static String ADMIN_ID;
+    public static String ROLE_ADMIN_ID;
 
     public static final String USER_NAME_ADMIN = "超级管理员";
 

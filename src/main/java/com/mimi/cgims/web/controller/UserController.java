@@ -72,7 +72,7 @@ public class UserController {
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.POST)
     @ResponseBody
     public Object update(@PathVariable String userId, UserModel user, String roleIds, String slaveIds) {
-        if (LoginUtil.isAdmin(user.getLoginName())) {
+        if (LoginUtil.isAdmin(userId)) {
             return ResultUtil.getFailResultMap("不能修改超级管理员");
         }
         String error = userService.checkUpdate(user);
@@ -135,6 +135,9 @@ public class UserController {
     @ResponseBody
     public Object batch(String ids) {
         if (StringUtils.isNotBlank(ids)) {
+            if(ids.contains(Constants.ADMIN_ID)){
+                return ResultUtil.getFailResultMap("不能删除超级管理员");
+            }
             userService.batchDelete(ids.split(Constants.SPLIT_STRING_IDS));
         }
         return ResultUtil.getSuccessResultMap(ids);
@@ -168,7 +171,7 @@ public class UserController {
             slaveNames+=slave.getName();
             slaveIds+=slave.getId();
         }
-        System.out.println(user.getId()+":"+permissionCodes);
+//        System.out.println(user.getId()+":"+permissionCodes);
         LoginUtil.userLogin(request, user, permissionCodes,slaveIds,slaveNames);
         return ResultUtil.getSuccessResultMap(LoginUtil.getUserLoginMsg(request));
     }

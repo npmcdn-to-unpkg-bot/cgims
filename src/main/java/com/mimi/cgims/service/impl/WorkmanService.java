@@ -58,7 +58,7 @@ public class WorkmanService extends BaseService<WorkmanModel, String> implements
                 workman.setArea(CityUtil.getRandomArea(workman.getProvince(), workman.getCity()));
                 workman.setCooperateTimes((int) (Math.random() * 10));
                 workman.setPhoneNum("14213423124");
-                workman.setQq("12314123123" + i);
+                workman.setQq("1231412312");
                 workman.setIdCardFace("http://upload.admin5.com/upimg/allimg/100926/1000401.jpg");
                 workman.setIdCardBack("http://epaper.cnsq.com.cn/jjwb/res/1/10/2011-01/07/06/res01_attpic_brief.jpg");
                 workman.setHeadImg("http://www.itotii.com/wp-content/uploads/2016/06/06/1465202291_jrhAYEHC.jpg");

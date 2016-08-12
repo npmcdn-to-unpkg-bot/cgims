@@ -54,7 +54,10 @@ public class RoleService extends BaseService<RoleModel, String> implements IRole
                     }
                 }
                 role.setPermissions(tempList);
-                roleDao.add(role);
+                String id = roleDao.add(role);
+                if(roleNames[i].equals(Constants.ROLE_NAME_ADMIN)){
+                    Constants.ROLE_ADMIN_ID = id;
+                }
             }
 //        }
     }

@@ -335,6 +335,8 @@
                 $(this).show();
             }
         })
+
+        filter_staff_from_exist();
     }
     function refreshCity() {
         var val = $("#province").val();
@@ -449,7 +451,15 @@
     function submitUpdate(){
         var  data = {};
         $(".text,.date,select").each(function(){
-            data[$(this).attr("name")] = $(this).val();
+            var value = $(this).val();
+            if(value){
+                if($(this).attr("id")=="cardNum"){
+                    value = value.replace(/\s+/g,"");
+                }else{
+                    value = value.replace(/(^\s*)|(\s*$)/g, "");
+                }
+            }
+            data[$(this).attr("name")] = value;
         });
         $("img").each(function(){
             data[$(this).attr("name")] = $(this).attr("src");

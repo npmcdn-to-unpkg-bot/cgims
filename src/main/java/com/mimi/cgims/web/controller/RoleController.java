@@ -50,7 +50,7 @@ public class RoleController {
         if (StringUtils.isNotBlank(error)) {
             return ResultUtil.getFailResultMap(error);
         }
-        if(Constants.ROLE_NAME_ADMIN.equals(role.getName())){
+        if(Constants.ROLE_ADMIN_ID.equals(roleId)){
             return ResultUtil.getFailResultMap("不能修改超级管理员角色");
         }
         RoleModel newModel = roleService.get(roleId);
@@ -89,8 +89,9 @@ public class RoleController {
     @ResponseBody
     public Object batch(String ids) {
         if (StringUtils.isNotBlank(ids)) {
-            RoleModel role = roleService.getByName(Constants.ROLE_NAME_ADMIN);
-            if(ids.contains(role.getId())){
+//            RoleModel role = roleService.getByName(Constants.ROLE_NAME_ADMIN);
+//            if(ids.contains(role.getId())){
+            if(ids.contains(Constants.ROLE_ADMIN_ID)){
                 return ResultUtil.getFailResultMap("不能删除超级管理员角色");
             }
             roleService.batchDelete(ids.split(Constants.SPLIT_STRING_IDS));

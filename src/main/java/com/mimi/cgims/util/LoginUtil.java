@@ -96,8 +96,8 @@ public class LoginUtil {
         return com.mimi.cgims.util.MD5Util.MD5(MD5Util.MD5(password + Constants.PROJECT_NAME));
     }
 
-    public static boolean isAdmin(String loginName) {
-        return Constants.USER_LOGIN_NAME_ADMIN.equals(loginName);
+    public static boolean isAdmin(String id) {
+        return Constants.ADMIN_ID.equals(id);
     }
 
     public static void initPhoneCaptcha(HttpServletRequest request, String phoneNum, String captchaText) {

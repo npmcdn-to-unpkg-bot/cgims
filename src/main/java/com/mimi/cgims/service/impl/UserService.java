@@ -52,7 +52,7 @@ public class UserService extends BaseService<UserModel, String> implements IUser
         }
         user.setRoles(tr);
         user.setPassword(LoginUtil.buildPassword(Constants.USER_PASSWORD));
-        userDao.add(user);
+        Constants.ADMIN_ID = userDao.add(user);
         List<UserModel> slaves = new ArrayList<>();
         slaves.add(user);
         user.setSlaves(slaves);

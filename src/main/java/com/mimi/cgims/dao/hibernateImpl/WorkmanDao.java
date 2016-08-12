@@ -28,6 +28,7 @@ public class WorkmanDao extends BaseDao<WorkmanModel, String>
     public List<WorkmanModel> list(String searchKeyword, String province, String city, String area, String serviceType, int targetPage, int pageSize) {
         Criteria criteria = getCriteria();
         setParams(criteria, searchKeyword, province, city, area, serviceType);
+        criteria.addOrder(Order.desc("workmanNumber"));
         List<WorkmanModel> workmans = list(criteria, targetPage, pageSize);
         return workmans;
     }
