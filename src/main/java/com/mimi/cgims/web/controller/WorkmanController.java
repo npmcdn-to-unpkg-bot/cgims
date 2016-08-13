@@ -51,7 +51,8 @@ public class WorkmanController {
         String id = LoginUtil.getCurWorkmanId(request);
         WorkmanModel workman = workmanService.get(id);
         request.setAttribute("workman",workman);
-        request.setAttribute("provinces",CityUtil.jsonDatas);
+//        request.setAttribute("provinces",CityUtil.jsonDatas);
+        request.setAttribute("provinces",CityUtil.jsonStr);
         request.setAttribute("provinceNames",CityUtil.defaultProvinceNames);
         return "workmanSelf";
     }

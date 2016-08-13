@@ -103,7 +103,8 @@ public class OrderDao extends BaseDao<OrderModel, String>
     private void setParams(Criteria criteria, String searchKeyword, String orderStatus, String serviceType, String userId, String workmanId, String beginTime, String endTime) {
         if (StringUtils.isNotBlank(searchKeyword)) {
             String keyword = "%" + searchKeyword.trim() + "%";
-            criteria.add(Restrictions.or(Restrictions.like("orderNumber", keyword), Restrictions.like("customerName", keyword), Restrictions.like("customerPhoneNum", keyword), Restrictions.like("customerTel", keyword), Restrictions.like("customerAddress", keyword), Restrictions.like("shopInfo", keyword)));
+            criteria.add(Restrictions.or(Restrictions.like("orderNumber", keyword), Restrictions.like("customerName", keyword), Restrictions.like("customerPhoneNum", keyword), Restrictions.like("customerTel", keyword), Restrictions.like("customerAddress", keyword),
+                    Restrictions.like("productInfo", keyword), Restrictions.like("logisticsInfo", keyword), Restrictions.like("repairInfo", keyword), Restrictions.like("checkInfo", keyword), Restrictions.like("shopInfo", keyword)));
         }
 
         if (StringUtils.isNotBlank(orderStatus)) {

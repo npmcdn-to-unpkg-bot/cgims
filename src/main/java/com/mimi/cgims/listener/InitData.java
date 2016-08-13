@@ -69,6 +69,7 @@ public class InitData implements ApplicationListener<ContextRefreshedEvent> {
 //        userService.initTestData2();
         workmanService.initTestData();
         orderService.initTestData();
+        AutoNumUtil.test = false;
     }
 
     private void initGeetest(){

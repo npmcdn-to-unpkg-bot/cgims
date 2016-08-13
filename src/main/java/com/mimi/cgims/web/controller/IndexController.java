@@ -31,7 +31,8 @@ public class IndexController {
     public String index(HttpServletRequest request) {
         Map<String,String> map = LoginUtil.getUserLoginMsg(request);
         request.setAttribute("loginUserMap", JSONObject.fromObject(map));
-        request.setAttribute("provinces",CityUtil.jsonDatas);
+//        request.setAttribute("provinces",CityUtil.jsonDatas);
+        request.setAttribute("provinces",CityUtil.jsonStr);
         request.setAttribute("provinceNames", CityUtil.defaultProvinceNames);
         return "index";
     }
