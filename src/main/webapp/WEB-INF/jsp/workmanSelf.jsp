@@ -277,7 +277,6 @@
     }
     var provinces = ${provinces};
     var provinceNames = "${provinceNames}";
-    alert(provinceNames);
     provinceNames = provinceNames.split(",");
     function init() {
         receiveTypeChange();
