@@ -33,6 +33,17 @@ public class RoleService extends BaseService<RoleModel, String> implements IRole
     }
 
     @Override
+    public void initData() {
+        int count = roleDao.count();
+        if (count < 1) {
+            initAction();
+        }
+        if(StringUtils.isBlank(Constants.ROLE_ADMIN_ID)){
+            Constants.ROLE_ADMIN_ID = roleDao.getByName(Constants.ROLE_NAME_ADMIN).getId();
+        }
+    }
+
+    @Override
     protected void initAction() {
 //        int count = roleDao.count();
 //        if (count == 0) {

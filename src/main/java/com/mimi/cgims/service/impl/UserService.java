@@ -38,6 +38,17 @@ public class UserService extends BaseService<UserModel, String> implements IUser
     }
 
     @Override
+    public void initData() {
+        int count = userDao.count();
+        if (count < 1) {
+            initAction();
+        }
+        if(StringUtils.isBlank(Constants.ADMIN_ID)){
+            Constants.ADMIN_ID = userDao.getByLoginName(Constants.USER_LOGIN_NAME_ADMIN).getId();
+        }
+    }
+
+    @Override
     protected void initAction() {
         UserModel user = new UserModel();
         user.setLoginName(Constants.USER_LOGIN_NAME_ADMIN);
