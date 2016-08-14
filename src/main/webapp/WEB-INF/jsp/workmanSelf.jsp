@@ -90,7 +90,7 @@
             <input type="file" name="theFile" id="theIdCardBackFile" accept="image/*"
                    class="upload-input">
         </form>
-        <img name="idCardBack" src="${workmna.idCardBack}" class="idCardImgClass"/>
+        <img name="idCardBack" src="${workman.idCardBack}" class="idCardImgClass"/>
     </div>
     <div class="line">
         <span class="head">
@@ -376,10 +376,15 @@
     };
 
     filter_staff_from_exist = function () {
-        var now = $.trim($('#cardNum').val());
+//        var now = $.trim($('#cardNum').val());
+        var now = $('#cardNum').val();
+        now = now.replace(/([^\d])+/g,"");
         now = insertSpace(now, 4);
         now = insertSpace(now, 9);
         now = insertSpace(now, 14);
+        if($("#cardNum").val()==now){
+            return;
+        }
         $("#cardNum").val(now);
     }
     function insertSpace(str, position) {
