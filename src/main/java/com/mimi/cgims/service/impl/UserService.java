@@ -88,6 +88,8 @@ public class UserService extends BaseService<UserModel, String> implements IUser
                 for(UserModel slave:users){
                     if(random.nextBoolean()){
                         slaves.add(slave);
+                    }else if(Constants.ADMIN_ID.equals(user.getId()) && Constants.ADMIN_ID.equals(slave.getId())){
+                        slaves.add(user);
                     }
                 }
                 user.setSlaves(slaves);
@@ -99,6 +101,7 @@ public class UserService extends BaseService<UserModel, String> implements IUser
 
     @Override
     public UserModel getWithDatas(String id) {
+//        UserModel user = userDao.get(id);
         UserModel user = get(id);
 //        List<RoleModel> roles = roleDao.list(id, null, PageUtil.BEGIN_PAGE, PageUtil.MAX_PAGE_SIZE);
 //        user.setRoles(roles);

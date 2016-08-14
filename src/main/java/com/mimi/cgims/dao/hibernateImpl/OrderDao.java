@@ -104,7 +104,7 @@ public class OrderDao extends BaseDao<OrderModel, String>
         if (StringUtils.isNotBlank(searchKeyword)) {
             String keyword = "%" + searchKeyword.trim() + "%";
             criteria.add(Restrictions.or(Restrictions.like("orderNumber", keyword), Restrictions.like("customerName", keyword), Restrictions.like("customerPhoneNum", keyword), Restrictions.like("customerTel", keyword), Restrictions.like("customerAddress", keyword),
-                    Restrictions.like("productInfo", keyword), Restrictions.like("logisticsInfo", keyword), Restrictions.like("repairInfo", keyword), Restrictions.like("checkInfo", keyword), Restrictions.like("shopInfo", keyword)));
+                    Restrictions.like("productInfo", keyword), Restrictions.like("logisticsInfo", keyword), Restrictions.like("repairInfo", keyword), Restrictions.like("checkInfo", keyword), Restrictions.like("shopInfo", keyword), Restrictions.like("qq", keyword)));
         }
 
         if (StringUtils.isNotBlank(orderStatus)) {
