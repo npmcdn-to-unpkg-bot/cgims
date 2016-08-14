@@ -100,7 +100,7 @@ public class RoleService extends BaseService<RoleModel, String> implements IRole
             errors.add("内容为空");
             return errors;
         }
-         error = FormatUtil.checkFormat(role.getName(),FormatUtil.REGEX_COMMON_NAME,true,0,FormatUtil.MAX_LENGTH_COMMON_SHORT_L3,"角色名称");
+         error = FormatUtil.checkFormat(role.getName(),FormatUtil.REGEX_COMMON_NAME,true,1,FormatUtil.MAX_LENGTH_COMMON_SHORT_L3,"角色名称");
         if(StringUtils.isNotBlank(error)){
             errors.add(error);
         }

@@ -9,7 +9,8 @@
 <html>
 <head>
     <meta charset=utf-8>
-    <title>vue-cgims</title>
+    <title>陈工家具服务</title>
+    <%@include file="inc/icoImport.jsp" %>
     <script>window.__BASE_PATH__ = 'http://localhost:8080'</script>
     <%--<script>window.__BASE_PATH__ = 'http://www.chengongjiaju.cn'</script>--%>
     <script>

@@ -81,6 +81,7 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
                     order.setChecked(Math.random() > 0.5);
                     order.setCheckInfo("核销信息" + i);
                     order.setShopInfo("商家信息" + i);
+                    order.setQq("1231233213");
                     order.setOrderPrice(random.nextInt(300) + 100);
                     order.setServicePrice(order.getOrderPrice() - random.nextInt(100));
                     order.setProfit(order.getOrderPrice() - order.getServicePrice());

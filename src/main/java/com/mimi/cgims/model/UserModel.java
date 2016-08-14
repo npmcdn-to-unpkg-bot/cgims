@@ -22,7 +22,7 @@ public class UserModel extends BaseModel{
     @Column(name = "id", nullable = false)
     private String id;
 
-    @Pattern(regexp = "[A-Za-z0-9_]{5,20}", message = "登录名格式有误")
+    @Pattern(regexp = "[A-Za-z0-9_]{3,20}", message = "登录名格式有误")
     @Column(unique = true)
     private String loginName;
 

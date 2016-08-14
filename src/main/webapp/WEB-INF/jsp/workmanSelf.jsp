@@ -10,6 +10,7 @@
     <title>师傅信息</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <%@include file="inc/icoImport.jsp" %>
     <link href="${ctx }/assets/css/ui.css" rel="stylesheet" type="text/css"/>
     <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
     <link href="${ctx }/assets/img/ui/favicon.ico" rel="icon" type="image/x-icon"/>
@@ -276,6 +277,7 @@
     }
     var provinces = ${provinces};
     var provinceNames = "${provinceNames}";
+    alert(provinceNames);
     provinceNames = provinceNames.split(",");
     function init() {
         receiveTypeChange();

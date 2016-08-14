@@ -157,7 +157,7 @@ public class UserService extends BaseService<UserModel, String> implements IUser
             errors.add("内容为空");
             return errors;
         }
-        error = FormatUtil.checkFormat(user.getLoginName(), FormatUtil.REGEX_COMMON_NAME, true, 0, FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "登录名");
+        error = FormatUtil.checkFormat(user.getLoginName(), FormatUtil.REGEX_COMMON_NAME, true, 3, FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "登录名");
         if (StringUtils.isNotBlank(error)) {
             errors.add(error);
         }
