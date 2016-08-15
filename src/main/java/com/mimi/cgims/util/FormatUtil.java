@@ -7,7 +7,8 @@ public class FormatUtil {
     public static final String FORMAT_ERROR_COMMON = "格式有误";
     public static final String FORMAT_ERROR_LENGTH = "长度超出[{minLen},{maxLen}]的长度限制";
 
-    public static final String REGEX_USER_NAME = "^[a-z]([a-z0-9_]){3,31}$";
+    public static final String REGEX_LOGIN_NAME = "^([a-zA-Z0-9_]){3,31}$";
+    public static final String REGEX_USER_NAME = "^([0-9a-zA-Z_\u4E00-\u9FA5]){1,31}$";
     public static final String REGEX_USER_PHONE_NUM = "^1[0-9]{10}$";
     public static final String REGEX_USER_EMAIL = "^([a-zA-Z0-9_\\.\\-])+@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9])+$";
 

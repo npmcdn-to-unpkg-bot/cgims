@@ -112,8 +112,8 @@ public class UserService extends BaseService<UserModel, String> implements IUser
 
     @Override
     public UserModel getWithDatas(String id) {
-//        UserModel user = userDao.get(id);
-        UserModel user = get(id);
+        UserModel user = userDao.get(id);
+//        UserModel user = get(id);
 //        List<RoleModel> roles = roleDao.list(id, null, PageUtil.BEGIN_PAGE, PageUtil.MAX_PAGE_SIZE);
 //        user.setRoles(roles);
 
@@ -171,11 +171,12 @@ public class UserService extends BaseService<UserModel, String> implements IUser
             errors.add("内容为空");
             return errors;
         }
-        error = FormatUtil.checkFormat(user.getLoginName(), FormatUtil.REGEX_COMMON_NAME, true, 3, FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "登录名");
+        error = FormatUtil.checkFormat(user.getLoginName(), FormatUtil.REGEX_LOGIN_NAME, true, 3, FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "登录名");
         if (StringUtils.isNotBlank(error)) {
             errors.add(error);
         }
-        error = FormatUtil.checkLengthOnly(user.getName(), 0, FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "姓名");
+        error = FormatUtil.checkFormat(user.getName(), FormatUtil.REGEX_USER_NAME, true, "姓名");
+//        error = FormatUtil.checkLengthOnly(user.getName(), 0, FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "姓名");
         if (StringUtils.isNotBlank(error)) {
             errors.add(error);
         }

@@ -44,6 +44,14 @@ public class UserController {
         Map<String, Object> map = userService.list4Page(searchKeyword, curPage, pageSize);
         List<UserModel> users = (List<UserModel>) ResultUtil.getDatas(map);
         cleanPwd(users);
+        if(pageSize>100){
+            for(UserModel user:users){
+                if(LoginUtil.isAdmin(user.getId())){
+                    users.remove(user);
+                    break;
+                }
+            }
+        }
         return map;
     }
 
@@ -164,6 +172,9 @@ public class UserController {
         String slaveNames = "";
         String slaveIds = "";
         for(UserModel slave:slaves){
+            if(LoginUtil.isAdmin(slave.getId())){
+                continue;
+            }
             if(StringUtils.isNotBlank(slaveIds)){
                 slaveNames+=Constants.SPLIT_STRING_PARAMS;
                 slaveIds+=Constants.SPLIT_STRING_PARAMS;

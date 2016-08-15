@@ -61,7 +61,8 @@ public class WorkmanDao extends BaseDao<WorkmanModel, String>
     private void setParams(Criteria criteria, String searchKeyword, String province, String city, String area, String serviceType) {
         if (StringUtils.isNotBlank(searchKeyword)) {
             String keyword = "%" + searchKeyword.trim() + "%";
-            criteria.add(Restrictions.or(Restrictions.like("name", keyword),Restrictions.like("workmanNumber", keyword), Restrictions.like("phoneNum", keyword), Restrictions.like("serviceArea", keyword)));
+            criteria.add(Restrictions.or(Restrictions.like("name", keyword),Restrictions.like("workmanNumber", keyword), Restrictions.like("phoneNum", keyword), Restrictions.like("serviceArea", keyword)
+                    , Restrictions.like("province", keyword), Restrictions.like("city", keyword), Restrictions.like("area", keyword)));
         }
         if (StringUtils.isNotBlank(province)) {
             criteria.add(Restrictions.eq("province",province));
