@@ -37,7 +37,7 @@
         <input type="text" class="text" name="phoneNum" placeholder="手机号码" readonly="readonly" value="${workman.phoneNum}"/>
         <input type="hidden" class="text" name="id" placeholder="" value="${workman.id}"/>
         <input type="hidden" class="text" name="workmanNumber" placeholder="工号" value="${workman.workmanNumber}"/>
-        <input type="text" class="text" name="name" placeholder="名称" value="${workman.name}"/>
+        <input type="text" class="text" name="name" placeholder="真实姓名" value="${workman.name}"/>
         <input type="text" class="text" name="qq" placeholder="QQ" value="${workman.qq}"/>
         <div class="line">
             <label>收款方式：</label>
@@ -52,6 +52,8 @@
                value="${workman.alipayAccount}"/>
         <input type="text" class="text" id="bank" name="bank" placeholder="银行名称" value="${workman.bank}"/>
         <input type="text" class="text" id="cardNum" name="cardNum" placeholder="银行卡号" value="${workman.cardNum}"/>
+        <input type="text" class="text" id="alipayAccountName" name="alipayAccountName" placeholder="支付宝账号姓名" value="${workman.alipayAccountName}"/>
+        <input type="text" class="text" id="bankCardName" name="bankCardName" placeholder="银行卡账号姓名" value="${workman.bankCardName}"/>
         <div class="line">
             <input type="date" name="birthday" class="date" value='<fmt:formatDate value="${workman.birthday}" pattern="yyyy-MM-dd"/>'/><label>出生日期</label>
         </div>
@@ -267,12 +269,16 @@
 
         if (type == 0) {
             $("#alipayAccount").show();
+            $("#alipayAccountName").show();
             $("#bank").hide();
             $("#cardNum").hide();
+            $("#bankCardName").hide();
         } else {
             $("#alipayAccount").hide();
+            $("#alipayAccountName").hide();
             $("#bank").show();
             $("#cardNum").show();
+            $("#bankCardName").show();
         }
     }
     var provinces = ${provinces};
@@ -382,6 +388,7 @@
         now = insertSpace(now, 4);
         now = insertSpace(now, 9);
         now = insertSpace(now, 14);
+        now = insertSpace(now, 19);
         if($("#cardNum").val()==now){
             return;
         }

@@ -50,6 +50,12 @@ public class WorkmanModel extends BaseModel {
     @Size(max = 50)
     private String cardNum;//	varchar	50	银行卡号
 
+    @Size(max = 50)
+    private String alipayAccountName;//	varchar	50	支付宝账号姓名
+
+    @Size(max = 50)
+    private String bankCardName;//	varchar	50	银行卡账号姓名
+
     private Date birthday;//	date		出生日期
 
     @Size(max = 50)
@@ -107,6 +113,22 @@ public class WorkmanModel extends BaseModel {
 //    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "workman_id", updatable = false)
     private List<OrderModel> orders;
+
+    public String getAlipayAccountName() {
+        return alipayAccountName;
+    }
+
+    public void setAlipayAccountName(String alipayAccountName) {
+        this.alipayAccountName = alipayAccountName;
+    }
+
+    public String getBankCardName() {
+        return bankCardName;
+    }
+
+    public void setBankCardName(String bankCardName) {
+        this.bankCardName = bankCardName;
+    }
 
     public String getId() {
         return id;

@@ -247,6 +247,12 @@ public class WorkmanService extends BaseService<WorkmanModel, String> implements
         if (StringUtils.isNotBlank(error)) {
             errors.add(error);
         }
+        if (errors.isEmpty()) {
+            WorkmanModel wm = workmanDao.getByPhoneNum(workman.getPhoneNum());
+            if (wm != null && !wm.getId().equals(workman.getId())) {
+                errors.add("手机号码已存在");
+            }
+        }
         return errors;
     }
 
