@@ -282,6 +282,42 @@ public class UserControllerTest extends BaseJunit4Test {
     }
 
     @Test
+    public void login2() throws Exception{
+       List<UserModel> users = userDao.list();
+        int ec = 0;
+        for(int i=0;i<users.size();i++){
+            UserModel tu = users.get(i);
+            if(ListUtil.isEmpty(tu.getRoles())){
+                ec++;
+            }
+            HttpServletRequest request = new MockHttpServletRequest();
+            assertFalse(LoginUtil.isUserLogined(request));
+            UserModel user = new UserModel();
+            user.setLoginName(tu.getLoginName());
+            user.setPassword("123123");
+//            System.out.println(userController.login(request, user));
+//            assertFalse(LoginUtil.isUserLogined(request));
+            if(!Constants.USER_LOGIN_NAME_ADMIN.equals(user.getLoginName())){
+                assertResultSuccess(userController.login(request, user));
+                assertTrue(LoginUtil.isUserLogined(request));
+            }else{
+                assertResultFail(userController.login(request, user));
+                assertFalse(LoginUtil.isUserLogined(request));
+            }
+        }
+        users = userDao.list();
+        int ec2 = 0;
+        for(int i=0;i<users.size();i++) {
+            UserModel tu = users.get(i);
+            if (ListUtil.isEmpty(tu.getRoles())) {
+                ec2++;
+            }
+        }
+        System.out.println(ec+"_"+ec2);
+        assertEquals(ec,ec2);
+    }
+
+    @Test
     public void logout() throws Exception {
         HttpServletRequest request = new MockHttpServletRequest();
         assertFalse(LoginUtil.isUserLogined(request));

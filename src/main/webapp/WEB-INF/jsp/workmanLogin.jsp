@@ -13,8 +13,7 @@
     <link href="${ctx }/assets/css/ui.css" rel="stylesheet" type="text/css"/>
     <%@include file="inc/icoImport.jsp" %>
     <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
-    <link href="${ctx }/assets/img/ui/favicon.ico" rel="icon" type="image/x-icon"/>
-    <link href="${ctx }/assets/img/ui/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+    <%@include file="inc/icoImport.jsp" %>
 
     <!-- 引入封装了failback的接口--initGeetest -->
     <script src="http://static.geetest.com/static/tools/gt.js"></script>

@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface IBaseDao<M extends Serializable, PK extends Serializable> {
+    Session getSession();
+
     int count();
 
     List<M> list();
@@ -18,7 +20,7 @@ public interface IBaseDao<M extends Serializable, PK extends Serializable> {
 
     void delete(PK id);
 
-    int batchDelete(PK ... ids);
+    int batchDelete(PK... ids);
 
-    int batchUpdate(String name,Object value,PK ... ids);
+    int batchUpdate(String name, Object value, PK... ids);
 }

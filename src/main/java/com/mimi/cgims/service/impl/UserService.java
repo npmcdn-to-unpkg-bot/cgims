@@ -228,6 +228,7 @@ public class UserService extends BaseService<UserModel, String> implements IUser
             return error;
         }
         UserModel tu = userDao.getByLoginName(loginName);
+//        userDao.getSession().evict(tu);
         if (tu == null) {
             return "找不到该用户";
         }
@@ -236,6 +237,10 @@ public class UserService extends BaseService<UserModel, String> implements IUser
         }
         user.setId(tu.getId());
         user.setName(tu.getName());
+//        UserModel tt = new UserModel();
+////        tt.setId(user.getId());
+//        tt.setLoginName("wawaw");
+//        userDao.add(tt);
         return null;
     }
 

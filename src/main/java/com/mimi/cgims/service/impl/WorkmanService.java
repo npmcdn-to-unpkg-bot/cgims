@@ -195,6 +195,14 @@ public class WorkmanService extends BaseService<WorkmanModel, String> implements
         if (StringUtils.isNotBlank(error)) {
             errors.add(error);
         }
+        error = FormatUtil.checkLengthOnly(workman.getAlipayAccountName(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "支付宝姓名");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
+        error = FormatUtil.checkLengthOnly(workman.getBankCardName(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "银行卡姓名");
+        if (StringUtils.isNotBlank(error)) {
+            errors.add(error);
+        }
         error = FormatUtil.checkLengthOnly(workman.getProvince(), FormatUtil.MAX_LENGTH_COMMON_SHORT_L3, "所在省");
         if (StringUtils.isNotBlank(error)) {
             errors.add(error);

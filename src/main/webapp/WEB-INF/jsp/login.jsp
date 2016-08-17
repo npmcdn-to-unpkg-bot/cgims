@@ -9,8 +9,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
-    <link href="${ctx }/assets/img/ui/favicon.ico" rel="icon" type="image/x-icon"/>
-    <link href="${ctx }/assets/img/ui/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+    <%@include file="inc/icoImport.jsp" %>
     <style>
         .text{
             width:300px;

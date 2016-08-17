@@ -13,8 +13,7 @@
     <%@include file="inc/icoImport.jsp" %>
     <link href="${ctx }/assets/css/ui.css" rel="stylesheet" type="text/css"/>
     <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
-    <link href="${ctx }/assets/img/ui/favicon.ico" rel="icon" type="image/x-icon"/>
-    <link href="${ctx }/assets/img/ui/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+    <%@include file="inc/icoImport.jsp" %>
 </head>
 <body style="zoom: 1;">
 <div class="workmanSelfMain">
@@ -41,10 +40,10 @@
         <input type="text" class="text" name="qq" placeholder="QQ" value="${workman.qq}"/>
         <div class="line">
             <label>收款方式：</label>
-            <input type="radio" name="receiveType" id="receiveTypeZFB" value="0" class="radio" checked
+            <input type="radio" name="receiveType" id="receiveTypeZFB" value="0" class="radio" <c:if test="${workman.receiveType==null || workman.receiveType==0}">checked</c:if>
                    onchange="receiveTypeChange()"/><label
                 for="receiveTypeZFB">支付宝</label>
-            <input type="radio" name="receiveType" id="receiveTypeBank" value="1" class="radio"
+            <input type="radio" name="receiveType" id="receiveTypeBank" value="1" class="radio" <c:if test="${workman.receiveType==1}">checked</c:if>
                    onchange="receiveTypeChange()"/><label
                 for="receiveTypeBank">银行卡</label>
         </div>
@@ -122,9 +121,9 @@
         </div>
     </div>
     <div class="line">
-        <input type="text" class="text" name="teamPeopleNum" placeholder="团队人数" value="${workman.teamPeopleNum}"/>
-        <input type="text" class="text" name="truckNum" placeholder="货车数量" value="${workman.truckNum}"/>
-        <input type="text" class="text" name="tonnage" placeholder="货车吨位" value="${workman.tonnage}"/>
+        <input type="text" class="text" name="teamPeopleNum" placeholder="团队人数(整数）" value="${workman.teamPeopleNum}"/>
+        <input type="text" class="text" name="truckNum" placeholder="货车数量（整数）" value="${workman.truckNum}"/>
+        <input type="text" class="text" name="tonnage" placeholder="货车吨位（整数或小数）" value="${workman.tonnage}"/>
         <input type="text" class="text" name="willingPickAddress" placeholder="推荐提货点"
                value="${workman.willingPickAddress}"/>
         <input type="text" class="text" name="logistics" placeholder="推荐物流" value="${workman.logistics}"/>
@@ -461,6 +460,12 @@
             }
         });
     });
+    function isNumber(val){
+        return /^\d+$/.test(val)
+    }
+    function isFloatNumber(val) {
+        return /^\d*\.?\d*$/.test(val)
+    }
     function submitUpdate(){
         var  data = {};
         $(".text,.date,select").each(function(){
@@ -481,6 +486,35 @@
         data.serviceItems = getServiceItems();
         data.serviceType = getItemValue($("#serviceTypeForm"));
         data.serviceArea = getItemValue($("#serviceAreaForm"));
+        var errStr = "";
+        if(data.teamPeopleNum){
+            if(!isNumber(data.teamPeopleNum)){
+                if(errStr){
+                    errStr+="\n";
+                }
+                errStr+="团队人数必须为数字";
+            }
+        }
+        if(data.truckNum){
+            if(!isNumber(data.truckNum)){
+                if(errStr){
+                    errStr+="\n";
+                }
+                errStr+="货车数量必须为数字";
+            }
+        }
+        if(data.tonnage){
+            if(!isFloatNumber(data.tonnage)){
+                if(errStr){
+                    errStr+="\n";
+                }
+                errStr+="货车吨数必须为整数或小数";
+            }
+        }
+        if(errStr){
+            alert(errStr);
+            return;
+        }
         $.ajax({
             url: "/workman/self",
             type: "post",
@@ -492,6 +526,9 @@
                 } else {
                     alert(json.msg);
                 }
+            },
+            error:function(){
+                alert("修改失败，请稍后重试");
             }
         });
     }

@@ -4,10 +4,7 @@ import com.mimi.cgims.dao.IBaseDao;
 import com.mimi.cgims.util.ListUtil;
 import com.mimi.cgims.util.page.PageUtil;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.hibernate.criterion.Projections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +50,10 @@ public abstract class BaseDao<M extends Serializable, PK extends Serializable>
 
     public Session getSession() {
         // 事务必须是开启的(Required)，否则获取不到
-        return sessionFactory.getCurrentSession();
+//        return sessionFactory.getCurrentSession();
+        Session session =  sessionFactory.getCurrentSession();
+//        session.setFlushMode(FlushMode.ALWAYS);
+        return session;
     }
 
     public int count() {

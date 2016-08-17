@@ -6,6 +6,7 @@ import com.mimi.cgims.model.RoleModel;
 import com.mimi.cgims.model.UserModel;
 import com.mimi.cgims.service.IPermissionService;
 import com.mimi.cgims.service.IUserService;
+import com.mimi.cgims.util.DateUtil;
 import com.mimi.cgims.util.ListUtil;
 import com.mimi.cgims.util.LoginUtil;
 import com.mimi.cgims.util.ResultUtil;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -96,6 +98,7 @@ public class UserController {
         }
         newModel.setRoles(buildRoles(roleIds));
         newModel.setSlaves(buildSlaves(slaveIds));
+        System.out.println("mimiTagUserUpdate:"+DateUtil.toString(new Date())+":"+user.getId());
         userService.update(newModel);
         return ResultUtil.getSuccessResultMap();
     }
@@ -226,6 +229,7 @@ public class UserController {
             BeanUtils.copyProperties(user, newModel, selfIgnores);
             newModel.setPassword(LoginUtil.buildPassword(user.getPassword()));
         }
+        System.out.println("mimiTagUserSelfUpdate:"+DateUtil.toString(new Date())+":"+user.getId());
         userService.update(newModel);
         return ResultUtil.getSuccessResultMap();
     }
