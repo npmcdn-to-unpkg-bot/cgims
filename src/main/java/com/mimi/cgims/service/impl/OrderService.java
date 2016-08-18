@@ -287,6 +287,7 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
     private void refreshWorkman(String workmanId){
         if(StringUtils.isNotBlank(workmanId)){
             List<OrderModel> orders = orderDao.list(null, null, null, null,workmanId, null,null, PageUtil.BEGIN_PAGE, PageUtil.MAX_PAGE_SIZE);
+            orderDao.getSession().clear();
             int count = 0;
             int sum = 0;
             for(OrderModel tOrder:orders){
