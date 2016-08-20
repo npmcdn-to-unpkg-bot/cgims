@@ -313,7 +313,28 @@ public class OrderService extends BaseService<OrderModel, String> implements IOr
             return;
         }
         if(Constants.BATCH_ACTION_UPDATE.equals(action) || ListUtil.contains(Constants.ORDER_STATUS_LIST,orderStatus)){
-            orderDao.batchUpdate("orderStatus",orderStatus,ids.split(Constants.SPLIT_STRING_IDS));
+            if(Constants.ORDER_STATUS_YSWC.equals(orderStatus)){
+                String[] idArr = ids.split(Constants.SPLIT_STRING_IDS);
+                Date now = new Date();
+                for(String id:idArr){
+                    OrderModel order = orderDao.get(id);
+                    if(Constants.ORDER_STATUS_YSWC.equals(order.getOrderStatus())){
+                        continue;
+                    }
+                    order.setOrderStatus(Constants.ORDER_STATUS_YSWC);
+//                    if(order.getCompleteDate()==null){
+//                        order.setCompleteDate(now);
+//                    }
+                    order.setCompleteDate(now);
+                    orderDao.update(order);
+                }
+            }else{
+                orderDao.batchUpdate("orderStatus",orderStatus,ids.split(Constants.SPLIT_STRING_IDS));
+            }
+//            orderDao.batchUpdate("orderStatus",orderStatus,ids.split(Constants.SPLIT_STRING_IDS));
+//            if(Constants.ORDER_STATUS_YSWC.equals(orderStatus)){
+//                orderDao.batchUpdate("completeDate",new Date(),ids.split(Constants.SPLIT_STRING_IDS));
+//            }
         }
         if(Constants.BATCH_ACTION_DELETE.equals(action)){
             List<String> workmanIds = new ArrayList<>();

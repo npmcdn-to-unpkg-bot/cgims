@@ -127,6 +127,9 @@ public class OrderController {
 //        order.setUser(userService.get(LoginUtil.getCurUserId(request)));
         order.setOrderNumber(AutoNumUtil.getOrderNum());
         order.setCreateDate(new Date());
+        if(Constants.ORDER_STATUS_YSWC.equals(order.getOrderStatus())){
+            order.setCompleteDate(new Date());
+        }
         order.setOrderPriceChanged(false);
         order.setServicePriceChanged(false);
         String error = orderService.checkAdd(order);
@@ -157,17 +160,16 @@ public class OrderController {
         String error = checkPermission(request,order,newOrder);
         if(StringUtils.isNotBlank(error)){
             return ResultUtil.getResultMap(ResultUtil.RESULT_FAIL_AUTHORIZATION,error);
-//            return ResultUtil.getFailResultMap(error);
         }
+//        if(Constants.ORDER_STATUS_YSWC.equals(order.getOrderStatus()) && newOrder.getCompleteDate()==null){
+//            newOrder.setCompleteDate(new Date());
+//        }
         if(Constants.ORDER_STATUS_YSWC.equals(order.getOrderStatus()) && !Constants.ORDER_STATUS_YSWC.equals(newOrder.getOrderStatus())){
             newOrder.setCompleteDate(new Date());
         }
-//        newOrder.setOrderPriceChanged(order.getOrderPriceChanged());
-//        newOrder.setServicePriceChanged(order.getServicePriceChanged());
         if(newOrder.getOrderPrice()!=null && order.getOrderPrice()!=null && newOrder.getOrderPrice().intValue()!=0 && order.getOrderPrice().intValue()!=newOrder.getOrderPrice().intValue()){
             newOrder.setOrderPriceChanged(true);
         }
-//        if(order.getServicePrice()!=newOrder.getServicePrice()){
         if(newOrder.getServicePrice()!=null && order.getServicePrice()!=null && newOrder.getServicePrice().intValue()!=0 && order.getServicePrice().intValue()!=newOrder.getServicePrice().intValue()){
             newOrder.setServicePriceChanged(true);
         }

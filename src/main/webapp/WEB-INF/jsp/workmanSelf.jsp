@@ -52,7 +52,7 @@
         <input type="text" class="text" id="bank" name="bank" placeholder="银行名称" value="${workman.bank}"/>
         <input type="text" class="text" id="cardNum" name="cardNum" placeholder="银行卡号" value="${workman.cardNum}"/>
         <input type="text" class="text" id="alipayAccountName" name="alipayAccountName" placeholder="支付宝账号姓名" value="${workman.alipayAccountName}"/>
-        <input type="text" class="text" id="bankCardName" name="bankCardName" placeholder="银行卡账号姓名" value="${workman.bankCardName}"/>
+        <input type="text" class="text" id="bankCardName" name="bankCardName" placeholder="户名" value="${workman.bankCardName}"/>
         <div class="line">
             <input type="date" name="birthday" class="date" value='<fmt:formatDate value="${workman.birthday}" pattern="yyyy-MM-dd"/>'/><label>出生日期</label>
         </div>
@@ -127,7 +127,7 @@
         <input type="text" class="text" name="willingPickAddress" placeholder="推荐提货点"
                value="${workman.willingPickAddress}"/>
         <input type="text" class="text" name="logistics" placeholder="推荐物流" value="${workman.logistics}"/>
-        <textarea class="text textarea" name="strength" placeholder="优势" >${workman.strength}</textarea>
+        <textarea class="text textarea" name="strength" placeholder="优势:是否有仓库，仓库面积多少平方，仓库地址，是否会维修，维修哪些项目" >${workman.strength}</textarea>
     </div>
     <div class="line">
         <input type="button" class="submitBtn" value="确认保存" onclick="submitUpdate()"/>
