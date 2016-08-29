@@ -49,7 +49,14 @@
         </div>
         <input type="text" class="text" id="alipayAccount" name="alipayAccount" placeholder="支付宝"
                value="${workman.alipayAccount}"/>
-        <input type="text" class="text" id="bank" name="bank" placeholder="银行名称" value="${workman.bank}"/>
+        <select id="bank" name="bank" class="text" >
+            <option value="中国银行">中国银行</option>
+            <option value="农业银行">农业银行</option>
+            <option value="建设银行">建设银行</option>
+            <option value="工商银行">工商银行</option>
+            <option value="邮政储蓄">邮政储蓄</option>
+        </select>
+        <%--<input type="text" class="text" id="bank" name="bank" placeholder="银行名称" value="${workman.bank}"/>--%>
         <input type="text" class="text" id="cardNum" name="cardNum" placeholder="银行卡号" value="${workman.cardNum}"/>
         <input type="text" class="text" id="alipayAccountName" name="alipayAccountName" placeholder="支付宝账号姓名" value="${workman.alipayAccountName}"/>
         <input type="text" class="text" id="bankCardName" name="bankCardName" placeholder="户名" value="${workman.bankCardName}"/>
@@ -305,6 +312,10 @@
         var provinceVal = "${workman.province}";
         var cityVal = "${workman.city}";
         var areaVal = "${workman.area}";
+        var bankVal = "${workman.bank}";
+        if(bankVal){
+            $("#bank").val(bankVal);
+        }
         if(provinceVal){
             $("#province").val(provinceVal);
             refreshCity();
