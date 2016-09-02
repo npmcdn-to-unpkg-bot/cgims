@@ -533,7 +533,7 @@
             data: data,
             success: function (json) {
                 if (json.status==1) {
-                    alert("修改成功");
+                    alert("恭喜师傅注册成功\n你的工号${workman.workmanNumber}\n（陈工有单会找你）");
                 } else {
                     alert(json.msg);
                 }
