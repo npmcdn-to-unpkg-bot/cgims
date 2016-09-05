@@ -15,7 +15,7 @@
     <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
     <link href="${ctx }/assets/img/ui/favicon.ico" rel="icon" type="image/x-icon"/>
     <link href="${ctx }/assets/img/ui/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
-    <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
 </head>
 <body style="zoom: 1;">
 <div class="workmanSelfMain">
